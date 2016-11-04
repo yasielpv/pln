@@ -14,7 +14,7 @@
  *
  */
 
-import('classes.plugins.GatewayPlugin');
+import('lib.pkp.classes.plugins.GatewayPlugin');
 import('lib.pkp.classes.site.VersionCheck');
 import('lib.pkp.classes.db.DBResultRange');
 import('lib.pkp.classes.core.ArrayItemIterator');
@@ -108,13 +108,13 @@ class PLNGatewayPlugin extends GatewayPlugin {
 	 * @return array
 	 */
 	function getManagementVerbs() {
-                return array();
+		return array();
 	}
-        
+
 	/**
 	 * Handle fetch requests for this plugin.
 	 */
-	function fetch() {
+	function fetch($args, $request) {
 		$plugin =& $this->getPLNPlugin();
 		$templateMgr =& TemplateManager::getManager();
 
@@ -134,14 +134,14 @@ class PLNGatewayPlugin extends GatewayPlugin {
 		} else {
 			$templateMgr->assign('termsAccepted', 'no');
 		}
-		
+
 		$application =& PKPApplication::getApplication();
 		$products =& $application->getEnabledProducts('plugins.generic');
 		$curlVersion = 'not installed';
 		if(function_exists('curl_version')) {
 			$versionArray = curl_version();
 			$curlVersion = $versionArray['version'];
-		}		
+		}
 		$prerequisites = array(
 			'phpVersion' => PHP_VERSION,
 			'curlVersion' => $curlVersion,
