@@ -17,9 +17,9 @@ import('lib.pkp.classes.form.Form');
 class PLNSettingsForm extends Form {
 
 	/**
-	 * @var $_journalId int
+     * @var $_contextId int
 	 */
-	var $_journalId;
+	var $_contextId;
 
 	/**
 	 * @var $plugin object
@@ -29,10 +29,10 @@ class PLNSettingsForm extends Form {
 	/**
 	 * Constructor
 	 * @param $plugin object
-	 * @param $journalId int
+     * @param $contextId int
 	 */
-	function PLNSettingsForm(&$plugin, $journalId) {
-		$this->_journalId = $journalId;
+	function PLNSettingsForm($plugin, $contextId) {
+		$this->_contextId = $contextId;
 		$this->_plugin =& $plugin;
 		parent::Form($plugin->getTemplatePath() . DIRECTORY_SEPARATOR . 'settings.tpl');
 	}
@@ -48,12 +48,12 @@ class PLNSettingsForm extends Form {
 	 * Initialize form data.
 	 */
 	function initData() {
-		$journalId = $this->_journalId;
-		if (!$this->_plugin->getSetting($journalId, 'terms_of_use')) {
-			$this->_plugin->getServiceDocument($journalId);
+		$contextId = $this->_contextId;
+		if (!$this->_plugin->getSetting($contextId, 'terms_of_use')) {
+			$this->_plugin->getServiceDocument($contextId);
 		}
-		$this->setData('terms_of_use', unserialize($this->_plugin->getSetting($journalId, 'terms_of_use')));
-		$this->setData('terms_of_use_agreement', unserialize($this->_plugin->getSetting($journalId, 'terms_of_use_agreement')));
+		$this->setData('terms_of_use', unserialize($this->_plugin->getSetting($contextId, 'terms_of_use')));
+		$this->setData('terms_of_use_agreement', unserialize($this->_plugin->getSetting($contextId, 'terms_of_use_agreement')));
 	}
 
 	/**
@@ -68,18 +68,18 @@ class PLNSettingsForm extends Form {
 			$this->setData('terms_of_use_agreement', $terms_agreed);
 		}
 	}
-	
+
 	/**
-	 * Check for the prerequisites for the plugin, and return a translated 
+	 * Check for the prerequisites for the plugin, and return a translated
 	 * message for each missing requirement.
-	 * 
+	 *
 	 * @return array
 	 */
 	function _checkPrerequisites() {
 		$messages = array();
-		
+
 		if( ! $this->_plugin->php5Installed()) {
-			// If php5 isn't available, then the other checks are not 
+			// If php5 isn't available, then the other checks are not
 			// useful.
 			$messages[] =  __('plugins.generic.pln.notifications.php5_missing');
 			return $messages;
@@ -100,37 +100,40 @@ class PLNSettingsForm extends Form {
 	}
 
 	/**
-	 * @see Form::display()
-	 */
-	function display() {
-		$journal =& Request::getJournal();
+     * Fetch the form.
+     * @copydoc Form::fetch()
+     */
+	function fetch($request) {
+		$context = Request::getContext();
 		$issn = '';
-		if ($journal->getSetting('onlineIssn')) {
-			$issn = $journal->getSetting('onlineIssn');
-		} else if ($journal->getSetting('printIssn')) {
-			$issn = $journal->getSetting('printIssn');
+		if ($context->getSetting('onlineIssn')) {
+			$issn = $context->getSetting('onlineIssn');
+		} else if ($context->getSetting('printIssn')) {
+			$issn = $context->getSetting('printIssn');
 		}
 		$hasIssn = false;
 		if ($issn != '') {
 			$hasIssn = true;
 		}
-		$templateMgr =& TemplateManager::getManager();
+		$templateMgr = TemplateManager::getManager();
+        $templateMgr->assign('pluginName', $this->_plugin->getName());
 		$templateMgr->assign('hasIssn', $hasIssn);
 		$templateMgr->assign('prerequisitesMissing', $this->_checkPrerequisites());
-		$templateMgr->assign('journal_uuid', $this->_plugin->getSetting($this->_journalId, 'journal_uuid'));
-		$templateMgr->assign('terms_of_use', unserialize($this->_plugin->getSetting($this->_journalId, 'terms_of_use')));
+		$templateMgr->assign('journal_uuid', $this->_plugin->getSetting($this->_contextId, 'journal_uuid'));
+		$templateMgr->assign('terms_of_use', unserialize($this->_plugin->getSetting($this->_contextId, 'terms_of_use')));
 		$templateMgr->assign('terms_of_use_agreement', $this->getData('terms_of_use_agreement'));
-		parent::display();
+
+        return parent::fetch($request);
 	}
 
 	/**
 	 * @see Form::execute()
 	 */
 	function execute() {
-		$this->_plugin->updateSetting($this->_journalId, 'terms_of_use_agreement', serialize($this->getData('terms_of_use_agreement')), 'object');
+		$this->_plugin->updateSetting($this->_contextId, 'terms_of_use_agreement', serialize($this->getData('terms_of_use_agreement')), 'object');
 
 		$pluginSettingsDao =& DAORegistry::getDAO('PluginSettingsDAO');
-		$pluginSettingsDao->installSettings($this->_journalId, $this->_plugin->getName(), $this->_plugin->getContextSpecificPluginSettingsFile());
+		$pluginSettingsDao->installSettings($this->_contextId, $this->_plugin->getName(), $this->_plugin->getContextSpecificPluginSettingsFile());
 	}
 
 }
