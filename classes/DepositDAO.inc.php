@@ -71,10 +71,12 @@ class DepositDAO extends DAO {
 	 * @param $journalId int
 	 * @return array Deposit
 	 */
-	function &getDepositsByJournalId($journalId, $dbResultRange = null) {
-		$result =& $this->retrieveRange(
+	function getDepositsByJournalId($journalId, $dbResultRange = null) {
+		$result = $this->retrieveRange(
 			'SELECT * FROM pln_deposits WHERE journal_id = ? ORDER BY deposit_id',
-			(int) $journalId,
+			array (
+				$journalId
+			),
 			$dbResultRange
 		);
 		$returner = new DAOResultFactory($result, $this, '_returnDepositFromRow');
@@ -214,7 +216,7 @@ class DepositDAO extends DAO {
 		foreach($deposit->getDepositObjects() as $deposit_object) {
 			$deposit_object_dao->deleteDepositObject($deposit_object);
 		}
-	
+
 		$ret = $this->update(
 			'DELETE from pln_deposits WHERE deposit_id = ?',
 			(int) $deposit->getId()

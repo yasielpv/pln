@@ -109,10 +109,25 @@ class PLNPlugin extends GenericPlugin {
 	}
 
     /**
+     * Permit requests to the plnStatus grid handler
+     * @param $hookName string The name of the hook being invoked
+     * @param $args array The parameters to the invoked hook
+     */
+	function setupGridHandler($hookName, $params) {
+		$component =& $params[0];
+		if ($component == 'plugins.generic.pln.controllers.grid.PLNStatusGridHandler') {
+            import($component);
+			define('PLN_PLUGIN_NAME', $this->getName());
+			return true;
+		}
+		return false;
+	}
+
+    /**
      * @see Plugin::getActions()
      */
 	function getActions($request, $verb) {
-		$router = $request->getRouter();
+        $router = $request->getRouter();
 		import('lib.pkp.classes.linkAction.request.AjaxModal');
 		return array_merge(
 			$this->getEnabled()?array(
@@ -125,6 +140,15 @@ class PLNPlugin extends GenericPlugin {
 					__('manager.plugins.settings'),
 					null
 				),
+                new LinkAction(
+					'status',
+					new AjaxModal(
+						$router->url($request, null, null, 'manage', null, array('verb' => 'status', 'plugin' => $this->getName(), 'category' => 'generic')),
+						$this->getDisplayName()
+					),
+					__('common.status'),
+					null
+				)
 			):array(),
 			parent::getActions($request, $verb)
 		);
@@ -385,36 +409,26 @@ class PLNPlugin extends GenericPlugin {
 
                 $form->initData();
 
-
                 return new JSONMessage(true, $form->fetch($request));
+            case 'status':
+                $context = $request->getContext();
+				AppLocale::requireComponents(LOCALE_COMPONENT_APP_COMMON,  LOCALE_COMPONENT_PKP_MANAGER);
+				$templateMgr = TemplateManager::getManager($request);
+				$templateMgr->register_function('plugin_url', array($this, 'smartyPluginUrl'));
+				$this->import('classes.form.PLNStatusForm');
+				$form = new PLNStatusForm($this, $context->getId());
 
-                // ---------------------------------------------------------------------
+				if (Request::getUserVar('reset')) {
+					$deposit_ids = array_keys(Request::getUserVar('reset'));
+					$depositDao =& DAORegistry::getDAO('DepositDAO');
+					foreach ($deposit_ids as $deposit_id) {
+						$deposit = $depositDao->getDepositById($context->getId(), $deposit_id);
+						$deposit->setStatus(PLN_PLUGIN_DEPOSIT_STATUS_NEW);
+						$depositDao->updateDeposit($deposit);
+					}
+				}
 
-                //$templateMgr =& TemplateManager::getManager();
-                //$templateMgr->register_function('plugin_url', array(&$this, 'smartyPluginUrl'));
-                //$this->import('classes.form.PLNSettingsForm');
-                //$form = new PLNSettingsForm($this, $journal->getId());
-
-                //if (Request::getUserVar('save')) {
-                //    $form->readInputData();
-                //    if ($form->validate()) {
-                //        $form->execute();
-                //        $message = NOTIFICATION_TYPE_SUCCESS;
-                //        $messageParams = array('contents' => __('plugins.generic.pln.settings.saved'));
-                //        return false;
-                //    } else {
-                //        $this->setBreadcrumbs('settings');
-                //        $form->display();
-                //    }
-                //} else {
-                //    if (Request::getUserVar('refresh')) {
-                //        $this->getServiceDocument($journal->getId());
-                //    }
-                //    $this->setBreadcrumbs('settings');
-                //    $form->initData();
-                //    $form->display();
-                //}
-                //return true;
+				return new JSONMessage(true, $form->fetch($request));
 			case 'enable':
 				if( ! @include_once('Archive/Tar.php')) {
 					$message = NOTIFICATION_TYPE_ERROR;
@@ -450,29 +464,8 @@ class PLNPlugin extends GenericPlugin {
 				$messageParams = array('contents' => __('plugins.generic.pln.disabled'));
 				$this->updateSetting($journal->getId(), 'enabled', false);
 				break;
-			case 'status':
-				$templateMgr =& TemplateManager::getManager();
-				$templateMgr->register_function('plugin_url', array(&$this, 'smartyPluginUrl'));
-				$this->import('classes.form.PLNStatusForm');
-				$form = new PLNStatusForm($this, $journal->getId());
-
-				if (Request::getUserVar('reset')) {
-					$journal =& Request::getJournal();
-					$deposit_ids = array_keys(Request::getUserVar('reset'));
-					$depositDao =& DAORegistry::getDAO('DepositDAO');
-					foreach ($deposit_ids as $deposit_id) {
-						$deposit =& $depositDao->getDepositById($journal->getId(),$deposit_id);
-						$deposit->setStatus(PLN_PLUGIN_DEPOSIT_STATUS_NEW);
-						$depositDao->updateDeposit($deposit);
-					}
-				}
-
-				$this->setBreadCrumbs('status');
-				$form->display();
-				return true;
 			default:
 				return parent::manage($verb, $args, $message, $messageParams);
-;
 		}
 
 	}

@@ -18,9 +18,9 @@ import('lib.pkp.classes.form.Form');
 class PLNStatusForm extends Form {
 
 	/**
-	 * @var $journalId int
+     * @var _contextId int
 	 */
-	var $_journalId;
+	var $_contextId;
 
 	/**
 	 * @var $plugin Object
@@ -30,37 +30,40 @@ class PLNStatusForm extends Form {
 	/**
 	 * Constructor
 	 * @param $plugin object
-	 * @param $journalId int
+     * @param $contextId int
 	 */
-	function PLNStatusForm(&$plugin, $journalId) {
-		$this->_journalId = $journalId;
-		$this->_plugin =& $plugin;           
+	function PLNStatusForm($plugin, $contextId) {
+		$this->_contextId = $contextId;
+		$this->_plugin = $plugin;
+
 		parent::Form($this->_plugin->getTemplatePath() . DIRECTORY_SEPARATOR . 'status.tpl');
 	}
 
-	/**
-	 * @see Form::display()
-	 */
-	function display() {
-		$depositDao =& DAORegistry::getDAO('DepositDAO');
-		$journal =& Request::getJournal();
-		$networkStatus = $this->_plugin->getSetting($journal->getId(), 'pln_accepting');
-		$networkStatusMessage = $this->_plugin->getSetting($journal->getId(), 'pln_accepting_message');
-		$rangeInfo = Handler::getRangeInfo('deposits');
-		
-		if (!$networkStatusMessage) {
+    /**
+     * Fetch the form.
+     * @copydoc Form::fetch()
+     */
+	function fetch($request) {
+		$context = Request::getContext();
+		$depositDao = DAORegistry::getDAO('DepositDAO');
+		$networkStatus = $this->_plugin->getSetting($context->getId(), 'pln_accepting');
+		$networkStatusMessage = $this->_plugin->getSetting($context->getId(), 'pln_accepting_message');
+		$rangeInfo = PKPHandler::getRangeInfo($request, 'deposits');
+
+        if (!$networkStatusMessage) {
 			if ($networkStatus === true) {
 				$networkStatusMessage = __('plugins.generic.pln.notifications.pln_accepting');
 			} else {
 				$networkStatusMessage = __('plugins.generic.pln.notifications.pln_not_accepting');
 			}
 		}
-		$templateMgr =& TemplateManager::getManager();
-		$templateMgr->assign('deposits', $depositDao->getDepositsByJournalId($journal->getId(),$rangeInfo));
+		$templateMgr = TemplateManager::getManager();
+		$templateMgr->assign('deposits', $depositDao->getDepositsByJournalId($context->getId(),$rangeInfo));
 		$templateMgr->assign('networkStatus', $networkStatus);
 		$templateMgr->assign('networkStatusMessage', $networkStatusMessage);
-		$templateMgr->assign('plnStatusDocs', $this->_plugin->getSetting($journal->getId(), 'pln_status_docs'));
-		parent::display();
+		$templateMgr->assign('plnStatusDocs', $this->_plugin->getSetting($context->getId(), 'pln_status_docs'));
+
+        return parent::fetch($request);
 	}
-	
+
 }
