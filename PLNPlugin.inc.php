@@ -362,15 +362,29 @@ class PLNPlugin extends GenericPlugin {
 				$form = new PLNSettingsForm($this, $context->getId());
 
 
-                if ($request->getUserVar('save')) {
-                    $form->readInputData();
-                    if ($form->validate()) {
-                        $form->execute();
-                        return new JSONMessage(true);
-                    }
+
+                if ($request->getUserVar('refresh')) {
+                    $this->getServiceDocument($context->getId());
                 } else {
-                    $form->initData();
+                    if ($request->getUserVar('save')) {
+
+                        $form->readInputData();
+                        if ($form->validate()) {
+                            $form->execute();
+
+                            // Add notification: Changes saved
+                            $notificationContent = __('plugins.generic.pln.settings.saved');
+                            $currentUser = $request->getUser();
+                            $notificationMgr = new NotificationManager();
+                            $notificationMgr->createTrivialNotification($currentUser->getId(), NOTIFICATION_TYPE_SUCCESS, array('contents' => $notificationContent));
+
+                            return new JSONMessage(false);
+                        }
+                    }
                 }
+
+                $form->initData();
+
 
                 return new JSONMessage(true, $form->fetch($request));
 
