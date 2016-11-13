@@ -23,6 +23,146 @@ class DepositDAO extends DAO {
 	}
 
 	/**
+	 * Construct a new User object.
+	 * @return User
+	 */
+	function newDataObject() {
+		return new Deposit(null);
+	}
+
+	/**
+	 * Retrieve a user by ID.
+	 * @param $userId int
+	 * @param $allowDisabled boolean
+	 * @return PKPUser
+	 */
+	function getById($depositId) {
+		$result = $this->retrieve(
+			'SELECT * FROM pln_deposits WHERE deposit_id = ?',
+			array (
+				(int) $depositId
+			)
+		);
+		$returner = null;
+		if ($result->RecordCount() != 0) {
+			$returner = $this->_returnDepositFromRow($result->GetRowAssoc(false));
+		}
+		$result->Close();
+		return $returner;
+	}
+
+	/**
+	 * Insert deposit object
+	 * @param $deposit Deposit
+	 * @return int inserted Deposit id
+	 */
+	function insertObject($deposit) {
+		$ret = $this->update(
+			sprintf('
+				INSERT INTO pln_deposits
+					(journal_id,
+					uuid,
+					status,
+					date_status,
+					date_created,
+					date_modified)
+				VALUES
+					(?, ?, ?, %s, NOW(), %s)',
+				$this->datetimeToDB($deposit->getLastStatusDate()),
+				$this->datetimeToDB($deposit->getDateModified())
+			),
+			array(
+				(int) $deposit->getJournalId(),
+				$deposit->getUUID(),
+				(int) $deposit->getStatus()
+			)
+		);
+		$deposit->setId($this->getInsertId());
+		return $deposit->getId();
+	}
+
+	/**
+	 * Update deposit
+	 * @param $deposit Deposit
+	 */
+	function updateObject($deposit) {
+		$ret = $this->update(
+			sprintf('
+				UPDATE pln_deposits SET
+					journal_id = ?,
+					uuid = ?,
+					status = ?,
+					date_status = %s,
+					date_created = %s,
+					date_modified = NOW()
+				WHERE deposit_id = ?',
+				$this->datetimeToDB($deposit->getLastStatusDate()),
+				$this->datetimeToDB($deposit->getDateCreated())
+			),
+			array(
+				(int) $deposit->getJournalId(),
+				$deposit->getUUID(),
+				(int) $deposit->getStatus(),
+				(int) $deposit->getId()
+			)
+		);
+	}
+
+	/**
+	 * Delete deposit
+	 * @param $deposit Deposit
+	 */
+	function deleteObject($deposit) {
+		$deposit_object_dao =& DAORegistry::getDAO('DepositObjectDAO');
+		foreach($deposit->getDepositObjects() as $deposit_object) {
+			$deposit_object_dao->deleteDepositObject($deposit_object);
+		}
+
+		$ret = $this->update(
+			'DELETE from pln_deposits WHERE deposit_id = ?',
+			(int) $deposit->getId()
+		);
+	}
+
+	/**
+	 * Get the ID of the last inserted user.
+	 * @return int
+	 */
+	function getInsertId() {
+		return $this->_getInsertId('pln_deposits', 'deposit_id');
+	}
+
+	/**
+	 * Internal function to return a deposit from a row.
+	 * @param $row array
+	 * @return Deposit
+	 */
+	function &_returnDepositFromRow($row) {
+		$deposit = $this->newDataObject();
+		$deposit->setId($row['deposit_id']);
+		$deposit->setJournalId($row['journal_id']);
+		$deposit->setUUID($row['uuid']);
+		$deposit->setStatus($row['status']);
+		$deposit->setLastStatusDate($this->datetimeFromDB($row['date_status']));
+		$deposit->setDateCreated($this->datetimeFromDB($row['date_created']));
+		$deposit->setDateModified($this->datetimeFromDB($row['date_modified']));
+
+		HookRegistry::call('DepositDAO::_returnDepositFromRow', array(&$deposit, &$row));
+
+		return $deposit;
+	}
+
+
+
+
+
+
+
+
+
+
+
+	/**
 	 * Retrieve a deposit by deposit id.
 	 * @param $journalId int
 	 * @param $depositId int
@@ -151,79 +291,6 @@ class DepositDAO extends DAO {
 	}
 
 	/**
-	 * Insert deposit object
-	 * @param $deposit Deposit
-	 * @return int inserted Deposit id
-	 */
-	function insertDeposit(&$deposit) {
-		$ret = $this->update(
-			sprintf('
-				INSERT INTO pln_deposits
-					(journal_id,
-					uuid,
-					status,
-					date_status,
-					date_created,
-					date_modified)
-				VALUES
-					(?, ?, ?, %s, NOW(), %s)',
-				$this->datetimeToDB($deposit->getLastStatusDate()),
-				$this->datetimeToDB($deposit->getDateModified())
-			),
-			array(
-				(int) $deposit->getJournalId(),
-				$deposit->getUUID(),
-				(int) $deposit->getStatus()
-			)
-		);
-		$deposit->setId($this->getInsertDepositId());
-		return $deposit->getId();
-	}
-
-	/**
-	 * Update deposit
-	 * @param $deposit Deposit
-	 */
-	function updateDeposit(&$deposit) {
-		$ret = $this->update(
-			sprintf('
-				UPDATE pln_deposits SET
-					journal_id = ?,
-					uuid = ?,
-					status = ?,
-					date_status = %s,
-					date_created = %s,
-					date_modified = NOW()
-				WHERE deposit_id = ?',
-				$this->datetimeToDB($deposit->getLastStatusDate()),
-				$this->datetimeToDB($deposit->getDateCreated())
-			),
-			array(
-				(int) $deposit->getJournalId(),
-				$deposit->getUUID(),
-				(int) $deposit->getStatus(),
-				(int) $deposit->getId()
-			)
-		);
-	}
-
-	/**
-	 * Delete deposit
-	 * @param $deposit Deposit
-	 */
-	function deleteDeposit(&$deposit) {
-		$deposit_object_dao =& DAORegistry::getDAO('DepositObjectDAO');
-		foreach($deposit->getDepositObjects() as $deposit_object) {
-			$deposit_object_dao->deleteDepositObject($deposit_object);
-		}
-
-		$ret = $this->update(
-			'DELETE from pln_deposits WHERE deposit_id = ?',
-			(int) $deposit->getId()
-		);
-	}
-
-	/**
 	 * Delete deposits by journal id
 	 * @param $journalId
 	 */
@@ -232,43 +299,6 @@ class DepositDAO extends DAO {
 		foreach($deposits as $deposit) {
 			$this->deleteDeposit($deposit);
 		}
-	}
-
-	/**
-	 * Get the ID of the last inserted deposit.
-	 * @return int
-	 */
-	function getInsertDepositId() {
-		return $this->getInsertId('pln_deposits', 'deposit_id');
-	}
-
-	/**
-	 * Construct a new data object corresponding to this DAO.
-	 * @return Deposit
-	 */
-	function _newDataObject() {
-		$plnPlugin =& PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
-		return new Deposit(null);
-	}
-
-	/**
-	 * Internal function to return a deposit from a row.
-	 * @param $row array
-	 * @return Deposit
-	 */
-	function &_returnDepositFromRow(&$row) {
-		$deposit = $this->_newDataObject();
-		$deposit->setId($row['deposit_id']);
-		$deposit->setJournalId($row['journal_id']);
-		$deposit->setUUID($row['uuid']);
-		$deposit->setStatus($row['status']);
-		$deposit->setLastStatusDate($this->datetimeFromDB($row['date_status']));
-		$deposit->setDateCreated($this->datetimeFromDB($row['date_created']));
-		$deposit->setDateModified($this->datetimeFromDB($row['date_modified']));
-
-		HookRegistry::call('DepositDAO::_returnDepositFromRow', array(&$deposit, &$row));
-
-		return $deposit;
 	}
 }
 

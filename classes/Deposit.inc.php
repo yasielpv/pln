@@ -14,7 +14,7 @@
  */
 
 class Deposit extends DataObject {
-	
+
 	/**
 	 * Constructor
 	 * @param string
@@ -26,7 +26,7 @@ class Deposit extends DataObject {
 		//Set up new deposits with a UUID
 		$this->setUUID($uuid);
 	}
-	
+
 	/**
 	 * Get the type of deposit objects in this deposit.
 	 * @return string One of PLN_PLUGIN_DEPOSIT_SUPPORTED_OBJECTS
@@ -36,7 +36,7 @@ class Deposit extends DataObject {
 		$depositObject =& $depositObjects->next();
 		return ($depositObject?$depositObject->getObjectType():null);
 	}
-	
+
 	/**
 	 * Get all deposit objects of this deposit.
 	 * @return array of DepositObject
@@ -45,7 +45,7 @@ class Deposit extends DataObject {
 		$depositObjectDao =& DAORegistry::getDAO('DepositObjectDAO');
 		return $depositObjectDao->getByDepositId($this->getJournalID(), $this->getId());
 	}
-	
+
 	/**
 	 * Get deposit uuid
 	 * @return string
@@ -53,7 +53,7 @@ class Deposit extends DataObject {
 	function getUUID() {
 		return $this->getData('uuid');
 	}
-	
+
 	/**
 	 * Set deposit uuid
 	 * @param $uuid string
@@ -61,7 +61,7 @@ class Deposit extends DataObject {
 	function setUUID($uuid) {
 		$this->setData('uuid', $uuid);
 	}
-	
+
 	/**
 	 * Get journal id
 	 * @return int
@@ -98,71 +98,71 @@ class Deposit extends DataObject {
 
 	/**
 	 * Return a string representation of the local status.
-	 * 
+	 *
 	 * @return string
 	 */
 	function getLocalStatus() {
 		if($this->getTransferredStatus()) {
-			return 'plugins.generic.pln.status.transferred';
+			return __('plugins.generic.pln.status.transferred');
 		}
 		if($this->getPackagedStatus()) {
-			return 'plugins.generic.pln.status.packaged';
+			return __('plugins.generic.pln.status.packaged');
 		}
 		if($this->getNewStatus()) {
-			return 'plugins.generic.pln.status.new';
-		}		
-		return 'plugins.generic.pln.status.unknown';
+			return __('plugins.generic.pln.status.new');
+		}
+		return __('plugins.generic.pln.status.unknown');
 	}
-	
+
 	/**
 	 * Return a string representation of the processing status.
-	 * 
+	 *
 	 * @return string
 	 */
 	function getProcessingStatus() {
 		if($this->getSentStatus()) {
-			return 'plugins.generic.pln.status.sent';
+			return __('plugins.generic.pln.status.sent');
 		}
 		if($this->getValidatedStatus()) {
-			return 'plugins.generic.pln.status.validated';
+			return __('plugins.generic.pln.status.validated');
 		}
 		if($this->getReceivedStatus()) {
-			return 'plugins.generic.pln.status.received';
+			return __('plugins.generic.pln.status.received');
 		}
-		return 'plugins.generic.pln.status.unknown';
+		return __('plugins.generic.pln.status.unknown');
 	}
-	
+
 	/**
 	 * Return a string representation of the LOCKSS status.
-	 * 
+	 *
 	 * @return string
 	 */
 	function getLockssStatus() {
 		if($this->getLockssAgreementStatus()) {
-			return 'plugins.generic.pln.status.agreement';
+			return __('plugins.generic.pln.status.agreement');
 		}
 		if($this->getLockssSyncingStatus()) {
-			return 'plugins.generic.pln.status.syncing';
+			return __('plugins.generic.pln.status.syncing');
 		}
 		if($this->getLockssReceivedStatus()) {
-			return 'plugins.generic.pln.status.received';
+			return __('plugins.generic.pln.status.received');
 		}
-		return 'plugins.generic.pln.status.unknown';
+		return __('plugins.generic.pln.status.unknown');
 	}
-	
+
 	/**
 	 * Return a string representation of wether or not the deposit processing
 	 * is complete ie. LOCKSS has acheived agreement.
-	 * 
+	 *
 	 * @return string
 	 */
 	function getComplete() {
 		if($this->getLockssAgreementStatus()) {
-			return 'common.yes';
+			return __('common.yes');
 		}
-		return 'common.no';
+		return __('common.no');
 	}
-	
+
 	/**
 	 * Get new (blank) deposit status
 	 * @return int
@@ -180,18 +180,18 @@ class Deposit extends DataObject {
 
 	/**
 	 * Get a status from the bit field.
-	 * 
+	 *
 	 * @param $field int one of the PLN_PLUGIN_DEPOSIT_STATUS_* constants.
 	 * @return int
 	 */
 	function _getStatusField($field) {
 		return $this->getStatus() & $field;
 	}
-	
+
 	/**
 	 * Set a status value.
-	 * 
-	 * @param boolean $value 
+	 *
+	 * @param boolean $value
 	 * @param int $field one of the PLN_PLUGIN_DEPOSIT_STATUS_* constants.
 	 */
 	function _setStatusField($value, $field) {
@@ -201,7 +201,7 @@ class Deposit extends DataObject {
 			$this->setStatus($this->getStatus() & ~$field);
 		}
 	}
-	
+
 	/**
 	 * Get whether the deposit has been packaged for the PLN
 	 * @return int

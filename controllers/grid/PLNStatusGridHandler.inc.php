@@ -13,11 +13,12 @@
  */
 
 import('lib.pkp.classes.controllers.grid.GridHandler');
-//import('plugins.generic.pln.controllers.grid.PLNStatusGridRow');
+import('plugins.generic.pln.controllers.grid.PLNStatusGridRow');
+import('plugins.generic.pln.controllers.grid.PLNStatusGridCellProvider');
 
 class PLNStatusGridHandler extends GridHandler {
 	/** @var PLNPlugin The pln plugin */
-	var $plugin;
+	static $plugin;
 
 	/**
 	 * Constructor
@@ -26,9 +27,17 @@ class PLNStatusGridHandler extends GridHandler {
 		parent::GridHandler();
 		$this->addRoleAssignment(
 			array(ROLE_ID_MANAGER),
-			array('fetchGrid', 'fetchRow', 'addCustomBlock', 'editCustomBlock', 'updateCustomBlock', 'deleteCustomBlock')
+			array('fetchGrid', 'fetchRow', 'addCustomBlock', 'editCustomBlock', 'updateCustomBlock', 'resetDeposit')
 		);
 		$this->plugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
+	}
+
+	/**
+	 * Set the translator plugin.
+	 * @param $plugin StaticPagesPlugin
+	 */
+	static function setPlugin($plugin) {
+		self::$plugin = $plugin;
 	}
 
 
@@ -40,54 +49,64 @@ class PLNStatusGridHandler extends GridHandler {
 	 */
 	function initialize($request, $args = null) {
 		parent::initialize($request);
-		$context = $request->getContext();
 
 		// Set the grid title.
-		$this->setTitle('plugins.generic.customBlockManager.customBlocks');
+		$this->setTitle('plugins.generic.pln.status.deposits');
+
 		// Set the grid instructions.
-		$this->setEmptyRowText('plugins.generic.customBlockManager.noneCreated');
-
-		// Get the blocks and add the data to the grid
-        //$depositDao = DAORegistry::getDAO('DepositDAO');
-        //$rangeInfo = PKPHandler::getRangeInfo($request, 'deposits');
-        //$deposits = $depositDao->getDepositsByJournalId($context->getId(),$rangeInfo);
-
-
-		//$plugin = $this->plugin;
-		//$blocks = $plugin->getSetting($context->getId(), 'blocks');
-        //$gridData = array();
-        //if (is_array($blocks)) foreach ($blocks as $block) {
-        //    $gridData[$block] = array(
-        //        'title' => $block
-        //    );
-        //}
-		//$this->setGridDataElements($deposits);
-
-		// Add grid-level actions
-		$router = $request->getRouter();
-		import('lib.pkp.classes.linkAction.request.AjaxModal');
-		$this->addAction(
-			new LinkAction(
-				'addCustomBlock',
-				new AjaxModal(
-					$router->url($request, null, null, 'addCustomBlock'),
-					__('plugins.generic.customBlockManager.addBlock'),
-					'modal_add_item'
-				),
-				__('plugins.generic.customBlockManager.addBlock'),
-				'add_item'
-			)
-		);
+		$this->setEmptyRowText('common.none');
 
 		// Columns
-		$this->addColumn(
-			new GridColumn(
-				'title',
-				'plugins.generic.customBlockManager.blockName',
-				null,
-				'controllers/grid/gridCell.tpl'
-			)
-		);
+		$cellProvider = new PLNStatusGridCellProvider();
+		$this->addColumn(new GridColumn(
+			'id',
+			'common.id',
+			null,
+			'controllers/grid/gridCell.tpl', // Default null not supported in OMP 1.1
+			$cellProvider
+		));
+		$this->addColumn(new GridColumn(
+			'type',
+			'common.type',
+			null,
+			'controllers/grid/gridCell.tpl', // Default null not supported in OMP 1.1
+			$cellProvider
+		));
+		$this->addColumn(new GridColumn(
+			'checked',
+			'plugins.generic.pln.status.checked',
+			null,
+			'controllers/grid/gridCell.tpl', // Default null not supported in OMP 1.1
+			$cellProvider
+		));
+		$this->addColumn(new GridColumn(
+			'local_status',
+			'plugins.generic.pln.status.local_status',
+			null,
+			'controllers/grid/gridCell.tpl', // Default null not supported in OMP 1.1
+			$cellProvider
+		));
+		$this->addColumn(new GridColumn(
+			'processing_status',
+			'plugins.generic.pln.status.processing_status',
+			null,
+			'controllers/grid/gridCell.tpl', // Default null not supported in OMP 1.1
+			$cellProvider
+		));
+		$this->addColumn(new GridColumn(
+			'lockss_status',
+			'plugins.generic.pln.status.lockss_status',
+			null,
+			'controllers/grid/gridCell.tpl', // Default null not supported in OMP 1.1
+			$cellProvider
+		));
+		$this->addColumn(new GridColumn(
+			'complete',
+			'plugins.generic.pln.status.complete',
+			null,
+			'controllers/grid/gridCell.tpl', // Default null not supported in OMP 1.1
+			$cellProvider
+		));
 	}
 
     /**
@@ -123,10 +142,25 @@ class PLNStatusGridHandler extends GridHandler {
         $depositDao = DAORegistry::getDAO('DepositDAO');
         $rangeInfo = $this->getGridRangeInfo($request, $this->getId());
         return $depositDao->getDepositsByJournalId($context->getId(), $rangeInfo);
+	}
 
+	/**
+	 * Delete a custom block
+	 * @param $args array
+	 * @param $request PKPRequest
+	 * @return string Serialized JSON object
+	 */
+	function resetDeposit($args, $request) {
+		$context = $request->getContext();
+		$deposit_ids = array_keys(Request::getUserVar('reset'));
+		$depositDao = DAORegistry::getDAO('DepositDAO');
+		foreach ($deposit_ids as $deposit_id) {
+			$deposit = $depositDao->getDepositById($context->getId(), $deposit_id);
+			$deposit->setStatus(PLN_PLUGIN_DEPOSIT_STATUS_NEW);
+			$depositDao->updateDeposit($deposit);
+		}
 
-		//$rangeInfo = $this->getGridRangeInfo($request, $this->getId());
-		//return $announcementDao->getByAssocId($context->getAssocType(), $context->getId(), $rangeInfo);
+		return DAO::getDataChangedEvent();
 	}
 
 	//

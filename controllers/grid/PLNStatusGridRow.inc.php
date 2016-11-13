@@ -37,32 +37,32 @@ class PLNStatusGridRow extends GridRow {
 			$router = $request->getRouter();
 
 			// Create the "edit custom block" action
-			import('lib.pkp.classes.linkAction.request.AjaxModal');
-			$this->addAction(
-				new LinkAction(
-					'editCustomBlock',
-					new AjaxModal(
-						$router->url($request, null, null, 'editCustomBlock', null, array('blockName' => $blockName)),
-						__('grid.action.edit'),
-						'modal_edit',
-						true),
-					__('grid.action.edit'),
-					'edit'
-				)
-			);
+			//import('lib.pkp.classes.linkAction.request.AjaxModal');
+			//$this->addAction(
+			//    new LinkAction(
+			//        'editCustomBlock',
+			//        new AjaxModal(
+			//            $router->url($request, null, null, 'editCustomBlock', null, array('blockName' => $blockName)),
+			//            __('grid.action.edit'),
+			//            'modal_edit',
+			//            true),
+			//        __('grid.action.edit'),
+			//        'edit'
+			//    )
+			//);
 
 			// Create the "delete custom block" action
 			import('lib.pkp.classes.linkAction.request.RemoteActionConfirmationModal');
 			$this->addAction(
 				new LinkAction(
-					'deleteCustomBlock',
+					'resetDeposit',
 					new RemoteActionConfirmationModal(
 						$request->getSession(),
-						__('common.confirmDelete'),
-						__('grid.action.delete'),
-						$router->url($request, null, null, 'deleteCustomBlock', null, array('blockName' => $blockName)), 'modal_delete'
+						__('common.reset'),
+						__('common.reset'),
+						$router->url($request, null, null, 'resetDeposit', null, $this->getRequestArgs(), 'modal_delete')
 					),
-					__('grid.action.delete'),
+					__('common.reset'),
 					'delete'
 				)
 			);

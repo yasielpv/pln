@@ -102,23 +102,27 @@ class PLNPlugin extends GenericPlugin {
 				HookRegistry::register('JournalDAO::deleteJournalById', array($this, 'callbackDeleteJournalById'));
 				HookRegistry::register('LoadHandler', array($this, 'callbackLoadHandler'));
 				HookRegistry::register('NotificationManager::getNotificationContents', array($this, 'callbackNotificationContents'));
+				HookRegistry::register('LoadComponentHandler', array($this, 'setupComponentHandlers'));
 			}
 		}
 
 		return $success;
 	}
 
-    /**
-     * Permit requests to the plnStatus grid handler
-     * @param $hookName string The name of the hook being invoked
-     * @param $args array The parameters to the invoked hook
-     */
-	function setupGridHandler($hookName, $params) {
+	/**
+	 * Permit requests to the static pages grid handler
+	 * @param $hookName string The name of the hook being invoked
+	 * @param $args array The parameters to the invoked hook
+	 */
+	function setupComponentHandlers($hookName, $params) {
 		$component =& $params[0];
-		if ($component == 'plugins.generic.pln.controllers.grid.PLNStatusGridHandler') {
-            import($component);
-			define('PLN_PLUGIN_NAME', $this->getName());
-			return true;
+		switch ($component) {
+			case 'plugins.generic.pln.controllers.grid.PLNStatusGridHandler':
+				// Allow the static page grid handler to get the plugin object
+				import($component);
+				$className = array_pop(explode('.', $component));
+				$className::setPlugin($this);
+				return true;
 		}
 		return false;
 	}
@@ -167,7 +171,6 @@ class PLNPlugin extends GenericPlugin {
 
 		$depositObjectDao = new DepositObjectDAO($this->getName());
 		DAORegistry::registerDAO('DepositObjectDAO', $depositObjectDao);
-
 	}
 
 	/**
@@ -411,6 +414,8 @@ class PLNPlugin extends GenericPlugin {
 
                 return new JSONMessage(true, $form->fetch($request));
             case 'status':
+				$depositDao =& DAORegistry::getDAO('DepositDAO');
+
                 $context = $request->getContext();
 				AppLocale::requireComponents(LOCALE_COMPONENT_APP_COMMON,  LOCALE_COMPONENT_PKP_MANAGER);
 				$templateMgr = TemplateManager::getManager($request);

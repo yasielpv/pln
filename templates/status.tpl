@@ -25,7 +25,7 @@
 	<h3>{translate key="plugins.generic.pln.status.deposits"}</h3>
 	<p>{translate key="plugins.generic.pln.status.network_status" networkStatusMessage=$networkStatusMessage}</p>
 	<form class="pkp_form" id="plnStatusForm" method="post" action="{plugin_url path="status"}">
-		{url|assign:announcementGridUrl router=$smarty.const.ROUTE_COMPONENT component="plugins.generic.pln.controllers.grid.PLNStatusGridHandler" op="fetchGrid" escape=false}
+		{url|assign:announcementGridUrl component="plugins.generic.pln.controllers.grid.PLNStatusGridHandler" op="fetchGrid" escape=false}
 		{load_url_in_div id="announcementGridContainer" url=$announcementGridUrl}
 
 		<table>
