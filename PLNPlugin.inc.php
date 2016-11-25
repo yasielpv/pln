@@ -21,7 +21,11 @@ import('classes.issue.Issue');
 define('PLN_PLUGIN_NAME','plnplugin');
 
 // defined here in case an upgrade doesn't pick up the default value.
-define('PLN_DEFAULT_NETWORK', 'http://pkp-pln.lib.sfu.ca');
+// define('PLN_DEFAULT_NETWORK', 'http://pkp-pln.lib.sfu.ca');
+
+// TODO defstat:: SHOULD CHANGE ON REVIEW AND PRODUCTION
+define('PLN_DEFAULT_NETWORK', 'http://localhost:8084/symfony/pkppln-php/web');
+
 define('PLN_DEFAULT_STATUS_SUFFIX', '/docs/status');
 
 define('PLN_PLUGIN_HTTP_STATUS_OK', 200);
