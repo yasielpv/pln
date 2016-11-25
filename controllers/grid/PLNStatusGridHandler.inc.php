@@ -24,7 +24,7 @@ class PLNStatusGridHandler extends GridHandler {
 	 * Constructor
 	 */
 	function PLNStatusGridHandler() {
-		parent::GridHandler();
+		parent::__construct();
 		$this->addRoleAssignment(
 			array(ROLE_ID_MANAGER),
 			array('fetchGrid', 'fetchRow', 'addCustomBlock', 'editCustomBlock', 'updateCustomBlock', 'resetDeposit')

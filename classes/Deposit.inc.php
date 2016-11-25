@@ -21,7 +21,7 @@ class Deposit extends DataObject {
 	 * @return Deposit
 	 */
 	function Deposit($uuid) {
-		parent::DataObject();
+		parent::__construct();
 
 		//Set up new deposits with a UUID
 		$this->setUUID($uuid);

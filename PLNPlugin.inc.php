@@ -72,13 +72,6 @@ define('PLN_PLUGIN_NOTIFICATION_TYPE_TAR_MISSING',		PLN_PLUGIN_NOTIFICATION_TYPE
 class PLNPlugin extends GenericPlugin {
 
 	/**
-	 * Constructor
-	 */
-	function PLNPlugin() {
-		parent::GenericPlugin();
-	}
-
-	/**
 	 * @copydoc LazyLoadPlugin::register()
 	 */
 	function register($category, $path) {

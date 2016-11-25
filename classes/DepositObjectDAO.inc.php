@@ -13,13 +13,15 @@
  * @brief Operations for adding a PLN deposit object
  */
 
+import('lib.pkp.classes.db.DAO');
+
 class DepositObjectDAO extends DAO {
 
 	/**
 	 * Constructor
 	 */
 	function DepositObjectDAO() {
-		parent::DAO();
+		parent::__construct();
 	}
 
 	/**
@@ -84,12 +86,12 @@ class DepositObjectDAO extends DAO {
 	 */
 	function markHavingUpdatedContent($journalId, $objectType) {
 		$depositDao =& DAORegistry::getDAO('DepositDAO');
-	
+
 		switch ($objectType) {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
 				$result =& $this->retrieve(
 					'SELECT pdo.deposit_object_id, a.last_modified FROM pln_deposit_objects pdo
-					LEFT JOIN articles a ON pdo.object_id = a.article_id 
+					LEFT JOIN articles a ON pdo.object_id = a.article_id
 					WHERE a.journal_id = ? AND pdo.journal_id = ? AND pdo.date_modified < a.last_modified',
 					array (
 						(int) $journalId,
@@ -154,13 +156,13 @@ class DepositObjectDAO extends DAO {
 	 */
 	function &createNew($journalId, $objectType) {
 		$objects = array();
-	
+
 		switch ($objectType) {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
 				$published_article_dao =& DAORegistry::getDAO('PublishedArticleDAO');
 				$result =& $this->retrieve(
 					'SELECT pa.article_id FROM published_articles pa
-					LEFT JOIN articles a ON pa.article_id = a.article_id 
+					LEFT JOIN articles a ON pa.article_id = a.article_id
 					LEFT JOIN pln_deposit_objects pdo ON pa.article_id = pdo.object_id
 					WHERE a.journal_id = ? AND pdo.object_id is null',
 					(int) $journalId
@@ -225,7 +227,7 @@ class DepositObjectDAO extends DAO {
 				$depositObject->getDepositId()
 			)
 		);
-		
+
 		$depositObject->setId($this->getInsertDepositObjectId());
 		return $depositObject->getId();
 	}

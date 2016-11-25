@@ -20,7 +20,7 @@ class DepositObject extends DataObject {
 	 * @return DepositObject
 	 */
 	function DepositObject() {
-		parent::DataObject();
+		parent::__construct();
 	}
 
 	/**
@@ -53,7 +53,7 @@ class DepositObject extends DataObject {
 				break;
 			default:
 		}
-		
+
 	}
 
 	/**

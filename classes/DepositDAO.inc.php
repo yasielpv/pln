@@ -13,13 +13,15 @@
  * @brief Operations for adding a PLN deposit
  */
 
+import('lib.pkp.classes.db.DAO');
+
 class DepositDAO extends DAO {
 
 	/**
 	 * Constructor
 	 */
 	function DepositDAO() {
-		parent::DAO();
+		parent::__construct();
 	}
 
 	/**
