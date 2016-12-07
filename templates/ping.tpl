@@ -23,7 +23,7 @@
 		</terms>
 	</pluginInfo>
 	<journalInfo>
-		<title>{$journal->getLocalizedTitle()|escape}</title>
+		<title>{$journal->getLocalizedName()|escape}</title>
 		<articles count="{$articles->getCount()|escape}">
 			{iterate from=articles item=article}
 			<article pubDate="{$article->getDatePublished()|escape}">{$article->getLocalizedTitle()|escape}</article>

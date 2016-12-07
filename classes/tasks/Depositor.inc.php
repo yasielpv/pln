@@ -44,16 +44,15 @@ class Depositor extends ScheduledTask {
 	 * @copydoc ScheduledTask::executeActions()
 	 */
 	function executeActions() {
-
 		if (!$this->_plugin) return false;
 
-		$journal_dao =& DAORegistry::getDAO('JournalDAO');
+		$journalDao =& DAORegistry::getDAO('JournalDAO');
 
 		// Get all journals
-		$journals =& $journal_dao->getJournals(true);
+		$journals = $journalDao->getAll(true);
 
 		// For all journals
-		while ($journal =& $journals->next()) {
+		while ($journal = $journals->next()) {
 
 			// if the plugin isn't enabled for this journal, skip it
 			if (!$this->_plugin->getSetting($journal->getId(), 'enabled')) continue;
@@ -63,7 +62,7 @@ class Depositor extends ScheduledTask {
 			$this->_plugin->import('classes.DepositObject');
 			$this->_plugin->import('classes.DepositPackage');
 
-			$this->addExecutionLogEntry(__('plugins.generic.pln.notifications.processing_for', array('title' => $journal->getLocalizedTitle())), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+			$this->addExecutionLogEntry(__('plugins.generic.pln.notifications.processing_for', array('title' => $journal->getLocalizedName())), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 
 			// check to make sure curl is installed
 			if (!$this->_plugin->curlInstalled()) {
@@ -79,11 +78,11 @@ class Depositor extends ScheduledTask {
 				continue;
 			}
 
-                        if(!$this->_plugin->tarInstalled()) {
+            if(!$this->_plugin->tarInstalled()) {
 				$this->addExecutionLogEntry(__('plugins.generic.pln.notifications.tar_missing'), SCHEDULED_TASK_MESSAGE_TYPE_WARNING);
 				$this->_plugin->createJournalManagerNotification($journal->getId(),PLN_PLUGIN_NOTIFICATION_TYPE_TAR_MISSING);
 				continue;
-                        }
+            }
 
 			$this->addExecutionLogEntry(__('plugins.generic.pln.notifications.getting_servicedocument'), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 			// get the sword service document
@@ -231,7 +230,7 @@ class Depositor extends ScheduledTask {
 						//create a new deposit
 						$newDeposit = new Deposit($this->_plugin->newUUID());
 						$newDeposit->setJournalId($journal->getId());
-						$depositDao->insertDeposit($newDeposit);
+						$depositDao->insertObject($newDeposit);
 
 						// add each object to the deposit
 						foreach ($newObject_array as $newObject) {
@@ -248,7 +247,7 @@ class Depositor extends ScheduledTask {
 				while ($newObject =& $newObjects->next()) {
 					$newDeposit = new Deposit($this->_plugin->newUUID());
 					$newDeposit->setJournalId($journal->getId());
-					$depositDao->insertDeposit($newDeposit);
+					$depositDao->insertObject($newDeposit);
 					$newObject->setDepositId($newDeposit->getId());
 					$depositObjectDao->updateDepositObject($newObject);
 					unset($newObject);

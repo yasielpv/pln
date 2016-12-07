@@ -148,7 +148,7 @@ class PLNGatewayPlugin extends GatewayPlugin {
 			'zipInstalled' => class_exists('ZipArchive') ? 'yes' : 'no',
 			'tarInstalled' => class_exists('Archive_Tar') ? 'yes' : 'no',
 			'acron' => isset($products['acron']) ? 'yes' : 'no',
-			'tasks' => Config::getVar('scheduled_tasks', false) ? 'yes' : 'no',
+			'tasks' => Config::getVar('general', 'scheduled_tasks', false) ? 'yes' : 'no',
 		);
 		$templateMgr->assign_by_ref('prerequisites', $prerequisites);
 

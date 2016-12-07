@@ -119,8 +119,8 @@ class DepositObjectDAO extends DAO {
 					'SELECT pdo.deposit_object_id, MAX(i.last_modified) as issue_modified, MAX(a.last_modified) as article_modified
 					FROM issues i
 					LEFT JOIN pln_deposit_objects pdo ON pdo.object_id = i.issue_id
-					LEFT JOIN published_articles pa ON pa.issue_id = i.issue_id
-					LEFT JOIN articles a ON a.article_id = pa.article_id
+					LEFT JOIN published_submissions pa ON pa.issue_id = i.issue_id
+					LEFT JOIN submissions a ON a.submission_id = pa.submission_id
 					WHERE (pdo.date_modified < a.last_modified OR pdo.date_modified < i.last_modified)
 					AND (pdo.journal_id = ?)
 					GROUP BY pdo.deposit_object_id',
@@ -141,7 +141,7 @@ class DepositObjectDAO extends DAO {
 						$this->updateDepositObject($depositObject);
 						$deposit->setNewStatus();
 						$deposit->setLockssAgreementStatus(true); // this is an update.
-						$depositDao->updateDeposit($deposit);
+						$depositDao->updateObject($deposit);
 					}
 					$result->MoveNext();
 				}
@@ -161,9 +161,9 @@ class DepositObjectDAO extends DAO {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
 				$published_article_dao =& DAORegistry::getDAO('PublishedArticleDAO');
 				$result =& $this->retrieve(
-					'SELECT pa.article_id FROM published_articles pa
-					LEFT JOIN articles a ON pa.article_id = a.article_id
-					LEFT JOIN pln_deposit_objects pdo ON pa.article_id = pdo.object_id
+					'SELECT pa.submission_id FROM published_submissions pa
+					LEFT JOIN submissions a ON pa.submission_id = a.submission_id
+					LEFT JOIN pln_deposit_objects pdo ON pa.submission_id = pdo.object_id
 					WHERE a.journal_id = ? AND pdo.object_id is null',
 					(int) $journalId
 				);
@@ -184,7 +184,7 @@ class DepositObjectDAO extends DAO {
 				);
 				while (!$result->EOF) {
 					$row = $result->GetRowAssoc(false);
-					$objects[] =& $issue_dao->getIssueById($row['issue_id']);
+					$objects[] =& $issue_dao->getById($row['issue_id']);
 					$result->MoveNext();
 				}
 				$result->Close();
@@ -275,7 +275,7 @@ class DepositObjectDAO extends DAO {
 	 * @return int
 	 */
 	function getInsertDepositObjectId() {
-		return $this->getInsertId('pln_deposit_objects', 'object_id');
+		return $this->_getInsertId('pln_deposit_objects', 'object_id');
 	}
 
 	/**

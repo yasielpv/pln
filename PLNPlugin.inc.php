@@ -87,7 +87,7 @@ class PLNPlugin extends GenericPlugin {
 		if ($success) {
 			HookRegistry::register('TemplateManager::display',array($this, 'callbackTemplateDisplay'));
 			HookRegistry::register('Templates::Manager::Setup::JournalArchiving', array($this, 'callbackJournalArchivingSetup'));
-			HookRegistry::register('AcronPlugin::parseCronTab', array($this, 'callbackParseCronTab'));
+            HookRegistry::register('AcronPlugin::parseCronTab', array($this, 'callbackParseCronTab'));
 
 			if ($this->getEnabled()) {
 				$this->registerDAOs();
@@ -233,7 +233,7 @@ class PLNPlugin extends GenericPlugin {
 	 */
 	function getSetting($journalId,$settingName) {
 		// if there isn't a journal_uuid, make one
-                switch ($settingName) {
+        switch ($settingName) {
 			case 'journal_uuid':
 				$uuid = parent::getSetting($journalId, $settingName);
 				if (!is_null($uuid) && $uuid != '')
@@ -388,7 +388,7 @@ class PLNPlugin extends GenericPlugin {
 
 
                 if ($request->getUserVar('refresh')) {
-                    $this->getServiceDocument($context->getId());
+                    $this->getServiceDocument($context->getId(), $request);
                 } else {
                     if ($request->getUserVar('save')) {
 
@@ -558,7 +558,7 @@ class PLNPlugin extends GenericPlugin {
 	 * @return int The HTTP response status or FALSE for a network error.
 	 */
 	function getServiceDocument($contextId) {
-
+        $request = PKPApplication::getRequest();
 		$contextDao = Application::getContextDAO();
 		$context = $contextDao->getById($contextId);
 
@@ -566,12 +566,14 @@ class PLNPlugin extends GenericPlugin {
 		$locale = $context->getPrimaryLocale();
 		$language = strtolower(str_replace('_', '-', $locale));
 		$network = $this->getSetting($context->getId(), 'pln_network');
+        $dispatcher = $request->getDispatcher();
+
 		// retrieve the service document
 		$result = $this->_curlGet(
 			$network . PLN_PLUGIN_SD_IRI,
 			array(
 				'On-Behalf-Of: '.$this->getSetting($contextId, 'journal_uuid'),
-				'Journal-URL: '.$context->getPath(),
+				'Journal-URL: '.$dispatcher->url($request, ROUTE_PAGE, $context->getPath()),
 				'Accept-language:' . $language,
 			)
 		);
