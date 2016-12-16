@@ -157,7 +157,7 @@ class PLNStatusGridHandler extends GridHandler {
 		foreach ($deposit_ids as $deposit_id) {
 			$deposit = $depositDao->getDepositById($context->getId(), $deposit_id);
 			$deposit->setStatus(PLN_PLUGIN_DEPOSIT_STATUS_NEW);
-			$depositDao->updateDeposit($deposit);
+			$depositDao->updateObject($deposit);
 		}
 
 		return DAO::getDataChangedEvent();

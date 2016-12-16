@@ -17,6 +17,14 @@ import('classes.handler.Handler');
 
 class PLNHandler extends Handler {
 
+    /**
+     * Constructor
+     * @param $request Request
+     */
+	function __construct($request) {
+		parent::__construct();
+	}
+
 	/**
 	 * Index handler: redirect to journal page.
 	 * @param $args array
@@ -26,17 +34,27 @@ class PLNHandler extends Handler {
 		$request->redirect(null, 'index');
 	}
 
+    /**
+     * @copydoc PKPHandler::authorize()
+     */
+	function authorize($request, &$args, $roleAssignments) {
+		import('lib.pkp.classes.security.authorization.ContextRequiredPolicy');
+		$this->addPolicy(new ContextRequiredPolicy($request));
+
+		return parent::authorize($request, $args, $roleAssignments);
+	}
+
 	/**
 	 * Provide an endpoint for the PLN staging server to retrieve a deposit
 	 * @param array $args
 	 * @param Request $request
 	 */
-	function deposits($args, &$request) {
+	function deposits($args, $request) {
 		$journal =& $request->getJournal();
 		$depositDao =& DAORegistry::getDAO('DepositDAO');
 		$fileManager = new FileManager();
 		$dispatcher = $request->getDispatcher();
-		
+
 		$depositUuid = (!isset($args[0]) || empty($args[0])) ? null : $args[0];
 
 		// sanitize the input
@@ -45,25 +63,25 @@ class PLNHandler extends Handler {
 			$dispatcher->handle404();
 			return FALSE;
 		}
-		
+
 		$deposit =& $depositDao->getDepositByUUID($journal->getId(),$depositUuid);
-		
+
 		if (!$deposit) {
 			error_log(__("plugins.generic.pln.error.handler.uuid.notfound"));
 			$dispatcher->handle404();
 			return FALSE;
 		}
-		
+
 		$depositPackage = new DepositPackage($deposit, null);
 		$depositBag = $depositPackage->getPackageFilePath();
-		
+
 		if (!$fileManager->fileExists($depositBag)) {
 			error_log("plugins.generic.pln.error.handler.file.notfound");
 			$dispatcher->handle404();
 			return FALSE;
 		}
-				
-		return $fileManager->downloadFile($depositBag, mime_content_type($depositBag), TRUE);		
+
+		return $fileManager->downloadFile($depositBag, mime_content_type($depositBag), TRUE);
 	}
 
 	/**
@@ -77,6 +95,18 @@ class PLNHandler extends Handler {
 		$templateMgr =& TemplateManager::getManager();
 		$templateMgr->assign('pageHierarchy', array(array($router->url($request, null, 'about'), 'about.aboutTheJournal')));
 		$templateMgr->display($plnPlugin->getTemplatePath() . DIRECTORY_SEPARATOR . 'status.tpl');
+	}
+
+    //
+	// Private helper methods
+	//
+	/**
+     * Get the Usage Stats plugin object
+     * @return UsageStatsPlugin
+     */
+	function &_getPlugin() {
+		$plugin =& PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
+		return $plugin;
 	}
 }
 

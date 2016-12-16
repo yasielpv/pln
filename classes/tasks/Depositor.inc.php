@@ -192,7 +192,9 @@ class Depositor extends ScheduledTask {
 
 		// make sure the pln work directory exists
 		// TOOD: use FileManager calls instead of PHP ones where possible
-		if ($fileManager->fileExists($plnDir,'dir') !== true) { $fileManager->mkdirtree($plnDir); }
+		if ($fileManager->fileExists($plnDir,'dir') !== true) { 
+            $fileManager->mkdirtree($plnDir); 
+        }
 
 		// loop though all of the deposits that need packaging
 		while ($deposit =& $depositQueue->next()) {

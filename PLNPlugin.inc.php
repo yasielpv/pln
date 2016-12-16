@@ -199,7 +199,7 @@ class PLNPlugin extends GenericPlugin {
 	 * @return string
 	 */
 	function getHandlerPath() {
-		return $this->getPluginPath() . DIRECTORY_SEPARATOR . 'pages';
+		return $this->getPluginPath() . '/' . 'pages';
 	}
 
 	/**
@@ -362,9 +362,10 @@ class PLNPlugin extends GenericPlugin {
 			if ($op) {
 				if (in_array($op, array('deposits'))) {
 					define('HANDLER_CLASS', 'PLNHandler');
+                    define('PLN_PLUGIN_NAME', $this->getName());
 					AppLocale::requireComponents(LOCALE_COMPONENT_APPLICATION_COMMON);
 					$handlerFile =& $args[2];
-					$handlerFile = $this->getHandlerPath() . DIRECTORY_SEPARATOR . 'PLNHandler.inc.php';
+					$handlerFile = $this->getHandlerPath() . '/' . 'PLNHandler.inc.php';
 				}
 			}
 		}
@@ -426,7 +427,7 @@ class PLNPlugin extends GenericPlugin {
 					foreach ($deposit_ids as $deposit_id) {
 						$deposit = $depositDao->getDepositById($context->getId(), $deposit_id);
 						$deposit->setStatus(PLN_PLUGIN_DEPOSIT_STATUS_NEW);
-						$depositDao->updateDeposit($deposit);
+						$depositDao->updateObject($deposit);
 					}
 				}
 

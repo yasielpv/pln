@@ -108,7 +108,7 @@ class DepositObjectDAO extends DAO {
 						$this->updateDepositObject($depositObject);
 						$deposit->setNewStatus();
 						$deposit->setLockssAgreementStatus(true); // this is an update.
-						$depositDao->updateDeposit($deposit);
+						$depositDao->updateObject($deposit);
 					}
 					$result->MoveNext();
 				}

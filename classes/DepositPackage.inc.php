@@ -140,10 +140,13 @@ class DepositPackage {
 		$email = $this->_generateElement($atom, 'email', $journal->getSetting('contactEmail'));
 		$entry->appendChild($email);
 
-		$title = $this->_generateElement($atom, 'title', $journal->getLocalizedTitle());
+		$title = $this->_generateElement($atom, 'title', $journal->getLocalizedName());
 		$entry->appendChild($title);
 
-		$pkpJournalUrl = $this->_generateElement($atom, 'pkp:journal_url', $journal->getUrl(), 'http://pkp.sfu.ca/SWORD');
+        $request = PKPApplication::getRequest();
+        $dispatcher = $request->getDispatcher();
+
+		$pkpJournalUrl = $this->_generateElement($atom, 'pkp:journal_url', $dispatcher->url($request, ROUTE_PAGE, $journal->getPath()), 'http://pkp.sfu.ca/SWORD');
 		$entry->appendChild($pkpJournalUrl);
 
 		$pkpPublisher = $this->_generateElement($atom, 'pkp:publisherName', $journal->getSetting('publisherInstitution'), 'http://pkp.sfu.ca/SWORD');
@@ -169,7 +172,7 @@ class DepositPackage {
 		$updated = $this->_generateElement($atom, 'updated', strftime("%FT%TZ",strtotime($this->_deposit->getDateModified())));
 		$entry->appendChild($updated);
 
-		$url = $journal->getUrl() . '/' . PLN_PLUGIN_ARCHIVE_FOLDER . '/deposits/' . $this->_deposit->getUUID();
+		$url = $dispatcher->url($request, ROUTE_PAGE, $journal->getPath()) . '/' . PLN_PLUGIN_ARCHIVE_FOLDER . '/deposits/' . $this->_deposit->getUUID();
 		$pkpDetails = $this->_generateElement($atom, 'pkp:content', $url, 'http://pkp.sfu.ca/SWORD');
 		$pkpDetails->setAttribute('size', ceil(filesize($packageFile)/1000));
 
@@ -192,7 +195,7 @@ class DepositPackage {
 				$depositObjects = $this->_deposit->getDepositObjects();
 				while ($depositObject =& $depositObjects->next()) {
 					$issueDao =& DAORegistry::getDAO('IssueDAO');
-					$issue = $issueDao->getIssueById($depositObject->getObjectId());
+					$issue = $issueDao->getById($depositObject->getObjectId());
 					$objectVolume = $issue->getVolume();
 					$objectIssue = $issue->getNumber();
 					if ($issue->getDatePublished() > $objectPublicationDate)
@@ -407,7 +410,7 @@ class DepositPackage {
 			// if this was an update, unset the update flag
 			$this->_deposit->setLockssAgreementStatus(false);
 			$this->_deposit->setLastStatusDate(time());
-			$depositDao->updateDeposit($this->_deposit);
+			$depositDao->updateObject($this->_deposit);
 		} else {
 			// we got an error back from the staging server
 			if($result['status'] == FALSE) {
@@ -417,7 +420,7 @@ class DepositPackage {
 			}
 			$this->_deposit->setLockssReceivedStatus();
 			$this->_deposit->setLastStatusDate(time());
-			$depositDao->updateDeposit($this->_deposit);
+			$depositDao->updateObject($this->_deposit);
 		}
 
 	}
@@ -446,19 +449,19 @@ class DepositPackage {
 		}
 		if (!$fileManager->fileExists($packagePath)) {
 			$this->_deposit->setPackagedStatus(false);
-			$depositDao->updateDeposit($this->_deposit);
+			$depositDao->updateObject($this->_deposit);
 			return;
 		}
 
 		if (!$fileManager->fileExists($this->generateAtomDocument())) {
 			$this->_deposit->setPackagedStatus(false);
-			$depositDao->updateDeposit($this->_deposit);
+			$depositDao->updateObject($this->_deposit);
 			return;
 		}
 
 		// update the deposit's status
 		$this->_deposit->setPackagedStatus();
-		$depositDao->updateDeposit($this->_deposit);
+		$depositDao->updateObject($this->_deposit);
 
 	}
 
@@ -539,7 +542,7 @@ class DepositPackage {
 		}
 
 		$this->_deposit->setLastStatusDate(time());
-		$depositDao->updateDeposit($this->_deposit);
+		$depositDao->updateObject($this->_deposit);
 	}
 }
 ?>
