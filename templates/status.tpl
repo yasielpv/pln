@@ -28,41 +28,7 @@
 		{url|assign:announcementGridUrl component="plugins.generic.pln.controllers.grid.PLNStatusGridHandler" op="fetchGrid" escape=false}
 		{load_url_in_div id="announcementGridContainer" url=$announcementGridUrl}
 
-		<table>
-			<tr>
-				<th>{translate key="common.id"}</th>
-				<th>{translate key="common.type"}</th>
-				<th>{translate key="plugins.generic.pln.status.checked"}</th>
-				<th>{translate key="plugins.generic.pln.status.local_status"}</th>
-				<th>{translate key="plugins.generic.pln.status.processing_status"}</th>
-				<th>{translate key="plugins.generic.pln.status.lockss_status"}</th>
-				<th>{translate key="plugins.generic.pln.status.complete"}</th>
-				<th></th>
-			</tr>
-			{iterate from=deposits item=deposit}
-			<tr>
-				<td>{$deposit->getId()}</td>
-				<td>{$deposit->getObjectType()}</td>
-				<td>{$deposit->getLastStatusDate()}</td>
-				<td>{translate key=$deposit->getLocalStatus()}</td>
-				<td>{translate key=$deposit->getProcessingStatus()}</td>
-				<td>{translate key=$deposit->getLockssStatus()}</td>
-				<td>{translate key=$deposit->getComplete()}</td>
-				<td><input type="submit" name="reset[{$deposit->getId()}]" class="button" value="{translate key="common.reset"}" onclick="return confirm('{$confirmReset|escape}')" /></td>
-			</tr>
-			{/iterate}
-			{if $deposits->wasEmpty()}
-			<tr>
-				<td colspan="8" class="nodata">{translate key="common.none"}</td>
-			</tr>
-			<tr><td colspan="8" class="endseparator">&nbsp;</td></tr>
-			{else}
-				<tr>
-					<td colspan="4" align="left">{page_info iterator=$deposits}</td>
-					<td colspan="4" align="right">{page_links anchor="deposits" name="deposits" iterator=$deposits}</td>
-				</tr>
-			{/if}
-		</table>
+		
 	</form>
 		<p>{translate key='plugins.generic.pln.status.docs' statusDocsUrl=$plnStatusDocs}</p>
 </div>

@@ -32,24 +32,10 @@ class PLNStatusGridRow extends GridRow {
 	function initialize($request) {
 		parent::initialize($request);
 
-		$blockName = $this->getId();
-		if (!empty($blockName)) {
+		$rowId = $this->getId();
+        $actionArgs['DepositId'] = $rowId;
+		if (!empty($rowId)) {
 			$router = $request->getRouter();
-
-			// Create the "edit custom block" action
-			//import('lib.pkp.classes.linkAction.request.AjaxModal');
-			//$this->addAction(
-			//    new LinkAction(
-			//        'editCustomBlock',
-			//        new AjaxModal(
-			//            $router->url($request, null, null, 'editCustomBlock', null, array('blockName' => $blockName)),
-			//            __('grid.action.edit'),
-			//            'modal_edit',
-			//            true),
-			//        __('grid.action.edit'),
-			//        'edit'
-			//    )
-			//);
 
 			// Create the "delete custom block" action
 			import('lib.pkp.classes.linkAction.request.RemoteActionConfirmationModal');
@@ -58,12 +44,13 @@ class PLNStatusGridRow extends GridRow {
 					'resetDeposit',
 					new RemoteActionConfirmationModal(
 						$request->getSession(),
+						__('plugins.generic.pln.status.confirmReset'),
 						__('common.reset'),
-						__('common.reset'),
-						$router->url($request, null, null, 'resetDeposit', null, $this->getRequestArgs(), 'modal_delete')
+
+						$router->url($request, null, null, 'resetDeposit', null, $actionArgs, 'modal_reset')
 					),
 					__('common.reset'),
-					'delete'
+					'reset'
 				)
 			);
 		}
