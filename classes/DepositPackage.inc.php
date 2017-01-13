@@ -64,7 +64,7 @@ class DepositPackage {
 	 * @return string
 	 */
 	function getDepositDir() {
-		$journalDao =& DAORegistry::getDAO('JournalDAO');
+		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$fileManager = new JournalFileManager($journalDao->getById($this->_deposit->getJournalId()));
 		return $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER . DIRECTORY_SEPARATOR . $this->_deposit->getUUID();
 	}
@@ -117,9 +117,9 @@ class DepositPackage {
 	 */
 	function generateAtomDocument() {
 
-		$plnPlugin =& PluginRegistry::getPlugin('generic',PLN_PLUGIN_NAME);
-		$journalDao =& DAORegistry::getDAO('JournalDAO');
-		$journal =& $journalDao->getById($this->_deposit->getJournalId());
+		$plnPlugin = PluginRegistry::getPlugin('generic',PLN_PLUGIN_NAME);
+		$journalDao = DAORegistry::getDAO('JournalDAO');
+		$journal = $journalDao->getById($this->_deposit->getJournalId());
 		$fileManager = new JournalFileManager($journal);
 
 		// set up folder and file locations
@@ -183,8 +183,8 @@ class DepositPackage {
 		switch ($this->_deposit->getObjectType()) {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
 				$depositObjects = $this->_deposit->getDepositObjects();
-				while ($depositObject =& $depositObjects->next()) {
-					$publishedArticleDao =& DAORegistry::getDAO('PublishedArticleDAO');
+				while ($depositObject = $depositObjects->next()) {
+					$publishedArticleDao = DAORegistry::getDAO('PublishedArticleDAO');
 					$article = $publishedArticleDao->getPublishedArticleByArticleId($depositObject->getObjectId());
 					if ($article->getDatePublished() > $objectPublicationDate)
 						$objectPublicationDate = $article->getDatePublished();
@@ -193,8 +193,8 @@ class DepositPackage {
 				break;
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
 				$depositObjects = $this->_deposit->getDepositObjects();
-				while ($depositObject =& $depositObjects->next()) {
-					$issueDao =& DAORegistry::getDAO('IssueDAO');
+				while ($depositObject = $depositObjects->next()) {
+					$issueDao = DAORegistry::getDAO('IssueDAO');
 					$issue = $issueDao->getById($depositObject->getObjectId());
 					$objectVolume = $issue->getVolume();
 					$objectIssue = $issue->getNumber();
@@ -266,16 +266,16 @@ class DepositPackage {
 		}
 
 		// get DAOs, plugins and settings
-		$journalDao =& DAORegistry::getDAO('JournalDAO');
-		$issueDao =& DAORegistry::getDAO('IssueDAO');
-		$sectionDao =& DAORegistry::getDAO('SectionDAO');
-		$publishedArticleDao =& DAORegistry::getDAO('PublishedArticleDAO');
+		$journalDao = DAORegistry::getDAO('JournalDAO');
+		$issueDao = DAORegistry::getDAO('IssueDAO');
+		$sectionDao = DAORegistry::getDAO('SectionDAO');
+		$publishedArticleDao = DAORegistry::getDAO('PublishedArticleDAO');
 		PluginRegistry::loadCategory('importexport');
-		$exportPlugin =& PluginRegistry::getPlugin('importexport','NativeImportExportPlugin');
-		$plnPlugin =& PluginRegistry::getPlugin('generic',PLN_PLUGIN_NAME);
+		$exportPlugin = PluginRegistry::getPlugin('importexport','NativeImportExportPlugin');
+		$plnPlugin = PluginRegistry::getPlugin('generic',PLN_PLUGIN_NAME);
 		$fileManager = new JournalFileManager($journalDao->getById($this->_deposit->getJournalId()));
 
-		$journal =& $journalDao->getById($this->_deposit->getJournalId());
+		$journal = $journalDao->getById($this->_deposit->getJournalId());
 		$depositObjects = $this->_deposit->getDepositObjects();
 
 		// set up folder and file locations
@@ -291,10 +291,10 @@ class DepositPackage {
 				$articles = array();
 
 				// we need to add all of the relevant articles to an array to export as a batch
-				while ($depositObject =& $depositObjects->next()) {
-					$article =& $publishedArticleDao->getPublishedArticleByArticleId($this->_deposit->getObjectId(), $journal->getId());
-					$issue =& $issueDao->getIssueById($article->getIssueId(), $journal->getId());
-					$section =& $sectionDao->getSection($article->getSectionId());
+				while ($depositObject = $depositObjects->next()) {
+					$article = $publishedArticleDao->getPublishedArticleByArticleId($this->_deposit->getObjectId(), $journal->getId());
+					$issue = $issueDao->getIssueById($article->getIssueId(), $journal->getId());
+					$section = $sectionDao->getSection($article->getSectionId());
 
 					// add the article to the array we'll pass for export
 					$articles[] = array(
@@ -315,8 +315,8 @@ class DepositPackage {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
 
 				// we only ever do one issue at a time, so get that issue
-				$depositObject =& $depositObjects->next();
-				$issue =& $issueDao->getByBestId($depositObject->getObjectId(),$journal->getId());
+				$depositObject = $depositObjects->next();
+				$issue = $issueDao->getByBestId($depositObject->getObjectId(),$journal->getId());
 
                 $exportXml = $exportPlugin->exportIssues(
 					(array) $issue->getId(),
@@ -379,9 +379,9 @@ class DepositPackage {
 	 */
 	function transferDeposit() {
 		$journalId = $this->_deposit->getJournalId();
-		$depositDao =& DAORegistry::getDAO('DepositDAO');
-		$journalDao =& DAORegistry::getDAO('JournalDAO');
-		$plnPlugin =& PluginRegistry::getPlugin('generic',PLN_PLUGIN_NAME);
+		$depositDao = DAORegistry::getDAO('DepositDAO');
+		$journalDao = DAORegistry::getDAO('JournalDAO');
+		$plnPlugin = PluginRegistry::getPlugin('generic',PLN_PLUGIN_NAME);
 		$fileManager = new JournalFileManager($journalDao->getById($journalId));
 		$plnDir = $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER;
 
@@ -430,8 +430,8 @@ class DepositPackage {
 	 */
 	function packageDeposit() {
 
-		$depositDao =& DAORegistry::getDAO('DepositDAO');
-		$journalDao =& DAORegistry::getDAO('JournalDAO');
+		$depositDao = DAORegistry::getDAO('DepositDAO');
+		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$fileManager = new JournalFileManager($journalDao->getById($this->_deposit->getJournalId()));
 		$plnDir = $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER;
 
@@ -470,8 +470,8 @@ class DepositPackage {
 	 */
 	function updateDepositStatus() {
 		$journalId = $this->_deposit->getJournalID();
-		$depositDao =& DAORegistry::getDAO('DepositDAO');
-		$plnPlugin =& PluginRegistry::getPlugin('generic', 'plnplugin');
+		$depositDao = DAORegistry::getDAO('DepositDAO');
+		$plnPlugin = PluginRegistry::getPlugin('generic', 'plnplugin');
 
 		$url = $plnPlugin->getSetting($journalId, 'pln_network') . PLN_PLUGIN_CONT_IRI;
 		$url .= '/' . $plnPlugin->getSetting($journalId, 'journal_uuid');
@@ -530,7 +530,7 @@ class DepositPackage {
 				break;
 			case 'agreement':
 				if( ! $this->_deposit->getLockssAgreementStatus()) {
-					$journalDao =& DAORegistry::getDAO('JournalDAO');
+					$journalDao = DAORegistry::getDAO('JournalDAO');
 					$fileManager = new JournalFileManager($journalDao->getById($this->_deposit->getJournalId()));
 					$depositDir = $this->getDepositDir();
 					$fileManager->rmtree($depositDir);

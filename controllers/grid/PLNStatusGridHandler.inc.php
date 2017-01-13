@@ -152,13 +152,14 @@ class PLNStatusGridHandler extends GridHandler {
 	 */
 	function resetDeposit($args, $request) {
 		$context = $request->getContext();
-		$deposit_ids = array_keys(Request::getUserVar('reset'));
+		$deposit_id = $args['DepositId'];
 		$depositDao = DAORegistry::getDAO('DepositDAO');
-		foreach ($deposit_ids as $deposit_id) {
-			$deposit = $depositDao->getDepositById($context->getId(), $deposit_id);
+
+        if (!is_null($deposit_id)) {
+            $deposit = $depositDao->getDepositById($context->getId(), $deposit_id);
 			$deposit->setStatus(PLN_PLUGIN_DEPOSIT_STATUS_NEW);
 			$depositDao->updateObject($deposit);
-		}
+        }
 
 		return DAO::getDataChangedEvent();
 	}

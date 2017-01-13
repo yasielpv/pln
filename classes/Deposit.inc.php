@@ -33,7 +33,7 @@ class Deposit extends DataObject {
 	 */
 	function getObjectType() {
 		$depositObjects = $this->getDepositObjects();
-		$depositObject =& $depositObjects->next();
+		$depositObject = $depositObjects->next();
 		return ($depositObject?$depositObject->getObjectType():null);
 	}
 
@@ -42,7 +42,7 @@ class Deposit extends DataObject {
 	 * @return array of DepositObject
 	 */
 	function &getDepositObjects() {
-		$depositObjectDao =& DAORegistry::getDAO('DepositObjectDAO');
+		$depositObjectDao = DAORegistry::getDAO('DepositObjectDAO');
 		return $depositObjectDao->getByDepositId($this->getJournalID(), $this->getId());
 	}
 

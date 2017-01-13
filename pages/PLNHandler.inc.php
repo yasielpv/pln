@@ -50,8 +50,8 @@ class PLNHandler extends Handler {
 	 * @param Request $request
 	 */
 	function deposits($args, $request) {
-		$journal =& $request->getJournal();
-		$depositDao =& DAORegistry::getDAO('DepositDAO');
+		$journal = $request->getJournal();
+		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$fileManager = new FileManager();
 		$dispatcher = $request->getDispatcher();
 
@@ -64,7 +64,7 @@ class PLNHandler extends Handler {
 			return FALSE;
 		}
 
-		$deposit =& $depositDao->getDepositByUUID($journal->getId(),$depositUuid);
+		$deposit = $depositDao->getDepositByUUID($journal->getId(),$depositUuid);
 
 		if (!$deposit) {
 			error_log(__("plugins.generic.pln.error.handler.uuid.notfound"));
@@ -90,9 +90,9 @@ class PLNHandler extends Handler {
 	 * @param Request $request
 	 */
 	function status($args=array(), &$request) {
-		$journal =& $request->getJournal();
-		$plnPlugin =& PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
-		$templateMgr =& TemplateManager::getManager();
+		$journal = $request->getJournal();
+		$plnPlugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
+		$templateMgr = TemplateManager::getManager();
 		$templateMgr->assign('pageHierarchy', array(array($router->url($request, null, 'about'), 'about.aboutTheJournal')));
 		$templateMgr->display($plnPlugin->getTemplatePath() . DIRECTORY_SEPARATOR . 'status.tpl');
 	}
@@ -105,7 +105,7 @@ class PLNHandler extends Handler {
      * @return UsageStatsPlugin
      */
 	function &_getPlugin() {
-		$plugin =& PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
+		$plugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 		return $plugin;
 	}
 }

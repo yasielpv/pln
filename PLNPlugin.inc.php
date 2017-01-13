@@ -112,7 +112,7 @@ class PLNPlugin extends GenericPlugin {
 	 * @param $args array The parameters to the invoked hook
 	 */
 	function setupComponentHandlers($hookName, $params) {
-		$component =& $params[0];
+		$component = $params[0];
 		switch ($component) {
 			case 'plugins.generic.pln.controllers.grid.PLNStatusGridHandler':
 				// Allow the static page grid handler to get the plugin object
@@ -261,13 +261,13 @@ class PLNPlugin extends GenericPlugin {
 	 * @param $args array
 	 */
 	function callbackLoadCategory($hookName, $args) {
-		$category =& $args[0];
-		$plugins =& $args[1];
+		$category = $args[0];
+		$plugins = $args[1];
 		switch ($category) {
 			case 'gateways':
 				$this->import('PLNGatewayPlugin');
 				$gatewayPlugin = new PLNGatewayPlugin($this->getName());
-				$plugins[$gatewayPlugin->getSeq()][$gatewayPlugin->getPluginPath()] =& $gatewayPlugin;
+				$plugins[$gatewayPlugin->getSeq()][$gatewayPlugin->getPluginPath()] = $gatewayPlugin;
 				break;
 		}
 		return false;
@@ -281,9 +281,9 @@ class PLNPlugin extends GenericPlugin {
 	 */
 	function callbackDeleteJournalById($hookName, $params) {
 		$journalId = $params[1];
-		$depositDao =& DAORegistry::getDAO('DepositDAO');
+		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$depositDao->deleteByJournalId($journalId);
-		$depositObjectDao =& DAORegistry::getDAO('DepositObjectDAO');
+		$depositObjectDao = DAORegistry::getDAO('DepositObjectDAO');
 		$depositObjectDao->deleteByJournalId($journalId);
 		return false;
 	}
@@ -293,11 +293,11 @@ class PLNPlugin extends GenericPlugin {
 	 */
 	function callbackTemplateDisplay($hookName, $params) {
 		// Get request and context.
-		$request =& PKPApplication::getRequest();
-		$journal =& $request->getContext();
+		$request = PKPApplication::getRequest();
+		$journal = $request->getContext();
 
 		// Assign our private stylesheet.
-		$templateMgr =& $params[0];
+		$templateMgr = $params[0];
 		$templateMgr->addStylesheet($request->getBaseUrl() . '/' . $this->getStyleSheet());
 
 		return false;
@@ -307,7 +307,7 @@ class PLNPlugin extends GenericPlugin {
 	 * @copydoc AcronPlugin::parseCronTab()
 	 */
 	function callbackParseCronTab($hookName, $args) {
-		$taskFilesPath =& $args[0];
+		$taskFilesPath = $args[0];
 		$taskFilesPath[] = $this->getPluginPath() . DIRECTORY_SEPARATOR . 'xml' . DIRECTORY_SEPARATOR . 'scheduledTasks.xml';
 		return false;
 	}
@@ -319,9 +319,9 @@ class PLNPlugin extends GenericPlugin {
 	 * @return boolean false to continue processing subsequent hooks
 	 */
 	function callbackJournalArchivingSetup($hookName, $args) {
-		$smarty =& $args[1];
-		$output =& $args[2];
-		$templateMgr =& TemplateManager::getManager();
+		$smarty = $args[1];
+		$output = $args[2];
+		$templateMgr = TemplateManager::getManager();
 		$templateMgr->register_function('plugin_url', array(&$this, 'smartyPluginUrl'));
 		$output .= $templateMgr->fetch($this->getTemplatePath() . DIRECTORY_SEPARATOR . 'setup.tpl');
 		return false;
@@ -334,8 +334,8 @@ class PLNPlugin extends GenericPlugin {
 	 * @return boolean false to continue processing subsequent hooks
 	 */
 	function callbackNotificationContents($hookName, $args) {
-		$notification =& $args[0];
-		$message =& $args[1];
+		$notification = $args[0];
+		$message = $args[1];
 
 		$type = $notification->getType();
 		assert(isset($type));
@@ -356,15 +356,15 @@ class PLNPlugin extends GenericPlugin {
 	 * @copydoc PKPPageRouter::route()
 	 */
 	function callbackLoadHandler($hookName, $args) {
-		$page =& $args[0];
+		$page = $args[0];
 		if ($page == 'pln') {
-			$op =& $args[1];
+			$op = $args[1];
 			if ($op) {
 				if (in_array($op, array('deposits'))) {
 					define('HANDLER_CLASS', 'PLNHandler');
                     define('PLN_PLUGIN_NAME', $this->getName());
 					AppLocale::requireComponents(LOCALE_COMPONENT_APPLICATION_COMMON);
-					$handlerFile =& $args[2];
+					$handlerFile = $args[2];
 					$handlerFile = $this->getHandlerPath() . '/' . 'PLNHandler.inc.php';
 				}
 			}
@@ -412,7 +412,7 @@ class PLNPlugin extends GenericPlugin {
 
                 return new JSONMessage(true, $form->fetch($request));
             case 'status':
-				$depositDao =& DAORegistry::getDAO('DepositDAO');
+				$depositDao = DAORegistry::getDAO('DepositDAO');
 
                 $context = $request->getContext();
 				AppLocale::requireComponents(LOCALE_COMPONENT_APP_COMMON,  LOCALE_COMPONENT_PKP_MANAGER);
@@ -423,7 +423,7 @@ class PLNPlugin extends GenericPlugin {
 
 				if (Request::getUserVar('reset')) {
 					$deposit_ids = array_keys(Request::getUserVar('reset'));
-					$depositDao =& DAORegistry::getDAO('DepositDAO');
+					$depositDao = DAORegistry::getDAO('DepositDAO');
 					foreach ($deposit_ids as $deposit_id) {
 						$deposit = $depositDao->getDepositById($context->getId(), $deposit_id);
 						$deposit->setStatus(PLN_PLUGIN_DEPOSIT_STATUS_NEW);
@@ -512,7 +512,7 @@ class PLNPlugin extends GenericPlugin {
 	 */
 	function setBreadcrumbs($page) {
 
-		$templateMgr =& TemplateManager::getManager();
+		$templateMgr = TemplateManager::getManager();
 		$pageCrumbs = array(
 			array(
 				Request::url(null, 'user'),
@@ -637,12 +637,12 @@ class PLNPlugin extends GenericPlugin {
 	 * @param $notificationType int
 	 */
 	function createJournalManagerNotification($contextId, $notificationType) {
-		$roleDao =& DAORegistry::getDAO('RoleDAO');
+		$roleDao = DAORegistry::getDAO('RoleDAO');
 		$journalManagers = $roleDao->getUsersByRoleId(ROLE_ID_JOURNAL_MANAGER, $contextId);
 		import('classes.notification.NotificationManager');
 		$notificationManager = new NotificationManager();
 		// TODO: this currently gets sent to all journal managers - perhaps only limit to the technical contact's account?
-		while ($journalManager =& $journalManagers->next()) {
+		while ($journalManager = $journalManagers->next()) {
 			$notificationManager->createTrivialNotification($journalManager->getId(), $notificationType);
 			unset($journalManager);
 		}
@@ -690,8 +690,8 @@ class PLNPlugin extends GenericPlugin {
 	 * @return boolean
 	 */
 	function cronEnabled() {
-		$application =& PKPApplication::getApplication();
-		$products =& $application->getEnabledProducts('plugins.generic');
+		$application = PKPApplication::getApplication();
+		$products = $application->getEnabledProducts('plugins.generic');
 		return isset($products['acron']) || Config::getVar('general', 'scheduled_tasks', false);
 	}
 

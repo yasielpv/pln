@@ -71,7 +71,7 @@ class PLNGatewayPlugin extends GatewayPlugin {
 	 * @return object
 	 */
 	function &getPLNPlugin() {
-		$plugin =& PluginRegistry::getPlugin('generic', $this->parentPluginName);
+		$plugin = PluginRegistry::getPlugin('generic', $this->parentPluginName);
 		return $plugin;
 	}
 
@@ -79,7 +79,7 @@ class PLNGatewayPlugin extends GatewayPlugin {
 	 * Override the builtin to get the correct plugin path.
 	 */
 	function getPluginPath() {
-		$plugin =& $this->getPLNPlugin();
+		$plugin = $this->getPLNPlugin();
 		return $plugin->getPluginPath();
 	}
 
@@ -88,7 +88,7 @@ class PLNGatewayPlugin extends GatewayPlugin {
 	 * @return string
 	 */
 	function getTemplatePath() {
-		$plugin =& $this->getPLNPlugin();
+		$plugin = $this->getPLNPlugin();
 		return $plugin->getTemplatePath();
 	}
 
@@ -98,7 +98,7 @@ class PLNGatewayPlugin extends GatewayPlugin {
 	 * @return boolean
 	 */
 	function getEnabled() {
-		$plugin =& $this->getPLNPlugin();
+		$plugin = $this->getPLNPlugin();
 		return $plugin->getEnabled(); // Should always be true anyway if this is loaded
 	}
 
@@ -115,14 +115,14 @@ class PLNGatewayPlugin extends GatewayPlugin {
 	 * Handle fetch requests for this plugin.
 	 */
 	function fetch($args, $request) {
-		$plugin =& $this->getPLNPlugin();
-		$templateMgr =& TemplateManager::getManager();
+		$plugin = $this->getPLNPlugin();
+		$templateMgr = TemplateManager::getManager();
 
-		$journal =& Request::getJournal();
+		$journal = Request::getJournal();
 		$templateMgr->assign_by_ref('journal', $journal);
 
 		$pluginVersionFile = $this->getPluginPath() . DIRECTORY_SEPARATOR . 'version.xml';
-		$pluginVersion =& VersionCheck::parseVersionXml($pluginVersionFile);
+		$pluginVersion = VersionCheck::parseVersionXml($pluginVersionFile);
 		$templateMgr->assign_by_ref('pluginVersion', $pluginVersion);
 
 		$terms = array();
@@ -135,8 +135,8 @@ class PLNGatewayPlugin extends GatewayPlugin {
 			$templateMgr->assign('termsAccepted', 'no');
 		}
 
-		$application =& PKPApplication::getApplication();
-		$products =& $application->getEnabledProducts('plugins.generic');
+		$application = PKPApplication::getApplication();
+		$products = $application->getEnabledProducts('plugins.generic');
 		$curlVersion = 'not installed';
 		if(function_exists('curl_version')) {
 			$versionArray = curl_version();
@@ -164,13 +164,13 @@ class PLNGatewayPlugin extends GatewayPlugin {
 		}
 		$templateMgr->assign('termsDisplay', new ArrayItemIterator($termsDisplay));
 
-		$versionDao =& DAORegistry::getDAO('VersionDAO');
-		$ojsVersion =& $versionDao->getCurrentVersion();
+		$versionDao = DAORegistry::getDAO('VersionDAO');
+		$ojsVersion = $versionDao->getCurrentVersion();
 		$templateMgr->assign('ojsVersion', $ojsVersion->getVersionString());
 
-		$publishedArticlesDAO =& DAORegistry::getDAO('PublishedArticleDAO');
+		$publishedArticlesDAO = DAORegistry::getDAO('PublishedArticleDAO');
 		$range = new DBResultRange(PLN_PLUGIN_PING_ARTICLE_COUNT);
-		$publishedArticles =& $publishedArticlesDAO->getPublishedArticlesByJournalId($journal->getId(), $range, true);
+		$publishedArticles = $publishedArticlesDAO->getPublishedArticlesByJournalId($journal->getId(), $range, true);
 		$templateMgr->assign_by_ref('articles', $publishedArticles);
 		$templateMgr->assign_by_ref('pln_network', $plugin->getSetting($journal->getId(), 'pln_network'));
 

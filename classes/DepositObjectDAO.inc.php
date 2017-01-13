@@ -31,7 +31,7 @@ class DepositObjectDAO extends DAO {
 	 * @return DepositObject
 	 */
 	function &getDepositObject($journalId, $depositObjectId) {
-		$result =& $this->retrieve(
+		$result = $this->retrieve(
 			'SELECT * FROM pln_deposit_objects WHERE journal_id = ? and deposit_object_id = ?',
 			array(
 				(int) $journalId,
@@ -41,7 +41,7 @@ class DepositObjectDAO extends DAO {
 
 		$returner = null;
 		if ($result->RecordCount() != 0) {
-			$returner =& $this->_returnDepositObjectFromRow($result->GetRowAssoc(false));
+			$returner = $this->_returnDepositObjectFromRow($result->GetRowAssoc(false));
 		}
 		$result->Close();
 		return $returner;
@@ -54,7 +54,7 @@ class DepositObjectDAO extends DAO {
 	 * @return array DepositObject ordered by sequence
 	 */
 	function &getByDepositId($journalId, $depositId) {
-		$result =& $this->retrieve(
+		$result = $this->retrieve(
 			'SELECT * FROM pln_deposit_objects WHERE journal_id = ? AND deposit_id = ?',
 			array (
 				(int) $journalId,
@@ -71,7 +71,7 @@ class DepositObjectDAO extends DAO {
 	 * @return array DepositObject ordered by sequence
 	 */
 	function &getNew($journalId) {
-		$result =& $this->retrieve(
+		$result = $this->retrieve(
 			'SELECT * FROM pln_deposit_objects WHERE journal_id = ? AND deposit_id is null',
 			(int) $journalId
 		);
@@ -85,11 +85,11 @@ class DepositObjectDAO extends DAO {
 	 * @param $objectType string
 	 */
 	function markHavingUpdatedContent($journalId, $objectType) {
-		$depositDao =& DAORegistry::getDAO('DepositDAO');
+		$depositDao = DAORegistry::getDAO('DepositDAO');
 
 		switch ($objectType) {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
-				$result =& $this->retrieve(
+				$result = $this->retrieve(
 					'SELECT pdo.deposit_object_id, a.last_modified FROM pln_deposit_objects pdo
 					LEFT JOIN articles a ON pdo.object_id = a.article_id
 					WHERE a.journal_id = ? AND pdo.journal_id = ? AND pdo.date_modified < a.last_modified',
@@ -100,8 +100,8 @@ class DepositObjectDAO extends DAO {
 				);
 				while (!$result->EOF) {
 					$row = $result->GetRowAssoc(false);
-					$depositObject =& $this->getDepositObjectId($journalId,$row['deposit_object_id']);
-					$deposit =& $depositDao->getDepositById($journalId, $depositObject->getDepositId());
+					$depositObject = $this->getDepositObjectId($journalId,$row['deposit_object_id']);
+					$deposit = $depositDao->getDepositById($journalId, $depositObject->getDepositId());
 					if($deposit->getSentStatus() || ! $deposit->getTransferredStatus()) {
 						// only update a deposit after it has been synced in LOCKSS.
 						$depositObject->setDateModified($row['last_modified']);
@@ -115,7 +115,7 @@ class DepositObjectDAO extends DAO {
 				$result->Close();
 				break;
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
-				$result =& $this->retrieve(
+				$result = $this->retrieve(
 					'SELECT pdo.deposit_object_id, MAX(i.last_modified) as issue_modified, MAX(a.last_modified) as article_modified
 					FROM issues i
 					LEFT JOIN pln_deposit_objects pdo ON pdo.object_id = i.issue_id
@@ -128,8 +128,8 @@ class DepositObjectDAO extends DAO {
 				);
 				while (!$result->EOF) {
 					$row = $result->GetRowAssoc(false);
-					$depositObject =& $this->getDepositObject($journalId,$row['deposit_object_id']);
-					$deposit =& $depositDao->getDepositById($journalId, $depositObject->getDepositId());
+					$depositObject = $this->getDepositObject($journalId,$row['deposit_object_id']);
+					$deposit = $depositDao->getDepositById($journalId, $depositObject->getDepositId());
 					if($deposit->getSentStatus() || ! $deposit->getTransferredStatus()) {
 						// only update a deposit after it has been synced in LOCKSS.
 						if ($row['issue_modified'] > $row['article_modified']) {
@@ -159,8 +159,8 @@ class DepositObjectDAO extends DAO {
 
 		switch ($objectType) {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
-				$published_article_dao =& DAORegistry::getDAO('PublishedArticleDAO');
-				$result =& $this->retrieve(
+				$published_article_dao = DAORegistry::getDAO('PublishedArticleDAO');
+				$result = $this->retrieve(
 					'SELECT pa.submission_id FROM published_submissions pa
 					LEFT JOIN submissions a ON pa.submission_id = a.submission_id
 					LEFT JOIN pln_deposit_objects pdo ON pa.submission_id = pdo.object_id
@@ -169,14 +169,14 @@ class DepositObjectDAO extends DAO {
 				);
 				while (!$result->EOF) {
 					$row = $result->GetRowAssoc(false);
-					$objects[] =& $published_article_dao->getPublishedArticleByArticleId($row['article_id']);
+					$objects[] = $published_article_dao->getPublishedArticleByArticleId($row['article_id']);
 					$result->MoveNext();
 				}
 				$result->Close();
 				break;
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
-				$issue_dao =& DAORegistry::getDAO('IssueDAO');
-				$result =& $this->retrieve(
+				$issue_dao = DAORegistry::getDAO('IssueDAO');
+				$result = $this->retrieve(
 					'SELECT i.issue_id FROM issues i
 					LEFT JOIN pln_deposit_objects pdo ON pdo.object_id = i.issue_id
 					WHERE i.journal_id = ? AND i.published = 1 AND pdo.object_id is null',
@@ -184,7 +184,7 @@ class DepositObjectDAO extends DAO {
 				);
 				while (!$result->EOF) {
 					$row = $result->GetRowAssoc(false);
-					$objects[] =& $issue_dao->getById($row['issue_id']);
+					$objects[] = $issue_dao->getById($row['issue_id']);
 					$result->MoveNext();
 				}
 				$result->Close();
@@ -283,7 +283,7 @@ class DepositObjectDAO extends DAO {
 	 * @return DepositObject
 	 */
 	function _newDataObject() {
-		$plnPlugin =& PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
+		$plnPlugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 		return new DepositObject();
 	}
 

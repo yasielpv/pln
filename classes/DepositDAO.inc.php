@@ -115,7 +115,7 @@ class DepositDAO extends DAO {
 	 * @param $deposit Deposit
 	 */
 	function deleteObject($deposit) {
-		$deposit_object_dao =& DAORegistry::getDAO('DepositObjectDAO');
+		$deposit_object_dao = DAORegistry::getDAO('DepositObjectDAO');
 		foreach($deposit->getDepositObjects() as $deposit_object) {
 			$deposit_object_dao->deleteDepositObject($deposit_object);
 		}
@@ -171,7 +171,7 @@ class DepositDAO extends DAO {
 	 * @return Deposit
 	 */
 	function &getDepositById($journalId, $depositId) {
-		$result =& $this->retrieve(
+		$result = $this->retrieve(
 			'SELECT * FROM pln_deposits WHERE journal_id = ? AND deposit_id = ?',
 			array (
 				(int) $journalId,
@@ -180,7 +180,7 @@ class DepositDAO extends DAO {
 		);
 		$returner = null;
 		if ($result->RecordCount() != 0) {
-			$returner =& $this->_returnDepositFromRow($result->GetRowAssoc(false));
+			$returner = $this->_returnDepositFromRow($result->GetRowAssoc(false));
 		}
 		$result->Close();
 		return $returner;
@@ -193,7 +193,7 @@ class DepositDAO extends DAO {
 	 * @return Deposit
 	 */
 	function &getDepositByUUID($journalId, $depositUuid) {
-		$result =& $this->retrieve(
+		$result = $this->retrieve(
 			'SELECT * FROM pln_deposits WHERE journal_id = ? AND uuid = ?',
 			array (
 				(int) $journalId,
@@ -202,7 +202,7 @@ class DepositDAO extends DAO {
 		);
 		$returner = null;
 		if ($result->RecordCount() != 0) {
-			$returner =& $this->_returnDepositFromRow($result->GetRowAssoc(false));
+			$returner = $this->_returnDepositFromRow($result->GetRowAssoc(false));
 		}
 		$result->Close();
 		return $returner;
@@ -230,7 +230,7 @@ class DepositDAO extends DAO {
 	 * @return array Deposit
 	 */
 	function &getNew($journalId) {
-		$result =& $this->retrieve(
+		$result = $this->retrieve(
 			'SELECT * FROM pln_deposits WHERE journal_id = ? AND status = ?',
 			array(
 				(int) $journalId,
@@ -246,7 +246,7 @@ class DepositDAO extends DAO {
 	 * @return array Deposit
 	 */
 	function &getNeedTransferring($journalId) {
-		$result =& $this->retrieve(
+		$result = $this->retrieve(
 			'SELECT * FROM pln_deposits AS d WHERE d.journal_id = ? AND d.status & ? = 0 AND d.status & ? = 0',
 			array (
 				(int) $journalId,
@@ -263,7 +263,7 @@ class DepositDAO extends DAO {
 	 * @return array Deposit
 	 */
 	function &getNeedPackaging($journalId) {
-		$result =& $this->retrieve(
+		$result = $this->retrieve(
 			'SELECT * FROM pln_deposits AS d WHERE d.journal_id = ? AND d.status & ? = 0 AND d.status & ? = 0',
 			array(
 				(int) $journalId,
@@ -280,7 +280,7 @@ class DepositDAO extends DAO {
 	 * @return array Deposit
 	 */
 	function &getNeedStagingStatusUpdate($journalId) {
-		$result =& $this->retrieve(
+		$result = $this->retrieve(
 			'SELECT * FROM pln_deposits AS d WHERE d.journal_id = ? AND d.status & ? <> 0 AND d.status & ? = 0',
 			array (
 				(int) $journalId,

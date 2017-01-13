@@ -33,7 +33,7 @@ class PLNSettingsForm extends Form {
 	 */
 	function PLNSettingsForm($plugin, $contextId) {
 		$this->_contextId = $contextId;
-		$this->_plugin =& $plugin;
+		$this->_plugin = $plugin;
 		parent::__construct($plugin->getTemplatePath() . DIRECTORY_SEPARATOR . 'settings.tpl');
 	}
 
@@ -132,7 +132,7 @@ class PLNSettingsForm extends Form {
 	function execute() {
 		$this->_plugin->updateSetting($this->_contextId, 'terms_of_use_agreement', serialize($this->getData('terms_of_use_agreement')), 'object');
 
-		$pluginSettingsDao =& DAORegistry::getDAO('PluginSettingsDAO');
+		$pluginSettingsDao = DAORegistry::getDAO('PluginSettingsDAO');
 		$pluginSettingsDao->installSettings($this->_contextId, $this->_plugin->getName(), $this->_plugin->getContextSpecificPluginSettingsFile());
 	}
 

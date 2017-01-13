@@ -29,7 +29,7 @@ class Depositor extends ScheduledTask {
 	 */
 	function Depositor($args) {
 		PluginRegistry::loadCategory('generic');
-		$this->_plugin =& PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
+		$this->_plugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 		parent::__construct($args);
 	}
 
@@ -46,7 +46,7 @@ class Depositor extends ScheduledTask {
 	function executeActions() {
 		if (!$this->_plugin) return false;
 
-		$journalDao =& DAORegistry::getDAO('JournalDAO');
+		$journalDao = DAORegistry::getDAO('JournalDAO');
 
 		// Get all journals
 		$journals = $journalDao->getAll(true);
@@ -147,10 +147,10 @@ class Depositor extends ScheduledTask {
 	 */
 	function _processStatusUpdates($journal) {
 		// get deposits that need status updates
-		$depositDao =& DAORegistry::getDAO('DepositDAO');
+		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$depositQueue = $depositDao->getNeedStagingStatusUpdate($journal->getId());
 
-		while ($deposit =& $depositQueue->next()) {
+		while ($deposit = $depositQueue->next()) {
 			$depositPackage = new DepositPackage($deposit, $this);
 			$depositPackage->updateDepositStatus();
 			unset($deposit);
@@ -162,7 +162,7 @@ class Depositor extends ScheduledTask {
 	 */
 	function _processHavingUpdatedContent($journal) {
 		// get deposits that have updated content
-		$depositObjectDao =& DAORegistry::getDAO('DepositObjectDAO');
+		$depositObjectDao = DAORegistry::getDAO('DepositObjectDAO');
 		$depositObjectDao->markHavingUpdatedContent($journal->getId(),$this->_plugin->getSetting($journal->getId(), 'object_type'));
 	}
 
@@ -171,10 +171,10 @@ class Depositor extends ScheduledTask {
 	 */
 	function _processNeedTransferring(&$journal) {
 		// fetch the deposits we need to send to the pln
-		$depositDao =& DAORegistry::getDAO('DepositDAO');
-		$depositQueue =& $depositDao->getNeedTransferring($journal->getId());
+		$depositDao = DAORegistry::getDAO('DepositDAO');
+		$depositQueue = $depositDao->getNeedTransferring($journal->getId());
 
-		while ($deposit =& $depositQueue->next()) {
+		while ($deposit = $depositQueue->next()) {
 			$depositPackage = new DepositPackage($deposit, $this);
 			$depositPackage->transferDeposit();
 			unset($deposit);
@@ -185,8 +185,8 @@ class Depositor extends ScheduledTask {
 	 * Create packages for any deposits that don't have any or have been updated
 	 */
 	function _processNeedPackaging(&$journal) {
-		$depositDao =& DAORegistry::getDAO('DepositDAO');
-		$depositQueue =& $depositDao->getNeedPackaging($journal->getId());
+		$depositDao = DAORegistry::getDAO('DepositDAO');
+		$depositQueue = $depositDao->getNeedPackaging($journal->getId());
 		$fileManager = new JournalFileManager($journal);
 		$plnDir = $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER;
 
@@ -197,7 +197,7 @@ class Depositor extends ScheduledTask {
         }
 
 		// loop though all of the deposits that need packaging
-		while ($deposit =& $depositQueue->next()) {
+		while ($deposit = $depositQueue->next()) {
 			$depositPackage = new DepositPackage($deposit, $this);
 			$depositPackage->packageDeposit();
 			unset($deposit);
@@ -212,12 +212,12 @@ class Depositor extends ScheduledTask {
 		$objectType = $this->_plugin->getSetting($journal->getId(), 'object_type');
 
 		// create new deposit objects for any new OJS content
-		$depositDao =& DAORegistry::getDAO('DepositDAO');
-		$depositObjectDao =& DAORegistry::getDAO('DepositObjectDAO');
+		$depositDao = DAORegistry::getDAO('DepositDAO');
+		$depositObjectDao = DAORegistry::getDAO('DepositObjectDAO');
 		$depositObjectDao->createNew($journal->getId(),$objectType);
 
 		// retrieve all deposit objects that don't belong to a deposit
-		$newObjects =& $depositObjectDao->getNew($journal->getId(),$objectType);
+		$newObjects = $depositObjectDao->getNew($journal->getId(),$objectType);
 
 		switch ($objectType) {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
@@ -246,7 +246,7 @@ class Depositor extends ScheduledTask {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
 
 				// create a new deposit for reach deposit object
-				while ($newObject =& $newObjects->next()) {
+				while ($newObject = $newObjects->next()) {
 					$newDeposit = new Deposit($this->_plugin->newUUID());
 					$newDeposit->setJournalId($journal->getId());
 					$depositDao->insertObject($newDeposit);

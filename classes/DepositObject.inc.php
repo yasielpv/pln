@@ -30,10 +30,10 @@ class DepositObject extends DataObject {
 	function getContent() {
 		switch ($this->getObjectType()) {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
-				$issueDao =& DAORegistry::getDAO('IssueDAO');
+				$issueDao = DAORegistry::getDAO('IssueDAO');
 				return $issueDao->getIssueById($this->getObjectId(),$this->getJournalId());
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
-				$articleDao =& DAORegistry::getDAO('ArticleDAO');
+				$articleDao = DAORegistry::getDAO('ArticleDAO');
 				return $articleDao->getArticle($this->getObjectId(),$this->getJournalId());
 		}
 	}
