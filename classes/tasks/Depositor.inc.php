@@ -149,7 +149,7 @@ class Depositor extends ScheduledTask {
      *
 	 * Go through existing deposits and fetch their status from the PLN
 	 */
-	function _processStatusUpdates($journal) {
+	function _processStatusUpdates(&$journal) {
 		// get deposits that need status updates
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$depositQueue = $depositDao->getNeedStagingStatusUpdate($journal->getId());
@@ -166,7 +166,7 @@ class Depositor extends ScheduledTask {
      *
 	 * Go thourgh the deposits and mark them as updated if they have been
 	 */
-	function _processHavingUpdatedContent($journal) {
+	function _processHavingUpdatedContent(&$journal) {
 		// get deposits that have updated content
 		$depositObjectDao = DAORegistry::getDAO('DepositObjectDAO');
 		$depositObjectDao->markHavingUpdatedContent($journal->getId(),$this->_plugin->getSetting($journal->getId(), 'object_type'));
@@ -177,7 +177,7 @@ class Depositor extends ScheduledTask {
      *
 	 * If a deposit hasn't been transferred, transfer it
 	 */
-	function _processNeedTransferring($journal) {
+	function _processNeedTransferring(&$journal) {
 		// fetch the deposits we need to send to the pln
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$depositQueue = $depositDao->getNeedTransferring($journal->getId());
@@ -194,7 +194,7 @@ class Depositor extends ScheduledTask {
      *
 	 * Create packages for any deposits that don't have any or have been updated
 	 */
-	function _processNeedPackaging($journal) {
+	function _processNeedPackaging(&$journal) {
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$depositQueue = $depositDao->getNeedPackaging($journal->getId());
 		$fileManager = new JournalFileManager($journal);
@@ -219,7 +219,7 @@ class Depositor extends ScheduledTask {
      *
 	 * Create new deposits for deposit objects
 	 */
-	function _processNewDepositObjects($journal) {
+	function _processNewDepositObjects(&$journal) {
 		// get the object type we'll be dealing with
 		$objectType = $this->_plugin->getSetting($journal->getId(), 'object_type');
 

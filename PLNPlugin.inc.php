@@ -358,15 +358,15 @@ class PLNPlugin extends GenericPlugin {
 	 * @copydoc PKPPageRouter::route()
 	 */
 	function callbackLoadHandler($hookName, $args) {
-		$page = $args[0];
+		$page =& $args[0];
 		if ($page == 'pln') {
-			$op = $args[1];
+			$op =& $args[1];
 			if ($op) {
 				if (in_array($op, array('deposits'))) {
 					define('HANDLER_CLASS', 'PLNHandler');
                     define('PLN_PLUGIN_NAME', $this->getName());
 					AppLocale::requireComponents(LOCALE_COMPONENT_APPLICATION_COMMON);
-					$handlerFile = $args[2];
+					$handlerFile =& $args[2];
 					$handlerFile = $this->getHandlerPath() . '/' . 'PLNHandler.inc.php';
 				}
 			}
