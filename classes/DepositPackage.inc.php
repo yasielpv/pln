@@ -207,7 +207,7 @@ class DepositPackage {
 
 		$pkpDetails->setAttribute('volume', $objectVolume);
 		$pkpDetails->setAttribute('issue', $objectIssue);
-		$pkpDetails->setAttribute('pubdate', strftime("%F",strtotime($objectPublicationDate)));
+		$pkpDetails->setAttribute('pubdate', strftime("%Y-%m-%d",strtotime($objectPublicationDate)));
 
 		switch ($plnPlugin->getSetting($journal->getId(), 'checksum_type')) {
 			case 'SHA-1':
@@ -327,7 +327,7 @@ class DepositPackage {
                 if (!$exportXml) {
                     $this->_logMessage(__("plugins.generic.pln.error.depositor.export.issue.error"));
                     return false;
-                } 
+                }
 
 				import('lib.pkp.classes.file.FileManager');
 				$fileManager = new FileManager();
