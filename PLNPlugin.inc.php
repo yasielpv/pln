@@ -242,7 +242,7 @@ class PLNPlugin extends GenericPlugin {
 				break;
 			case 'object_type':
 				$type = parent::getSetting($journalId, $settingName);
-				if( ! is_null($type)) 
+				if( ! is_null($type))
                     return $type;
 				$this->updateSetting($journalId, $settingName, PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE);
 				break;
@@ -262,15 +262,16 @@ class PLNPlugin extends GenericPlugin {
 	 * @param $args array
 	 */
 	function callbackLoadCategory($hookName, $args) {
-		$category = $args[0];
-		$plugins = $args[1];
+		$category =& $args[0];
+		$plugins =& $args[1];
 		switch ($category) {
 			case 'gateways':
 				$this->import('PLNGatewayPlugin');
 				$gatewayPlugin = new PLNGatewayPlugin($this->getName());
-				$plugins[$gatewayPlugin->getSeq()][$gatewayPlugin->getPluginPath()] = $gatewayPlugin;
+				$plugins[$gatewayPlugin->getSeq()][$gatewayPlugin->getPluginPath()] =& $gatewayPlugin;
 				break;
 		}
+
 		return false;
 	}
 
@@ -546,7 +547,7 @@ class PLNPlugin extends GenericPlugin {
 		$termsAgreed = unserialize($this->getSetting($journalId, 'terms_of_use_agreement'));
 
 		foreach (array_keys($terms) as $term) {
-			if (!isset($termsAgreed[$term]) || (!$termsAgreed[$term])) 
+			if (!isset($termsAgreed[$term]) || (!$termsAgreed[$term]))
                 return false;
 		}
 
