@@ -48,6 +48,8 @@ class PLNHandler extends Handler {
 	 * Provide an endpoint for the PLN staging server to retrieve a deposit
 	 * @param array $args
 	 * @param Request $request
+     *
+     * @return bool
 	 */
 	function deposits($args, $request) {
 		$journal = $request->getJournal();
@@ -61,7 +63,7 @@ class PLNHandler extends Handler {
 		if (!preg_match('/^[[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12}$/',$depositUuid)) {
 			error_log(__("plugins.generic.pln.error.handler.uuid.invalid"));
 			$dispatcher->handle404();
-			return FALSE;
+			return false;
 		}
 
 		$deposit = $depositDao->getDepositByUUID($journal->getId(),$depositUuid);
@@ -69,7 +71,7 @@ class PLNHandler extends Handler {
 		if (!$deposit) {
 			error_log(__("plugins.generic.pln.error.handler.uuid.notfound"));
 			$dispatcher->handle404();
-			return FALSE;
+			return false;
 		}
 
 		$depositPackage = new DepositPackage($deposit, null);
@@ -78,10 +80,10 @@ class PLNHandler extends Handler {
 		if (!$fileManager->fileExists($depositBag)) {
 			error_log("plugins.generic.pln.error.handler.file.notfound");
 			$dispatcher->handle404();
-			return FALSE;
+			return false;
 		}
 
-		return $fileManager->downloadFile($depositBag, mime_content_type($depositBag), TRUE);
+		return $fileManager->downloadFile($depositBag, mime_content_type($depositBag), true);
 	}
 
 	/**
@@ -89,7 +91,8 @@ class PLNHandler extends Handler {
 	 * @param array $args
 	 * @param Request $request
 	 */
-	function status($args=array(), &$request) {
+	function status($args=array(), $request) {
+        $router = $request->getRouter();
 		$journal = $request->getJournal();
 		$plnPlugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 		$templateMgr = TemplateManager::getManager();
@@ -102,7 +105,7 @@ class PLNHandler extends Handler {
 	//
 	/**
      * Get the Usage Stats plugin object
-     * @return UsageStatsPlugin
+     * @return PLNPlugin
      */
 	function &_getPlugin() {
 		$plugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);

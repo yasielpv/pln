@@ -1,14 +1,14 @@
 <?php
 
 /**
- * @file plugins/generic/pln/DepositDAO.inc.php
+ * @file plugins/generic/pln/classes/DepositDAO.inc.php
  *
  * Copyright (c) 2013-2016 Simon Fraser University Library
  * Copyright (c) 2003-2016 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * @class DepositDAO
- * @ingroup plugins_generic_pln
+ * @ingroup plugins_generic_pln_classes
  *
  * @brief Operations for adding a PLN deposit
  */
@@ -33,10 +33,9 @@ class DepositDAO extends DAO {
 	}
 
 	/**
-	 * Retrieve a user by ID.
-	 * @param $userId int
-	 * @param $allowDisabled boolean
-	 * @return PKPUser
+	 * Retrieve deposit by ID.
+     * @param $depositId int
+	 * @return Deposit Object
 	 */
 	function getById($depositId) {
 		$result = $this->retrieve(
@@ -127,7 +126,7 @@ class DepositDAO extends DAO {
 	}
 
 	/**
-	 * Get the ID of the last inserted user.
+	 * Get the ID of the last inserted deposit.
 	 * @return int
 	 */
 	function getInsertId() {
@@ -153,16 +152,6 @@ class DepositDAO extends DAO {
 
 		return $deposit;
 	}
-
-
-
-
-
-
-
-
-
-
 
 	/**
 	 * Retrieve a deposit by deposit id.
@@ -227,6 +216,7 @@ class DepositDAO extends DAO {
 
 	/**
 	 * Retrieve all newly-created deposits (ones with new status)
+     * @param $journalId int
 	 * @return array Deposit
 	 */
 	function &getNew($journalId) {
@@ -243,6 +233,7 @@ class DepositDAO extends DAO {
 
 	/**
 	 * Retrieve all deposits that need packaging
+     * @param $journalId int
 	 * @return array Deposit
 	 */
 	function &getNeedTransferring($journalId) {
@@ -260,6 +251,7 @@ class DepositDAO extends DAO {
 
 	/**
 	 * Retrieve all deposits that need packaging
+     * @param $journalId int
 	 * @return array Deposit
 	 */
 	function &getNeedPackaging($journalId) {
@@ -277,6 +269,7 @@ class DepositDAO extends DAO {
 
 	/**
 	 * Retrieve all deposits that need a status update
+     * @param $journalId int
 	 * @return array Deposit
 	 */
 	function &getNeedStagingStatusUpdate($journalId) {

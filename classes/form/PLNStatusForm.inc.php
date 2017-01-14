@@ -1,14 +1,14 @@
 <?php
 
 /**
- * @file plugins/generic/pln/PLNStatusForm.inc.php
+ * @file plugins/generic/pln/classes/form/PLNStatusForm.inc.php
  *
  * Copyright (c) 2013-2016 Simon Fraser University Library
  * Copyright (c) 2003-2016 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * @class PLNStatusForm
- * @ingroup plugins_generic_pln
+ * @ingroup plugins_generic_pln_classes_form
  *
  * @brief Form for journal managers to check PLN plugin status
  */

@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @file controllers/grid/StaticPageGridCellProvider.inc.php
+ * @file plugins/generic/pln/controllers/grid/PLNStatusGridCellProvider.inc.php
  *
  * Copyright (c) 2014-2016 Simon Fraser University Library
  * Copyright (c) 2000-2016 John Willinsky
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  *
- * @class StaticPageGridCellProvider
- * @ingroup controllers_grid_staticPages
+ * @class PLNStatusGridCellProvider
+ * @ingroup controllers_grid_PLNStatusGridCellProvider
  *
- * @brief Class for a cell provider to display information about static pages
+ * @brief Class for a cell provider to display information about PLN Deposits
  */
 
 import('lib.pkp.classes.controllers.grid.GridCellProvider');

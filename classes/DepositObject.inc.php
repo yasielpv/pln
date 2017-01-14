@@ -8,7 +8,7 @@
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * @class DepositObject
- * @ingroup plugins_generic_pln
+ * @ingroup plugins_generic_pln_classes
  *
  * @brief Basic class describing a deposit stored in the PLN
  */

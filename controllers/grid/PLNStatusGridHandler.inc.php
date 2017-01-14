@@ -27,7 +27,7 @@ class PLNStatusGridHandler extends GridHandler {
 		parent::__construct();
 		$this->addRoleAssignment(
 			array(ROLE_ID_MANAGER),
-			array('fetchGrid', 'fetchRow', 'addCustomBlock', 'editCustomBlock', 'updateCustomBlock', 'resetDeposit')
+			array('fetchGrid', 'fetchRow', 'resetDeposit')
 		);
 		$this->plugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 	}
@@ -144,12 +144,16 @@ class PLNStatusGridHandler extends GridHandler {
         return $depositDao->getDepositsByJournalId($context->getId(), $rangeInfo);
 	}
 
+	//
+	// Public Grid Actions
+	//
 	/**
-	 * Delete a custom block
-	 * @param $args array
-	 * @param $request PKPRequest
-	 * @return string Serialized JSON object
-	 */
+     * Reset Deposit
+     * @param $args array
+     * @param $request PKPRequest
+     *
+     * @return string Serialized JSON object
+     */
 	function resetDeposit($args, $request) {
 		$context = $request->getContext();
 		$deposit_id = $args['DepositId'];
@@ -161,113 +165,6 @@ class PLNStatusGridHandler extends GridHandler {
 			$depositDao->updateObject($deposit);
         }
 
-		return DAO::getDataChangedEvent();
-	}
-
-	//
-	// Public Grid Actions
-	//
-	/**
-	 * An action to add a new custom block
-	 * @param $args array Arguments to the request
-	 * @param $request PKPRequest Request object
-	 */
-	function addCustomBlock($args, $request) {
-		// Calling editCustomBlock with an empty ID will add
-		// a new custom block.
-		return $this->editCustomBlock($args, $request);
-	}
-
-	/**
-	 * An action to edit a custom block
-	 * @param $args array Arguments to the request
-	 * @param $request PKPRequest Request object
-	 * @return string Serialized JSON object
-	 */
-	function editCustomBlock($args, $request) {
-		$blockName = $request->getUserVar('blockName');
-		$context = $request->getContext();
-		$this->setupTemplate($request);
-
-		$customBlockPlugin = null;
-		// If this is the edit of the existing custom block plugin,
-		if ($blockName) {
-			// Create the custom block plugin
-			import('plugins.generic.customBlockManager.CustomBlockPlugin');
-			$customBlockPlugin = new CustomBlockPlugin($blockName, CUSTOMBLOCKMANAGER_PLUGIN_NAME);
-		}
-
-		// Create and present the edit form
-		import('plugins.generic.customBlockManager.controllers.grid.form.CustomBlockForm');
-		$customBlockManagerPlugin = $this->plugin;
-		$template = $customBlockManagerPlugin->getTemplatePath() . 'editCustomBlockForm.tpl';
-		$customBlockForm = new CustomBlockForm($template, $context->getId(), $customBlockPlugin);
-		$customBlockForm->initData();
-		$json = new JSONMessage(true, $customBlockForm->fetch($request));
-		return $json->getString();
-	}
-
-	/**
-	 * Update a custom block
-	 * @param $args array
-	 * @param $request PKPRequest
-	 * @return string Serialized JSON object
-	 */
-	function updateCustomBlock($args, $request) {
-		$pluginName = $request->getUserVar('existingBlockName');
-		$context = $request->getContext();
-		$this->setupTemplate($request);
-
-		$customBlockPlugin = null;
-		// If this was the edit of the existing custom block plugin
-		if ($pluginName) {
-			// Create the custom block plugin
-			import('plugins.generic.customBlockManager.CustomBlockPlugin');
-			$customBlockPlugin = new CustomBlockPlugin($pluginName, CUSTOMBLOCKMANAGER_PLUGIN_NAME);
-		}
-
-		// Create and populate the form
-		import('plugins.generic.customBlockManager.controllers.grid.form.CustomBlockForm');
-		$customBlockManagerPlugin = $this->plugin;
-		$template = $customBlockManagerPlugin->getTemplatePath() . 'editCustomBlockForm.tpl';
-		$customBlockForm = new CustomBlockForm($template, $context->getId(), $customBlockPlugin);
-		$customBlockForm->readInputData();
-
-		// Check the results
-		if ($customBlockForm->validate()) {
-			// Save the results
-			$customBlockForm->execute();
- 			return DAO::getDataChangedEvent();
-		} else {
-			// Present any errors
-			$json = new JSONMessage(true, $customBlockForm->fetch($request));
-			return $json->getString();
-		}
-	}
-
-	/**
-	 * Delete a custom block
-	 * @param $args array
-	 * @param $request PKPRequest
-	 * @return string Serialized JSON object
-	 */
-	function deleteCustomBlock($args, $request) {
-		$blockName = $request->getUserVar('blockName');
-		$context = $request->getContext();
-
-		// Delete all the entries for this block plugin
-		$pluginSettingsDao = DAORegistry::getDAO('PluginSettingsDAO');
-		$pluginSettingsDao->deleteSetting($context->getId(), $blockName, 'enabled');
-		$pluginSettingsDao->deleteSetting($context->getId(), $blockName, 'context');
-		$pluginSettingsDao->deleteSetting($context->getId(), $blockName, 'seq');
-		$pluginSettingsDao->deleteSetting($context->getId(), $blockName, 'blockContent');
-
-		// Remove this block plugin from the list of the custom block plugins
-		$customBlockManagerPlugin = $this->plugin;
-		$blocks = $customBlockManagerPlugin->getSetting($context->getId(), 'blocks');
-		$newBlocks = array_diff($blocks, array($blockName));
-		ksort($newBlocks);
-		$customBlockManagerPlugin->updateSetting($context->getId(), 'blocks', $newBlocks);
 		return DAO::getDataChangedEvent();
 	}
 }

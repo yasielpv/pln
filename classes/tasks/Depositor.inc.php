@@ -19,7 +19,7 @@ import('lib.pkp.classes.scheduledTask.ScheduledTask');
 class Depositor extends ScheduledTask {
 
 	/*
-	 * @var $_plugin Ooject
+	 * @var $_plugin Object
 	 */
 	var $_plugin;
 
@@ -55,7 +55,8 @@ class Depositor extends ScheduledTask {
 		while ($journal = $journals->next()) {
 
 			// if the plugin isn't enabled for this journal, skip it
-			if (!$this->_plugin->getSetting($journal->getId(), 'enabled')) continue;
+			if (!$this->_plugin->getSetting($journal->getId(), 'enabled'))
+                continue;
 
 			$this->_plugin->registerDAOs();
 			$this->_plugin->import('classes.Deposit');
@@ -139,10 +140,13 @@ class Depositor extends ScheduledTask {
 
 			unset($journal);
 		}
+
 		return true;
 	}
 
 	/**
+     * @param $journal Journal Object
+     *
 	 * Go through existing deposits and fetch their status from the PLN
 	 */
 	function _processStatusUpdates($journal) {
@@ -158,6 +162,8 @@ class Depositor extends ScheduledTask {
 	}
 
 	/**
+     * @param $journal Journal Object
+     *
 	 * Go thourgh the deposits and mark them as updated if they have been
 	 */
 	function _processHavingUpdatedContent($journal) {
@@ -167,9 +173,11 @@ class Depositor extends ScheduledTask {
 	}
 
 	/**
+     * @param $journal Journal Object
+     *
 	 * If a deposit hasn't been transferred, transfer it
 	 */
-	function _processNeedTransferring(&$journal) {
+	function _processNeedTransferring($journal) {
 		// fetch the deposits we need to send to the pln
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$depositQueue = $depositDao->getNeedTransferring($journal->getId());
@@ -182,9 +190,11 @@ class Depositor extends ScheduledTask {
 	}
 
 	/**
+     * @param $journal Journal Object
+     *
 	 * Create packages for any deposits that don't have any or have been updated
 	 */
-	function _processNeedPackaging(&$journal) {
+	function _processNeedPackaging($journal) {
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$depositQueue = $depositDao->getNeedPackaging($journal->getId());
 		$fileManager = new JournalFileManager($journal);
@@ -192,8 +202,8 @@ class Depositor extends ScheduledTask {
 
 		// make sure the pln work directory exists
 		// TOOD: use FileManager calls instead of PHP ones where possible
-		if ($fileManager->fileExists($plnDir,'dir') !== true) { 
-            $fileManager->mkdirtree($plnDir); 
+		if ($fileManager->fileExists($plnDir,'dir') !== true) {
+            $fileManager->mkdirtree($plnDir);
         }
 
 		// loop though all of the deposits that need packaging
@@ -205,9 +215,11 @@ class Depositor extends ScheduledTask {
 	}
 
 	/**
+     * @param $journal Journal Object
+     *
 	 * Create new deposits for deposit objects
 	 */
-	function _processNewDepositObjects(&$journal) {
+	function _processNewDepositObjects($journal) {
 		// get the object type we'll be dealing with
 		$objectType = $this->_plugin->getSetting($journal->getId(), 'object_type');
 

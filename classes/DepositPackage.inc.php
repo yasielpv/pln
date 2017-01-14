@@ -323,15 +323,16 @@ class DepositPackage {
 					$journal,
 					$user = Request::getUser()
 				);
+
+                if (!$exportXml) {
+                    $this->_logMessage(__("plugins.generic.pln.error.depositor.export.issue.error"));
+                    return false;
+                } 
+
 				import('lib.pkp.classes.file.FileManager');
 				$fileManager = new FileManager();
 				$fileManager->writeFile($exportFile, $exportXml);
 
-				// export the issue
-                //if ($exportPlugin->exportIssues($issue, $journal, $exportFile) !== true) {
-                //    $this->_logMessage(__("plugins.generic.pln.error.depositor.export.issue.error"));
-                //    return false;
-                //}
 				break;
 			default:
 		}

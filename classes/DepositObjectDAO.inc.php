@@ -1,14 +1,14 @@
 <?php
 
 /**
- * @file plugins/generic/pln/DepositObjectDAO.inc.php
+ * @file plugins/generic/pln/classes/DepositObjectDAO.inc.php
  *
  * Copyright (c) 2013-2016 Simon Fraser University Library
  * Copyright (c) 2003-2016 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * @class DepositObjectDAO
- * @ingroup plugins_generic_pln
+ * @ingroup plugins_generic_pln_classes
  *
  * @brief Operations for adding a PLN deposit object
  */
@@ -152,6 +152,9 @@ class DepositObjectDAO extends DAO {
 
 	/**
 	 * Create a new deposit object for OJS content that doesn't yet have one
+     *
+     * @param $journalId int
+     * @param $objectType string
 	 * @return array DepositObject ordered by sequence
 	 */
 	function &createNew($journalId, $objectType) {
@@ -206,7 +209,7 @@ class DepositObjectDAO extends DAO {
 	 * @param $depositObject DepositObject
 	 * @return int inserted DepositObject id
 	 */
-	function insertDepositObject(&$depositObject) {
+	function insertDepositObject($depositObject) {
 		$ret = $this->update(
 			sprintf('
 				INSERT INTO pln_deposit_objects
@@ -236,7 +239,7 @@ class DepositObjectDAO extends DAO {
 	 * Update deposit object
 	 * @param $depositObject DepositObject
 	 */
-	function updateDepositObject(&$depositObject) {
+	function updateDepositObject($depositObject) {
 		$ret = $this->update(
 			sprintf('
 				UPDATE pln_deposit_objects SET
@@ -263,7 +266,7 @@ class DepositObjectDAO extends DAO {
 	 * Delete deposit object
 	 * @param $depositObject Deposit
 	 */
-	function deleteDepositObject(&$depositObject) {
+	function deleteDepositObject($depositObject) {
 		$ret = $this->update(
 			'DELETE from pln_deposit_objects WHERE deposit_object_id = ?',
 			(int) $depositObject->getId()
@@ -292,7 +295,7 @@ class DepositObjectDAO extends DAO {
 	 * @param $row array
 	 * @return DepositObject
 	 */
-	function &_returnDepositObjectFromRow(&$row) {
+	function &_returnDepositObjectFromRow($row) {
 		$depositObject = $this->_newDataObject();
 		$depositObject->setId($row['deposit_object_id']);
 		$depositObject->setJournalId($row['journal_id']);

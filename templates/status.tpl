@@ -9,7 +9,7 @@
  *
  *}
 
-  <script>
+<script>
 	$(function() {ldelim}
 		// Attach the form handler.
 		$('#plnStatusForm').pkpHandler('$.pkp.controllers.form.AjaxFormHandler');
@@ -25,10 +25,8 @@
 	<h3>{translate key="plugins.generic.pln.status.deposits"}</h3>
 	<p>{translate key="plugins.generic.pln.status.network_status" networkStatusMessage=$networkStatusMessage}</p>
 	<form class="pkp_form" id="plnStatusForm" method="post" action="{plugin_url path="status"}">
-		{url|assign:announcementGridUrl component="plugins.generic.pln.controllers.grid.PLNStatusGridHandler" op="fetchGrid" escape=false}
-		{load_url_in_div id="announcementGridContainer" url=$announcementGridUrl}
-
-		
+		{url|assign:depositsGridUrl component="plugins.generic.pln.controllers.grid.PLNStatusGridHandler" op="fetchGrid" escape=false}
+		{load_url_in_div id="depositsGridContainer" url=$depositsGridUrl}
 	</form>
-		<p>{translate key='plugins.generic.pln.status.docs' statusDocsUrl=$plnStatusDocs}</p>
+	<p>{translate key='plugins.generic.pln.status.docs' statusDocsUrl=$plnStatusDocs}</p>
 </div>

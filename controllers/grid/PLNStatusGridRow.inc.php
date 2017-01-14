@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @file plugins/generic/customBlockManager/controllers/grid/CustomBlockGridRow.inc.php
+ * @file plugins/generic/pln/controllers/grid/PLNStatusGridRow.inc.php
  *
  * Copyright (c) 2014-2016 Simon Fraser University Library
  * Copyright (c) 2003-2016 John Willinsky
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  *
- * @class CustomBlockGridRow
- * @ingroup controllers_grid_customBlockManager
+ * @class PLNStatusGridRow
+ * @ingroup controllers_grid_PLNStatusGridRow
  *
- * @brief Handle custom blocks grid row requests.
+ * @brief Handle PLNStatus deposit grid row requests.
  */
 
 import('lib.pkp.classes.controllers.grid.GridRow');
@@ -37,7 +37,7 @@ class PLNStatusGridRow extends GridRow {
 		if (!empty($rowId)) {
 			$router = $request->getRouter();
 
-			// Create the "delete custom block" action
+			// Create the "reset deposit" action
 			import('lib.pkp.classes.linkAction.request.RemoteActionConfirmationModal');
 			$this->addAction(
 				new LinkAction(

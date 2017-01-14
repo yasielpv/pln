@@ -95,7 +95,7 @@ class PLNPlugin extends GenericPlugin {
 				$this->import('classes.DepositObject');
 				$this->import('classes.DepositPackage');
 
-				HookRegistry::register('PluginRegistry::loadCategory', array(&$this, 'callbackLoadCategory'));
+				HookRegistry::register('PluginRegistry::loadCategory', array($this, 'callbackLoadCategory'));
 				HookRegistry::register('JournalDAO::deleteJournalById', array($this, 'callbackDeleteJournalById'));
 				HookRegistry::register('LoadHandler', array($this, 'callbackLoadHandler'));
 				HookRegistry::register('NotificationManager::getNotificationContents', array($this, 'callbackNotificationContents'));
@@ -231,7 +231,7 @@ class PLNPlugin extends GenericPlugin {
 	 * @param $journalId int
 	 * @param $settingName string
 	 */
-	function getSetting($journalId,$settingName) {
+	function getSetting($journalId, $settingName) {
 		// if there isn't a journal_uuid, make one
         switch ($settingName) {
 			case 'journal_uuid':
@@ -242,7 +242,8 @@ class PLNPlugin extends GenericPlugin {
 				break;
 			case 'object_type':
 				$type = parent::getSetting($journalId, $settingName);
-				if( ! is_null($type)) return $type;
+				if( ! is_null($type)) 
+                    return $type;
 				$this->updateSetting($journalId, $settingName, PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE);
 				break;
 			case 'pln_network':
@@ -386,8 +387,6 @@ class PLNPlugin extends GenericPlugin {
 				$this->import('classes/form/PLNSettingsForm');
 				$form = new PLNSettingsForm($this, $context->getId());
 
-
-
                 if ($request->getUserVar('refresh')) {
                     $this->getServiceDocument($context->getId(), $request);
                 } else {
@@ -433,27 +432,27 @@ class PLNPlugin extends GenericPlugin {
 
 				return new JSONMessage(true, $form->fetch($request));
 			case 'enable':
-				if( ! @include_once('Archive/Tar.php')) {
+				if(!@include_once('Archive/Tar.php')) {
 					$message = NOTIFICATION_TYPE_ERROR;
 					$messageParams = array('contents' => __('plugins.generic.pln.notifications.archive_tar_missing'));
 					break;
 				}
-				if( ! $this->php5Installed()) {
+				if(!$this->php5Installed()) {
 					$message = NOTIFICATION_TYPE_ERROR;
 					$messageParams = array('contents' => __('plugins.generic.pln.notifications.php5_missing'));
 					break;
 				}
-				if( ! $this->curlInstalled()) {
+				if(!$this->curlInstalled()) {
 					$message = NOTIFICATION_TYPE_ERROR;
 					$messageParams = array('contents' => __('plugins.generic.pln.notifications.curl_missing'));
 					break;
 				}
-				if( ! $this->zipInstalled()) {
+				if(!$this->zipInstalled()) {
 					$message = NOTIFICATION_TYPE_ERROR;
 					$messageParams = array('contents' => __('plugins.generic.pln.notifications.zip_missing'));
 					break;
 				}
-				if( ! $this->tarInstalled()) {
+				if(!$this->tarInstalled()) {
 					$message = NOTIFICATION_TYPE_ERROR;
 					$messageParams = array('contents' => __('plugins.generic.pln.notifications.tar_missing'));
 					break;
@@ -547,7 +546,8 @@ class PLNPlugin extends GenericPlugin {
 		$termsAgreed = unserialize($this->getSetting($journalId, 'terms_of_use_agreement'));
 
 		foreach (array_keys($terms) as $term) {
-			if (!isset($termsAgreed[$term]) || (!$termsAgreed[$term])) return false;
+			if (!isset($termsAgreed[$term]) || (!$termsAgreed[$term])) 
+                return false;
 		}
 
 		return true;
