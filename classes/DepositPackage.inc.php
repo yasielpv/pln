@@ -143,8 +143,8 @@ class DepositPackage {
 		$title = $this->_generateElement($atom, 'title', $journal->getLocalizedName());
 		$entry->appendChild($title);
 
-        $request = PKPApplication::getRequest();
-        $dispatcher = $request->getDispatcher();
+		$request = PKPApplication::getRequest();
+		$dispatcher = $request->getDispatcher();
 
 		$pkpJournalUrl = $this->_generateElement($atom, 'pkp:journal_url', $dispatcher->url($request, ROUTE_PAGE, $journal->getPath()), 'http://pkp.sfu.ca/SWORD');
 		$entry->appendChild($pkpJournalUrl);
@@ -318,16 +318,16 @@ class DepositPackage {
 				$depositObject = $depositObjects->next();
 				$issue = $issueDao->getByBestId($depositObject->getObjectId(),$journal->getId());
 
-                $exportXml = $exportPlugin->exportIssues(
+				$exportXml = $exportPlugin->exportIssues(
 					(array) $issue->getId(),
 					$journal,
 					$user = Request::getUser()
 				);
 
-                if (!$exportXml) {
-                    $this->_logMessage(__("plugins.generic.pln.error.depositor.export.issue.error"));
-                    return false;
-                }
+				if (!$exportXml) {
+					$this->_logMessage(__("plugins.generic.pln.error.depositor.export.issue.error"));
+					return false;
+				}
 
 				import('lib.pkp.classes.file.FileManager');
 				$fileManager = new FileManager();

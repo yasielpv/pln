@@ -109,25 +109,25 @@ class PLNStatusGridHandler extends GridHandler {
 		));
 	}
 
-    /**
-     * @copydoc GridHandler::initFeatures()
-     */
+	/**
+	 * @copydoc GridHandler::initFeatures()
+	 */
 	function initFeatures($request, $args) {
 		import('lib.pkp.classes.controllers.grid.feature.PagingFeature');
 		return array(new PagingFeature());
 	}
 
 	/**
-     * @copydoc GridHandler::getRowInstance()
-     */
+	 * @copydoc GridHandler::getRowInstance()
+	 */
 	protected function getRowInstance() {
 		import('plugins.generic.pln.controllers.grid.PLNStatusGridRow');
 		return new PLNStatusGridRow();
 	}
 
 	/**
-     * @copydoc GridHandler::authorize()
-     */
+	 * @copydoc GridHandler::authorize()
+	 */
 	function authorize($request, &$args, $roleAssignments) {
 		import('lib.pkp.classes.security.authorization.ContextAccessPolicy');
 		$this->addPolicy(new ContextAccessPolicy($request, $roleAssignments));
@@ -135,35 +135,35 @@ class PLNStatusGridHandler extends GridHandler {
 	}
 
 	/**
-     * @copydoc GridHandler::loadData()
-     */
+	 * @copydoc GridHandler::loadData()
+	 */
 	protected function loadData($request, $filter) {
-        $context = $request->getContext();
-        $depositDao = DAORegistry::getDAO('DepositDAO');
-        $rangeInfo = $this->getGridRangeInfo($request, $this->getId());
-        return $depositDao->getDepositsByJournalId($context->getId(), $rangeInfo);
+		$context = $request->getContext();
+		$depositDao = DAORegistry::getDAO('DepositDAO');
+		$rangeInfo = $this->getGridRangeInfo($request, $this->getId());
+		return $depositDao->getDepositsByJournalId($context->getId(), $rangeInfo);
 	}
 
 	//
 	// Public Grid Actions
 	//
 	/**
-     * Reset Deposit
-     * @param $args array
-     * @param $request PKPRequest
-     *
-     * @return string Serialized JSON object
-     */
+	 * Reset Deposit
+	 * @param $args array
+	 * @param $request PKPRequest
+	 *
+	 * @return string Serialized JSON object
+	 */
 	function resetDeposit($args, $request) {
 		$context = $request->getContext();
 		$deposit_id = $args['DepositId'];
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 
-        if (!is_null($deposit_id)) {
-            $deposit = $depositDao->getDepositById($context->getId(), $deposit_id);
+		if (!is_null($deposit_id)) {
+			$deposit = $depositDao->getDepositById($context->getId(), $deposit_id);
 			$deposit->setStatus(PLN_PLUGIN_DEPOSIT_STATUS_NEW);
 			$depositDao->updateObject($deposit);
-        }
+		}
 
 		return DAO::getDataChangedEvent();
 	}

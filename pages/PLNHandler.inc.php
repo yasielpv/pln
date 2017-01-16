@@ -17,10 +17,10 @@ import('classes.handler.Handler');
 
 class PLNHandler extends Handler {
 
-    /**
-     * Constructor
-     * @param $request Request
-     */
+	/**
+	 * Constructor
+	 * @param $request Request
+	 */
 	function __construct($request) {
 		parent::__construct();
 	}
@@ -34,9 +34,9 @@ class PLNHandler extends Handler {
 		$request->redirect(null, 'index');
 	}
 
-    /**
-     * @copydoc PKPHandler::authorize()
-     */
+	/**
+	 * @copydoc PKPHandler::authorize()
+	 */
 	function authorize($request, &$args, $roleAssignments) {
 		import('lib.pkp.classes.security.authorization.ContextRequiredPolicy');
 		$this->addPolicy(new ContextRequiredPolicy($request));
@@ -48,8 +48,8 @@ class PLNHandler extends Handler {
 	 * Provide an endpoint for the PLN staging server to retrieve a deposit
 	 * @param array $args
 	 * @param Request $request
-     *
-     * @return bool
+	 *
+	 * @return bool
 	 */
 	function deposits($args, $request) {
 		$journal = $request->getJournal();
@@ -92,7 +92,7 @@ class PLNHandler extends Handler {
 	 * @param Request $request
 	 */
 	function status($args=array(), $request) {
-        $router = $request->getRouter();
+		$router = $request->getRouter();
 		$journal = $request->getJournal();
 		$plnPlugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 		$templateMgr = TemplateManager::getManager();
@@ -100,13 +100,13 @@ class PLNHandler extends Handler {
 		$templateMgr->display($plnPlugin->getTemplatePath() . DIRECTORY_SEPARATOR . 'status.tpl');
 	}
 
-    //
+	//
 	// Private helper methods
 	//
 	/**
-     * Get the Usage Stats plugin object
-     * @return PLNPlugin
-     */
+	 * Get the Usage Stats plugin object
+	 * @return PLNPlugin
+	 */
 	function &_getPlugin() {
 		$plugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 		return $plugin;

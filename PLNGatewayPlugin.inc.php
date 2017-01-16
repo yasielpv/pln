@@ -46,22 +46,22 @@ class PLNGatewayPlugin extends GatewayPlugin {
 	}
 
 	/**
-         * @copydoc Plugin::getName
-         */
+		 * @copydoc Plugin::getName
+		 */
 	function getName() {
 		return 'PLNGatewayPlugin';
 	}
 
-        /**
-         * @copydoc Plugin::getDisplayName
-         */
+		/**
+		 * @copydoc Plugin::getDisplayName
+		 */
 	function getDisplayName() {
 		return __('plugins.generic.plngateway.displayName');
 	}
 
-        /**
-         * @copydoc Plugin::getDescription
-         */
+		/**
+		 * @copydoc Plugin::getDescription
+		 */
 	function getDescription() {
 		return __('plugins.generic.plngateway.description');
 	}

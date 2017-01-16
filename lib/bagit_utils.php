@@ -40,16 +40,16 @@
  */
 function filterArrayMatches($regex, $list) 
 {
-    $ret = array();
+	$ret = array();
 
-    foreach ($list as $item) {
-        $matches = array();
-        if (preg_match($regex, $item, $matches)) {
-            array_push($ret, $matches);
-        }
-    }
+	foreach ($list as $item) {
+		$matches = array();
+		if (preg_match($regex, $item, $matches)) {
+			array_push($ret, $matches);
+		}
+	}
 
-    return $ret;
+	return $ret;
 }
 
 /**
@@ -62,8 +62,8 @@ function filterArrayMatches($regex, $list)
  */
 function endsWith($main, $suffix) 
 {
-    $len = strlen($suffix);
-    return substr_compare($main, $suffix, -$len, $len) === 0;
+	$len = strlen($suffix);
+	return substr_compare($main, $suffix, -$len, $len) === 0;
 }
 
 /**
@@ -76,30 +76,30 @@ function endsWith($main, $suffix)
  */
 function rls($dir) 
 {
-    $files = array();
-    $queue = array($dir);
+	$files = array();
+	$queue = array($dir);
 
-    while (count($queue) > 0) {
-        $current = array_shift($queue);
+	while (count($queue) > 0) {
+		$current = array_shift($queue);
 
-        foreach (scandir($current) as $item) {
-            if ($item[0] != '.') {
-                $filename = "$current/$item";
+		foreach (scandir($current) as $item) {
+			if ($item[0] != '.') {
+				$filename = "$current/$item";
 
-                switch (filetype($filename))
-                {
-                case 'file':
-                    array_push($files, $filename);
-                    break;
-                case 'dir':
-                    array_push($queue, $filename);
-                    break;
-                }
-            }
-        }
-    }
+				switch (filetype($filename))
+				{
+				case 'file':
+					array_push($files, $filename);
+					break;
+				case 'dir':
+					array_push($queue, $filename);
+					break;
+				}
+			}
+		}
+	}
 
-    return $files;
+	return $files;
 }
 
 /**
@@ -111,20 +111,20 @@ function rls($dir)
  */
 function rrmdir($dir)
 {
-    if (is_dir($dir)) {
-        $objects = scandir($dir);
-        foreach ($objects as $object) {
-            if ($object != "." && $object != "..") {
-                if (filetype($dir . "/" . $object) == "dir") {
-                    rrmdir($dir . "/" . $object);
-                } else {
-                    unlink($dir . "/" . $object);
-                }
-            }
-        }
-        reset($objects);
-        rmdir($dir);
-    }
+	if (is_dir($dir)) {
+		$objects = scandir($dir);
+		foreach ($objects as $object) {
+			if ($object != "." && $object != "..") {
+				if (filetype($dir . "/" . $object) == "dir") {
+					rrmdir($dir . "/" . $object);
+				} else {
+					unlink($dir . "/" . $object);
+				}
+			}
+		}
+		reset($objects);
+		rmdir($dir);
+	}
 }
 
 /**
@@ -138,9 +138,9 @@ function rrmdir($dir)
  */
 function tmpdir($prefix='bag')
 {
-    $dir = tempnam(sys_get_temp_dir(), $prefix);
-    unlink($dir);
-    return $dir;
+	$dir = tempnam(sys_get_temp_dir(), $prefix);
+	unlink($dir);
+	return $dir;
 }
 
 /**
@@ -154,14 +154,14 @@ function tmpdir($prefix='bag')
  */
 function seenAtKey($array, $key, $item)
 {
-    $keys = array_keys($array);
-    for ($x=0, $len=count($keys); $x<$len; $x++) {
-        $sub = $array[$keys[$x]];
-        if (array_key_exists($key, $sub) && $sub[$key] == $item) {
-            return true;
-        }
-    }
-    return false;
+	$keys = array_keys($array);
+	for ($x=0, $len=count($keys); $x<$len; $x++) {
+		$sub = $array[$keys[$x]];
+		if (array_key_exists($key, $sub) && $sub[$key] == $item) {
+			return true;
+		}
+	}
+	return false;
 }
 
 /**
@@ -174,16 +174,16 @@ function seenAtKey($array, $key, $item)
  */
 function saveUrl($url, $filename)
 {
-    $curl = curl_init($url);
-    $file = fopen($filename, 'w');
+	$curl = curl_init($url);
+	$file = fopen($filename, 'w');
 
-    curl_setopt($curl, CURLOPT_FILE, $file);
-    curl_setopt($curl, CURLOPT_HEADER, 0);
+	curl_setopt($curl, CURLOPT_FILE, $file);
+	curl_setopt($curl, CURLOPT_HEADER, 0);
 
-    curl_exec($curl);
-    curl_close($curl);
+	curl_exec($curl);
+	curl_close($curl);
 
-    fclose($file);
+	fclose($file);
 }
 
 /**
@@ -196,12 +196,12 @@ function saveUrl($url, $filename)
  */
 function findFirstExisting($fileNames, $default=null)
 {
-    foreach ($fileNames as $fileName) {
-        if (file_exists($fileName)) {
-            return $fileName;
-        }
-    }
-    return $default;
+	foreach ($fileNames as $fileName) {
+		if (file_exists($fileName)) {
+			return $fileName;
+		}
+	}
+	return $default;
 }
 
 /**
@@ -216,8 +216,8 @@ function findFirstExisting($fileNames, $default=null)
  */
 function readFileText($fileName, $fileEncoding)
 {
-    $data = iconv($fileEncoding, 'UTF-8', file_get_contents($fileName));
-    return $data;
+	$data = iconv($fileEncoding, 'UTF-8', file_get_contents($fileName));
+	return $data;
 }
 
 /**
@@ -232,9 +232,9 @@ function readFileText($fileName, $fileEncoding)
  */
 function readLines($fileName, $fileEncoding)
 {
-    $data = readFileText($fileName, $fileEncoding);
-    $lines = preg_split('/[\n\r]+/', $data, null, PREG_SPLIT_NO_EMPTY);
-    return $lines;
+	$data = readFileText($fileName, $fileEncoding);
+	$lines = preg_split('/[\n\r]+/', $data, null, PREG_SPLIT_NO_EMPTY);
+	return $lines;
 }
 
 /**
@@ -249,7 +249,7 @@ function readLines($fileName, $fileEncoding)
  */
 function writeFileText($fileName, $fileEncoding, $data)
 {
-    file_put_contents($fileName, iconv('UTF-8', $fileEncoding, $data));
+	file_put_contents($fileName, iconv('UTF-8', $fileEncoding, $data));
 }
 
 /**
@@ -261,27 +261,27 @@ function writeFileText($fileName, $fileEncoding, $data)
  */
 function BagIt_sanitizeFileName($filename)
 {
-    // White space => underscores.
-    $filename = preg_replace('/\s+/', '_', $filename);
+	// White space => underscores.
+	$filename = preg_replace('/\s+/', '_', $filename);
 
-    // Remove some characters.
-    $filename = preg_replace(
-        '/\.{2}|[~\^@!#%&\*\/:\'?\"<>\|]/',
-        '',
-        $filename
-    );
+	// Remove some characters.
+	$filename = preg_replace(
+		'/\.{2}|[~\^@!#%&\*\/:\'?\"<>\|]/',
+		'',
+		$filename
+	);
 
-    $forbidden = '/^(CON|PRN|AUX|NUL|COM1|COM2|COM3|COM4|COM5| ' .
-        'COM6|COM7|COM8|COM9|LPT1|LPT2|LPT3|LPT4|LPT5|LPT6|' .
-        'LPT7|LPT8|LPT9)$/';
+	$forbidden = '/^(CON|PRN|AUX|NUL|COM1|COM2|COM3|COM4|COM5| ' .
+		'COM6|COM7|COM8|COM9|LPT1|LPT2|LPT3|LPT4|LPT5|LPT6|' .
+		'LPT7|LPT8|LPT9)$/';
 
-    if (preg_match($forbidden, $filename)) {
-        $filename = strtolower($filename);
-        $suffix = substr(str_shuffle('abcdefghijklmnopqrstuvwxyz'), 0, 12);
-        $filename = "{$filename}_{$suffix}";
-    }
+	if (preg_match($forbidden, $filename)) {
+		$filename = strtolower($filename);
+		$suffix = substr(str_shuffle('abcdefghijklmnopqrstuvwxyz'), 0, 12);
+		$filename = "{$filename}_{$suffix}";
+	}
 
-    return $filename;
+	return $filename;
 }
 /**
  * This reads the information from the bag it file.
@@ -293,28 +293,28 @@ function BagIt_sanitizeFileName($filename)
  */
 function BagIt_readBagItFile($filename)
 {
-    $errors = array();
+	$errors = array();
 
-    if (file_exists($filename)) {
-        $data = readFileText($filename, 'UTF-8');
+	if (file_exists($filename)) {
+		$data = readFileText($filename, 'UTF-8');
 
-        $versions = BagIt_parseVersionString($data);
-        if ($versions === null) {
-            array_push(
-                $errors,
-                array('bagit',
-                'Error reading version information from bagit.txt file.')
-            );
-        }
+		$versions = BagIt_parseVersionString($data);
+		if ($versions === null) {
+			array_push(
+				$errors,
+				array('bagit',
+				'Error reading version information from bagit.txt file.')
+			);
+		}
 
-        $fileEncoding = BagIt_parseEncodingString($data);
+		$fileEncoding = BagIt_parseEncodingString($data);
 
-    } else {
-        $versions = array('major' => 0, 'minor' => 96);
-        $fileEncoding = 'UTF-8';
-    }
+	} else {
+		$versions = array('major' => 0, 'minor' => 96);
+		$fileEncoding = 'UTF-8';
+	}
 
-    return array($versions, $fileEncoding, $errors);
+	return array($versions, $fileEncoding, $errors);
 }
 
 /**
@@ -327,23 +327,23 @@ function BagIt_readBagItFile($filename)
  */
 function BagIt_parseVersionString($bagitFileData)
 {
-    $matches = array();
-    $success = preg_match(
-        "/BagIt-Version: (\d+)\.(\d+)/",
-        $bagitFileData,
-        $matches
-    );
+	$matches = array();
+	$success = preg_match(
+		"/BagIt-Version: (\d+)\.(\d+)/",
+		$bagitFileData,
+		$matches
+	);
 
-    if ($success) {
-        $major = (int)$matches[1];
-        $minor = (int)$matches[2];
-        if ($major === null || $minor === null) {
-            throw new Exception("Invalid bagit version: '{$matches[0]}'.");
-        }
-        return array('major' => $major, 'minor' => $minor);
-    }
+	if ($success) {
+		$major = (int)$matches[1];
+		$minor = (int)$matches[2];
+		if ($major === null || $minor === null) {
+			throw new Exception("Invalid bagit version: '{$matches[0]}'.");
+		}
+		return array('major' => $major, 'minor' => $minor);
+	}
 
-    return null;
+	return null;
 }
 
 /**
@@ -355,18 +355,18 @@ function BagIt_parseVersionString($bagitFileData)
  */
 function BagIt_parseEncodingString($bagitFileData)
 {
-    $matches = array();
-    $success = preg_match(
-        '/Tag-File-Character-Encoding: (.*)/',
-        $bagitFileData,
-        $matches
-    );
+	$matches = array();
+	$success = preg_match(
+		'/Tag-File-Character-Encoding: (.*)/',
+		$bagitFileData,
+		$matches
+	);
 
-    if ($success) {
-        return $matches[1];
-    }
+	if ($success) {
+		return $matches[1];
+	}
 
-    return null;
+	return null;
 }
 
 /**
@@ -378,45 +378,45 @@ function BagIt_parseEncodingString($bagitFileData)
  */
 function BagIt_uncompressBag($compressedFile)
 {
-    // Create an output directory.
-    $dir = tempnam(sys_get_temp_dir(), 'bagit_');
-    unlink($dir);
-    mkdir($dir, 0700);
+	// Create an output directory.
+	$dir = tempnam(sys_get_temp_dir(), 'bagit_');
+	unlink($dir);
+	mkdir($dir, 0700);
 
-    // Pull apart the compressed file name.
-    $matches = array();
-    $success = preg_match(
-        '/^(.*)\.(zip|tar\.gz|tgz)$/',
-        basename($compressedFile),
-        $matches
-    );
-    if (!$success) {
-        throw new ErrorException("File not compressed: $compressedFile.");
-    }
+	// Pull apart the compressed file name.
+	$matches = array();
+	$success = preg_match(
+		'/^(.*)\.(zip|tar\.gz|tgz)$/',
+		basename($compressedFile),
+		$matches
+	);
+	if (!$success) {
+		throw new ErrorException("File not compressed: $compressedFile.");
+	}
 
-    $bagBase = $matches[1];
-    $ext = $matches[2];
+	$bagBase = $matches[1];
+	$ext = $matches[2];
 
-    if ($ext == 'zip') {
+	if ($ext == 'zip') {
 
-        $zip = new ZipArchive();
-        $zip->open($compressedFile);
-        $zip->extractTo($dir);
+		$zip = new ZipArchive();
+		$zip->open($compressedFile);
+		$zip->extractTo($dir);
 
-        $datadir = $dir . '/' . $bagBase . '/data';
+		$datadir = $dir . '/' . $bagBase . '/data';
 
-        if (!file_exists($datadir)) {
-            mkdir($datadir, 0700);
-        }
+		if (!file_exists($datadir)) {
+			mkdir($datadir, 0700);
+		}
 
-    } else if ($ext == 'tgz' || $ext == 'tar.gz') {
+	} else if ($ext == 'tgz' || $ext == 'tar.gz') {
 
-        $tar = new Archive_Tar($compressedFile, 'gz');
-        $tar->extract($dir);
+		$tar = new Archive_Tar($compressedFile, 'gz');
+		$tar->extract($dir);
 
-    }
+	}
 
-    return "$dir/$bagBase";
+	return "$dir/$bagBase";
 }
 
 /**
@@ -430,24 +430,24 @@ function BagIt_uncompressBag($compressedFile)
  */
 function BagIt_compressBag($dirname, $output, $method='tgz')
 {
-    $base = basename($dirname);
-    $stripLen = strlen($dirname) - strlen($base);
+	$base = basename($dirname);
+	$stripLen = strlen($dirname) - strlen($base);
 
-    if ($method == 'zip') {
-        $zip = new ZipArchive();
-        $zip->open($output, ZIPARCHIVE::CREATE);
+	if ($method == 'zip') {
+		$zip = new ZipArchive();
+		$zip->open($output, ZIPARCHIVE::CREATE);
 
-        foreach (rls($dirname) as $file) {
-            $zip->addFile($file, substr($file, $stripLen));
-        }
+		foreach (rls($dirname) as $file) {
+			$zip->addFile($file, substr($file, $stripLen));
+		}
 
-        $zip->close();
+		$zip->close();
 
-    } else if ($method == 'tgz') {
-        $tar = new Archive_Tar($output, 'gz');
-        $tar->createModify($dirname, $base, $dirname);
+	} else if ($method == 'tgz') {
+		$tar = new Archive_Tar($output, 'gz');
+		$tar->createModify($dirname, $base, $dirname);
 
-    }
+	}
 }
 
 /**
@@ -461,15 +461,15 @@ function BagIt_compressBag($dirname, $output, $method='tgz')
  */
 function BagIt_validateExists($filename, &$errors)
 {
-    if (! file_exists($filename)) {
-        $basename = basename($filename);
-        array_push(
-            $errors,
-            array($basename, "$basename does not exist.")
-        );
-        return false;
-    }
-    return true;
+	if (! file_exists($filename)) {
+		$basename = basename($filename);
+		array_push(
+			$errors,
+			array($basename, "$basename does not exist.")
+		);
+		return false;
+	}
+	return true;
 }
 
 /**
@@ -481,32 +481,32 @@ function BagIt_validateExists($filename, &$errors)
  */
 function BagIt_parseBagInfo($lines)
 {
-    $bagInfo = array();
+	$bagInfo = array();
 
-    $prevKey = null;
-    foreach ($lines as $line) {
-        if (strlen($line) <= 1) {
-            // Skip.
-        } else if ($line[0] == ' ' || $line[0] == "\t") {
-            // Continued line.
-            $val = $bagInfo[$prevKey];
-            if (is_array($val)) {
-                $val[count($val) - 1] .= ' '. trim($line);
-            } else {
-                $val .= ' ' . trim($line);
-            }
-            $bagInfo[$prevKey] = $val;
-        } else {
-            list($key, $val)   = preg_split('/:\s*/', $line, 2);
-            $val               = trim($val);
-            $prevKey           = $key;
-            $bagInfo[$prevKey] = BagIt_getAccumulatedValue(
-                $bagInfo, $prevKey, $val
-            );
-        }
-    }
+	$prevKey = null;
+	foreach ($lines as $line) {
+		if (strlen($line) <= 1) {
+			// Skip.
+		} else if ($line[0] == ' ' || $line[0] == "\t") {
+			// Continued line.
+			$val = $bagInfo[$prevKey];
+			if (is_array($val)) {
+				$val[count($val) - 1] .= ' '. trim($line);
+			} else {
+				$val .= ' ' . trim($line);
+			}
+			$bagInfo[$prevKey] = $val;
+		} else {
+			list($key, $val)   = preg_split('/:\s*/', $line, 2);
+			$val               = trim($val);
+			$prevKey           = $key;
+			$bagInfo[$prevKey] = BagIt_getAccumulatedValue(
+				$bagInfo, $prevKey, $val
+			);
+		}
+	}
 
-    return $bagInfo;
+	return $bagInfo;
 }
 
 /**
@@ -526,16 +526,16 @@ function BagIt_parseBagInfo($lines)
  **/
 function BagIt_getAccumulatedValue($map, $key, $val)
 {
-    if (array_key_exists($key, $map)) {
-        $pval = $map[$key];
-        if (is_array($pval)) {
-            $pval[] = $val;
-        } else {
-            $pval = array( $pval, $val );
-        }
-        $val = $pval;
-    }
-    return $val;
+	if (array_key_exists($key, $map)) {
+		$pval = $map[$key];
+		if (is_array($pval)) {
+			$pval[] = $val;
+		} else {
+			$pval = array( $pval, $val );
+		}
+		$val = $pval;
+	}
+	return $val;
 }
 
 /*

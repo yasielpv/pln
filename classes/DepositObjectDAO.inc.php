@@ -152,9 +152,9 @@ class DepositObjectDAO extends DAO {
 
 	/**
 	 * Create a new deposit object for OJS content that doesn't yet have one
-     *
-     * @param $journalId int
-     * @param $objectType string
+	 *
+	 * @param $journalId int
+	 * @param $objectType string
 	 * @return array DepositObject ordered by sequence
 	 */
 	function &createNew($journalId, $objectType) {

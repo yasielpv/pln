@@ -87,7 +87,7 @@ class PLNPlugin extends GenericPlugin {
 		if ($success) {
 			HookRegistry::register('TemplateManager::display',array($this, 'callbackTemplateDisplay'));
 			HookRegistry::register('Templates::Manager::Setup::JournalArchiving', array($this, 'callbackJournalArchivingSetup'));
-            HookRegistry::register('AcronPlugin::parseCronTab', array($this, 'callbackParseCronTab'));
+			HookRegistry::register('AcronPlugin::parseCronTab', array($this, 'callbackParseCronTab'));
 
 			if ($this->getEnabled()) {
 				$this->registerDAOs();
@@ -124,11 +124,11 @@ class PLNPlugin extends GenericPlugin {
 		return false;
 	}
 
-    /**
-     * @see Plugin::getActions()
-     */
+	/**
+	 * @see Plugin::getActions()
+	 */
 	function getActions($request, $verb) {
-        $router = $request->getRouter();
+		$router = $request->getRouter();
 		import('lib.pkp.classes.linkAction.request.AjaxModal');
 		return array_merge(
 			$this->getEnabled()?array(
@@ -141,7 +141,7 @@ class PLNPlugin extends GenericPlugin {
 					__('manager.plugins.settings'),
 					null
 				),
-                new LinkAction(
+				new LinkAction(
 					'status',
 					new AjaxModal(
 						$router->url($request, null, null, 'manage', null, array('verb' => 'status', 'plugin' => $this->getName(), 'category' => 'generic')),
@@ -156,7 +156,7 @@ class PLNPlugin extends GenericPlugin {
 	}
 
 	/**
-     * Register this plugin's DAOs with the application
+	 * Register this plugin's DAOs with the application
 	 */
 	function registerDAOs() {
 
@@ -233,7 +233,7 @@ class PLNPlugin extends GenericPlugin {
 	 */
 	function getSetting($journalId, $settingName) {
 		// if there isn't a journal_uuid, make one
-        switch ($settingName) {
+		switch ($settingName) {
 			case 'journal_uuid':
 				$uuid = parent::getSetting($journalId, $settingName);
 				if (!is_null($uuid) && $uuid != '')
@@ -243,7 +243,7 @@ class PLNPlugin extends GenericPlugin {
 			case 'object_type':
 				$type = parent::getSetting($journalId, $settingName);
 				if( ! is_null($type))
-                    return $type;
+					return $type;
 				$this->updateSetting($journalId, $settingName, PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE);
 				break;
 			case 'pln_network':
@@ -364,7 +364,7 @@ class PLNPlugin extends GenericPlugin {
 			if ($op) {
 				if (in_array($op, array('deposits'))) {
 					define('HANDLER_CLASS', 'PLNHandler');
-                    define('PLN_PLUGIN_NAME', $this->getName());
+					define('PLN_PLUGIN_NAME', $this->getName());
 					AppLocale::requireComponents(LOCALE_COMPONENT_APPLICATION_COMMON);
 					$handlerFile =& $args[2];
 					$handlerFile = $this->getHandlerPath() . '/' . 'PLNHandler.inc.php';
@@ -380,41 +380,41 @@ class PLNPlugin extends GenericPlugin {
 		$journal = Request::getJournal();
 
 		switch($request->getUserVar('verb')) {
-            case 'settings':
-                $context = $request->getContext();
+			case 'settings':
+				$context = $request->getContext();
 				AppLocale::requireComponents(LOCALE_COMPONENT_APP_COMMON,  LOCALE_COMPONENT_PKP_MANAGER);
 				$templateMgr = TemplateManager::getManager($request);
 				$templateMgr->register_function('plugin_url', array($this, 'smartyPluginUrl'));
 				$this->import('classes/form/PLNSettingsForm');
 				$form = new PLNSettingsForm($this, $context->getId());
 
-                if ($request->getUserVar('refresh')) {
-                    $this->getServiceDocument($context->getId(), $request);
-                } else {
-                    if ($request->getUserVar('save')) {
+				if ($request->getUserVar('refresh')) {
+					$this->getServiceDocument($context->getId(), $request);
+				} else {
+					if ($request->getUserVar('save')) {
 
-                        $form->readInputData();
-                        if ($form->validate()) {
-                            $form->execute();
+						$form->readInputData();
+						if ($form->validate()) {
+							$form->execute();
 
-                            // Add notification: Changes saved
-                            $notificationContent = __('plugins.generic.pln.settings.saved');
-                            $currentUser = $request->getUser();
-                            $notificationMgr = new NotificationManager();
-                            $notificationMgr->createTrivialNotification($currentUser->getId(), NOTIFICATION_TYPE_SUCCESS, array('contents' => $notificationContent));
+							// Add notification: Changes saved
+							$notificationContent = __('plugins.generic.pln.settings.saved');
+							$currentUser = $request->getUser();
+							$notificationMgr = new NotificationManager();
+							$notificationMgr->createTrivialNotification($currentUser->getId(), NOTIFICATION_TYPE_SUCCESS, array('contents' => $notificationContent));
 
-                            return new JSONMessage(false);
-                        }
-                    }
-                }
+							return new JSONMessage(false);
+						}
+					}
+				}
 
-                $form->initData();
+				$form->initData();
 
-                return new JSONMessage(true, $form->fetch($request));
-            case 'status':
+				return new JSONMessage(true, $form->fetch($request));
+			case 'status':
 				$depositDao = DAORegistry::getDAO('DepositDAO');
 
-                $context = $request->getContext();
+				$context = $request->getContext();
 				AppLocale::requireComponents(LOCALE_COMPONENT_APP_COMMON,  LOCALE_COMPONENT_PKP_MANAGER);
 				$templateMgr = TemplateManager::getManager($request);
 				$templateMgr->register_function('plugin_url', array($this, 'smartyPluginUrl'));
@@ -548,7 +548,7 @@ class PLNPlugin extends GenericPlugin {
 
 		foreach (array_keys($terms) as $term) {
 			if (!isset($termsAgreed[$term]) || (!$termsAgreed[$term]))
-                return false;
+				return false;
 		}
 
 		return true;
@@ -556,11 +556,11 @@ class PLNPlugin extends GenericPlugin {
 
 	/**
 	 * Request service document at specified URL
-     * @param $contextId int The journal id for the service document we wish to fetch
+	 * @param $contextId int The journal id for the service document we wish to fetch
 	 * @return int The HTTP response status or FALSE for a network error.
 	 */
 	function getServiceDocument($contextId) {
-        $request = PKPApplication::getRequest();
+		$request = PKPApplication::getRequest();
 		$contextDao = Application::getContextDAO();
 		$context = $contextDao->getById($contextId);
 
@@ -568,7 +568,7 @@ class PLNPlugin extends GenericPlugin {
 		$locale = $context->getPrimaryLocale();
 		$language = strtolower(str_replace('_', '-', $locale));
 		$network = $this->getSetting($context->getId(), 'pln_network');
-        $dispatcher = $request->getDispatcher();
+		$dispatcher = $request->getDispatcher();
 
 		// retrieve the service document
 		$result = $this->_curlGet(
@@ -634,7 +634,7 @@ class PLNPlugin extends GenericPlugin {
 
 	/**
 	 * Create notification for all journal managers
-     * @param $contextId int
+	 * @param $contextId int
 	 * @param $notificationType int
 	 */
 	function createJournalManagerNotification($contextId, $notificationType) {

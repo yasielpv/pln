@@ -18,7 +18,7 @@ import('lib.pkp.classes.form.Form');
 class PLNStatusForm extends Form {
 
 	/**
-     * @var _contextId int
+	 * @var _contextId int
 	 */
 	var $_contextId;
 
@@ -30,7 +30,7 @@ class PLNStatusForm extends Form {
 	/**
 	 * Constructor
 	 * @param $plugin object
-     * @param $contextId int
+	 * @param $contextId int
 	 */
 	function PLNStatusForm($plugin, $contextId) {
 		$this->_contextId = $contextId;
@@ -39,10 +39,10 @@ class PLNStatusForm extends Form {
 		parent::__construct($this->_plugin->getTemplatePath() . DIRECTORY_SEPARATOR . 'status.tpl');
 	}
 
-    /**
-     * Fetch the form.
-     * @copydoc Form::fetch()
-     */
+	/**
+	 * Fetch the form.
+	 * @copydoc Form::fetch()
+	 */
 	function fetch($request) {
 		$context = Request::getContext();
 		$depositDao = DAORegistry::getDAO('DepositDAO');
@@ -50,7 +50,7 @@ class PLNStatusForm extends Form {
 		$networkStatusMessage = $this->_plugin->getSetting($context->getId(), 'pln_accepting_message');
 		$rangeInfo = PKPHandler::getRangeInfo($request, 'deposits');
 
-        if (!$networkStatusMessage) {
+		if (!$networkStatusMessage) {
 			if ($networkStatus === true) {
 				$networkStatusMessage = __('plugins.generic.pln.notifications.pln_accepting');
 			} else {
@@ -63,7 +63,7 @@ class PLNStatusForm extends Form {
 		$templateMgr->assign('networkStatusMessage', $networkStatusMessage);
 		$templateMgr->assign('plnStatusDocs', $this->_plugin->getSetting($context->getId(), 'pln_status_docs'));
 
-        return parent::fetch($request);
+		return parent::fetch($request);
 	}
 
 }

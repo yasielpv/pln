@@ -34,7 +34,7 @@ class DepositDAO extends DAO {
 
 	/**
 	 * Retrieve deposit by ID.
-     * @param $depositId int
+	 * @param $depositId int
 	 * @return Deposit Object
 	 */
 	function getById($depositId) {
@@ -216,7 +216,7 @@ class DepositDAO extends DAO {
 
 	/**
 	 * Retrieve all newly-created deposits (ones with new status)
-     * @param $journalId int
+	 * @param $journalId int
 	 * @return array Deposit
 	 */
 	function &getNew($journalId) {
@@ -233,7 +233,7 @@ class DepositDAO extends DAO {
 
 	/**
 	 * Retrieve all deposits that need packaging
-     * @param $journalId int
+	 * @param $journalId int
 	 * @return array Deposit
 	 */
 	function &getNeedTransferring($journalId) {
@@ -251,7 +251,7 @@ class DepositDAO extends DAO {
 
 	/**
 	 * Retrieve all deposits that need packaging
-     * @param $journalId int
+	 * @param $journalId int
 	 * @return array Deposit
 	 */
 	function &getNeedPackaging($journalId) {
@@ -269,7 +269,7 @@ class DepositDAO extends DAO {
 
 	/**
 	 * Retrieve all deposits that need a status update
-     * @param $journalId int
+	 * @param $journalId int
 	 * @return array Deposit
 	 */
 	function &getNeedStagingStatusUpdate($journalId) {
