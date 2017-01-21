@@ -1,7 +1,8 @@
 ================================================================
 === OJS Private LOCKSS Network Plugin
-=== Version: 1.0.0
-=== Author: Bozana Bokan
+=== Version: 2.0.0
+=== Author: Chris MacDonald <chris@fcts.ca>
+=== Author: Michael Joyce <ubermichael@gmail.com>
 === Author: Dimitris Efstathiou
 === Last update: January 2017
 ================================================================
@@ -54,4 +55,7 @@ Site Administration > Administrative Functions
 
 Version History
 ---------------
-1.0.0	- Initial Release
+-1.0	- Initial Release
+-1.0.1	- Make upgraded plugins use default settings
+-1.0.2	- Bug fixes, add terms of use acceptance to the gateway, add setting for default network URL. 
+-2.0.0	- Porting PLN Plugin to OJS 3.0.x
