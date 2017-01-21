@@ -19,7 +19,7 @@ class PLNStatusGridRow extends GridRow {
 	/**
 	 * Constructor
 	 */
-	function PLNStatusGridRow() {
+	function __construct() {
 		parent::__construct();
 	}
 

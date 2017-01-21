@@ -20,7 +20,7 @@ class DepositDAO extends DAO {
 	/**
 	 * Constructor
 	 */
-	function DepositDAO() {
+	function __construct() {
 		parent::__construct();
 	}
 

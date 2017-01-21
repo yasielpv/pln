@@ -32,7 +32,7 @@ class PLNStatusForm extends Form {
 	 * @param $plugin object
 	 * @param $contextId int
 	 */
-	function PLNStatusForm($plugin, $contextId) {
+	function __construct($plugin, $contextId) {
 		$this->_contextId = $contextId;
 		$this->_plugin = $plugin;
 

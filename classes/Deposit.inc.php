@@ -20,7 +20,7 @@ class Deposit extends DataObject {
 	 * @param string
 	 * @return Deposit
 	 */
-	function Deposit($uuid) {
+	function __construct($uuid) {
 		parent::__construct();
 
 		//Set up new deposits with a UUID

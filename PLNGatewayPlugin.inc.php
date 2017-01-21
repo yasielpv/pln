@@ -33,7 +33,7 @@ class PLNGatewayPlugin extends GatewayPlugin {
 	 *
 	 * @param $parentPluginName string
 	 */
-	function PLNGatewayPlugin($parentPluginName) {
+	function __construct($parentPluginName) {
 		parent::__construct();
 		$this->parentPluginName = $parentPluginName;
 	}

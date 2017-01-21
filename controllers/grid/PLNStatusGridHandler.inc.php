@@ -23,7 +23,7 @@ class PLNStatusGridHandler extends GridHandler {
 	/**
 	 * Constructor
 	 */
-	function PLNStatusGridHandler() {
+	function __construct() {
 		parent::__construct();
 		$this->addRoleAssignment(
 			array(ROLE_ID_MANAGER),

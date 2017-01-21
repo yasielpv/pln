@@ -19,7 +19,7 @@ class DepositObject extends DataObject {
 	 * Constructor
 	 * @return DepositObject
 	 */
-	function DepositObject() {
+	function __construct() {
 		parent::__construct();
 	}
 

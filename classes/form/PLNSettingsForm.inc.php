@@ -31,7 +31,7 @@ class PLNSettingsForm extends Form {
 	 * @param $plugin object
 	 * @param $contextId int
 	 */
-	function PLNSettingsForm($plugin, $contextId) {
+	function __construct($plugin, $contextId) {
 		$this->_contextId = $contextId;
 		$this->_plugin = $plugin;
 		parent::__construct($plugin->getTemplatePath() . DIRECTORY_SEPARATOR . 'settings.tpl');

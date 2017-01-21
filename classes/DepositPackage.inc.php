@@ -39,7 +39,7 @@ class DepositPackage {
 	 *
 	 * @return DepositPackage
 	 */
-	function DepositPackage($deposit, $task = null) {
+	function __construct($deposit, $task = null) {
 		$this->_deposit = $deposit;
 		$this->_task = $task;
 	}

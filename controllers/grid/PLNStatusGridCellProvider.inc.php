@@ -20,7 +20,7 @@ class PLNStatusGridCellProvider extends GridCellProvider {
 	/**
 	 * Constructor
 	 */
-	function PLNStatusGridCellProvider() {
+	function __construct() {
 		parent::__construct();
 	}
 

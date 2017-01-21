@@ -27,7 +27,7 @@ class Depositor extends ScheduledTask {
 	 * Constructor.
 	 * @param $argv array task arguments
 	 */
-	function Depositor($args) {
+	function __construct($args) {
 		PluginRegistry::loadCategory('generic');
 		$this->_plugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 		parent::__construct($args);
