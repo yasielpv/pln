@@ -249,7 +249,7 @@ class Depositor extends ScheduledTask {
 						// add each object to the deposit
 						foreach ($newObject_array as $newObject) {
 							$newObject->setDepositId($newDeposit->getId());
-							$depositObjectDao->updateDepositObject($newObject);
+							$depositObjectDao->updateObject($newObject);
 						}
 					}
 				}
@@ -263,7 +263,7 @@ class Depositor extends ScheduledTask {
 					$newDeposit->setJournalId($journal->getId());
 					$depositDao->insertObject($newDeposit);
 					$newObject->setDepositId($newDeposit->getId());
-					$depositObjectDao->updateDepositObject($newObject);
+					$depositObjectDao->updateObject($newObject);
 					unset($newObject);
 				}
 

@@ -154,7 +154,7 @@ class DepositDAO extends DAO {
 	}
 
 	/**
-	 * Retrieve a deposit by deposit id.
+	 * Retrieve a deposit by deposit id and journal id.
 	 * @param $journalId int
 	 * @param $depositId int
 	 * @return Deposit
@@ -176,7 +176,7 @@ class DepositDAO extends DAO {
 	}
 
 	/**
-	 * Retrieve a deposit by deposit uuid.
+	 * Retrieve a deposit by deposit uuid and journal id.
 	 * @param $journalId int
 	 * @param $depositUuid string
 	 * @return Deposit

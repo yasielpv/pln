@@ -105,7 +105,7 @@ class DepositObjectDAO extends DAO {
 					if($deposit->getSentStatus() || ! $deposit->getTransferredStatus()) {
 						// only update a deposit after it has been synced in LOCKSS.
 						$depositObject->setDateModified($row['last_modified']);
-						$this->updateDepositObject($depositObject);
+						$this->updateObject($depositObject);
 						$deposit->setNewStatus();
 						$deposit->setLockssAgreementStatus(true); // this is an update.
 						$depositDao->updateObject($deposit);
@@ -138,7 +138,7 @@ class DepositObjectDAO extends DAO {
 							$depositObject->setDateModified($row['article_modified']);
 						}
 
-						$this->updateDepositObject($depositObject);
+						$this->updateObject($depositObject);
 						$deposit->setNewStatus();
 						$deposit->setLockssAgreementStatus(true); // this is an update.
 						$depositDao->updateObject($deposit);
@@ -198,7 +198,7 @@ class DepositObjectDAO extends DAO {
 			$depositObject = $this->_newDataObject();
 			$depositObject->setContent($object);
 			$depositObject->setJournalId($journalId);
-			$this->insertDepositObject($depositObject);
+			$this->insertObject($depositObject);
 			$depositObjects[] = $depositObject;
 		}
 		return $depositObjects;
@@ -209,7 +209,7 @@ class DepositObjectDAO extends DAO {
 	 * @param $depositObject DepositObject
 	 * @return int inserted DepositObject id
 	 */
-	function insertDepositObject($depositObject) {
+	function insertObject($depositObject) {
 		$ret = $this->update(
 			sprintf('
 				INSERT INTO pln_deposit_objects
@@ -239,7 +239,7 @@ class DepositObjectDAO extends DAO {
 	 * Update deposit object
 	 * @param $depositObject DepositObject
 	 */
-	function updateDepositObject($depositObject) {
+	function updateObject($depositObject) {
 		$ret = $this->update(
 			sprintf('
 				UPDATE pln_deposit_objects SET
