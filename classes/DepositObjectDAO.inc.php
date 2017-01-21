@@ -30,7 +30,7 @@ class DepositObjectDAO extends DAO {
 	 * @param $depositId int
 	 * @return DepositObject
 	 */
-	function &getDepositObject($journalId, $depositObjectId) {
+	function getDepositObject($journalId, $depositObjectId) {
 		$result = $this->retrieve(
 			'SELECT * FROM pln_deposit_objects WHERE journal_id = ? and deposit_object_id = ?',
 			array(
@@ -53,7 +53,7 @@ class DepositObjectDAO extends DAO {
 	 * @param $depositId int
 	 * @return array DepositObject ordered by sequence
 	 */
-	function &getByDepositId($journalId, $depositId) {
+	function getByDepositId($journalId, $depositId) {
 		$result = $this->retrieve(
 			'SELECT * FROM pln_deposit_objects WHERE journal_id = ? AND deposit_id = ?',
 			array (
@@ -70,7 +70,7 @@ class DepositObjectDAO extends DAO {
 	 * @param $journalId int
 	 * @return array DepositObject ordered by sequence
 	 */
-	function &getNew($journalId) {
+	function getNew($journalId) {
 		$result = $this->retrieve(
 			'SELECT * FROM pln_deposit_objects WHERE journal_id = ? AND deposit_id is null',
 			(int) $journalId
@@ -157,7 +157,7 @@ class DepositObjectDAO extends DAO {
 	 * @param $objectType string
 	 * @return array DepositObject ordered by sequence
 	 */
-	function &createNew($journalId, $objectType) {
+	function createNew($journalId, $objectType) {
 		$objects = array();
 
 		switch ($objectType) {
@@ -295,7 +295,7 @@ class DepositObjectDAO extends DAO {
 	 * @param $row array
 	 * @return DepositObject
 	 */
-	function &_returnDepositObjectFromRow($row) {
+	function _returnDepositObjectFromRow($row) {
 		$depositObject = $this->_newDataObject();
 		$depositObject->setId($row['deposit_object_id']);
 		$depositObject->setJournalId($row['journal_id']);

@@ -138,7 +138,7 @@ class DepositDAO extends DAO {
 	 * @param $row array
 	 * @return Deposit
 	 */
-	function &_returnDepositFromRow($row) {
+	function _returnDepositFromRow($row) {
 		$deposit = $this->newDataObject();
 		$deposit->setId($row['deposit_id']);
 		$deposit->setJournalId($row['journal_id']);
@@ -159,7 +159,7 @@ class DepositDAO extends DAO {
 	 * @param $depositId int
 	 * @return Deposit
 	 */
-	function &getDepositById($journalId, $depositId) {
+	function getDepositById($journalId, $depositId) {
 		$result = $this->retrieve(
 			'SELECT * FROM pln_deposits WHERE journal_id = ? AND deposit_id = ?',
 			array (
@@ -181,7 +181,7 @@ class DepositDAO extends DAO {
 	 * @param $depositUuid string
 	 * @return Deposit
 	 */
-	function &getDepositByUUID($journalId, $depositUuid) {
+	function getDepositByUUID($journalId, $depositUuid) {
 		$result = $this->retrieve(
 			'SELECT * FROM pln_deposits WHERE journal_id = ? AND uuid = ?',
 			array (
@@ -219,7 +219,7 @@ class DepositDAO extends DAO {
 	 * @param $journalId int
 	 * @return array Deposit
 	 */
-	function &getNew($journalId) {
+	function getNew($journalId) {
 		$result = $this->retrieve(
 			'SELECT * FROM pln_deposits WHERE journal_id = ? AND status = ?',
 			array(
@@ -236,7 +236,7 @@ class DepositDAO extends DAO {
 	 * @param $journalId int
 	 * @return array Deposit
 	 */
-	function &getNeedTransferring($journalId) {
+	function getNeedTransferring($journalId) {
 		$result = $this->retrieve(
 			'SELECT * FROM pln_deposits AS d WHERE d.journal_id = ? AND d.status & ? = 0 AND d.status & ? = 0',
 			array (
@@ -254,7 +254,7 @@ class DepositDAO extends DAO {
 	 * @param $journalId int
 	 * @return array Deposit
 	 */
-	function &getNeedPackaging($journalId) {
+	function getNeedPackaging($journalId) {
 		$result = $this->retrieve(
 			'SELECT * FROM pln_deposits AS d WHERE d.journal_id = ? AND d.status & ? = 0 AND d.status & ? = 0',
 			array(
@@ -272,7 +272,7 @@ class DepositDAO extends DAO {
 	 * @param $journalId int
 	 * @return array Deposit
 	 */
-	function &getNeedStagingStatusUpdate($journalId) {
+	function getNeedStagingStatusUpdate($journalId) {
 		$result = $this->retrieve(
 			'SELECT * FROM pln_deposits AS d WHERE d.journal_id = ? AND d.status & ? <> 0 AND d.status & ? = 0',
 			array (

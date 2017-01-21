@@ -107,7 +107,7 @@ class PLNHandler extends Handler {
 	 * Get the Usage Stats plugin object
 	 * @return PLNPlugin
 	 */
-	function &_getPlugin() {
+	function _getPlugin() {
 		$plugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 		return $plugin;
 	}

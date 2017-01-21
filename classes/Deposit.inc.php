@@ -41,7 +41,7 @@ class Deposit extends DataObject {
 	 * Get all deposit objects of this deposit.
 	 * @return array of DepositObject
 	 */
-	function &getDepositObjects() {
+	function getDepositObjects() {
 		$depositObjectDao = DAORegistry::getDAO('DepositObjectDAO');
 		return $depositObjectDao->getByDepositId($this->getJournalID(), $this->getId());
 	}
