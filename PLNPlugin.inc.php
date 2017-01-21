@@ -80,8 +80,6 @@ class PLNPlugin extends GenericPlugin {
 	 */
 	function register($category, $path) {
 
-		if (!$this->php5Installed()) return false;
-
 		$success = parent::register($category, $path);
 
 		if ($success) {
@@ -438,11 +436,7 @@ class PLNPlugin extends GenericPlugin {
 					$messageParams = array('contents' => __('plugins.generic.pln.notifications.archive_tar_missing'));
 					break;
 				}
-				if(!$this->php5Installed()) {
-					$message = NOTIFICATION_TYPE_ERROR;
-					$messageParams = array('contents' => __('plugins.generic.pln.notifications.php5_missing'));
-					break;
-				}
+				
 				if(!$this->curlInstalled()) {
 					$message = NOTIFICATION_TYPE_ERROR;
 					$messageParams = array('contents' => __('plugins.generic.pln.notifications.curl_missing'));
@@ -647,14 +641,6 @@ class PLNPlugin extends GenericPlugin {
 			$notificationManager->createTrivialNotification($journalManager->getId(), $notificationType);
 			unset($journalManager);
 		}
-	}
-
-	/**
-	 * Get whether we're running php 5
-	 * @return boolean
-	 */
-	function php5Installed() {
-		return version_compare(PHP_VERSION, '5.0.0', '>=');
 	}
 
 	/**

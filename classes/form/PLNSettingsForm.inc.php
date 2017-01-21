@@ -78,12 +78,6 @@ class PLNSettingsForm extends Form {
 	function _checkPrerequisites() {
 		$messages = array();
 
-		if( ! $this->_plugin->php5Installed()) {
-			// If php5 isn't available, then the other checks are not
-			// useful.
-			$messages[] =  __('plugins.generic.pln.notifications.php5_missing');
-			return $messages;
-		}
 		if( ! @include_once('Archive/Tar.php')) {
 			$messages[] = __('plugins.generic.pln.notifications.archive_tar_missing');
 		}
