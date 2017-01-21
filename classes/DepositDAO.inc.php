@@ -25,8 +25,8 @@ class DepositDAO extends DAO {
 	}
 
 	/**
-	 * Construct a new User object.
-	 * @return User
+	 * Construct a new deposit object.
+	 * @return Deposit
 	 */
 	function newDataObject() {
 		return new Deposit(null);
