@@ -41,7 +41,7 @@ class DepositObjectDAO extends DAO {
 
 		$returner = null;
 		if ($result->RecordCount() != 0) {
-			$returner = $this->_returnDepositObjectFromRow($result->GetRowAssoc(false));
+			$returner = $this->_fromRow($result->GetRowAssoc(false));
 		}
 		$result->Close();
 		return $returner;
@@ -61,7 +61,7 @@ class DepositObjectDAO extends DAO {
 				(int) $depositId
 			)
 		);
-		$returner = new DAOResultFactory($result, $this, '_returnDepositObjectFromRow');
+		$returner = new DAOResultFactory($result, $this, '_fromRow');
 		return $returner;
 	}
 
@@ -75,7 +75,7 @@ class DepositObjectDAO extends DAO {
 			'SELECT * FROM pln_deposit_objects WHERE journal_id = ? AND deposit_id is null',
 			(int) $journalId
 		);
-		$returner = new DAOResultFactory($result, $this, '_returnDepositObjectFromRow');
+		$returner = new DAOResultFactory($result, $this, '_fromRow');
 		return $returner;
 	}
 
@@ -295,7 +295,7 @@ class DepositObjectDAO extends DAO {
 	 * @param $row array
 	 * @return DepositObject
 	 */
-	function _returnDepositObjectFromRow($row) {
+	function _fromRow($row) {
 		$depositObject = $this->_newDataObject();
 		$depositObject->setId($row['deposit_object_id']);
 		$depositObject->setJournalId($row['journal_id']);
@@ -305,7 +305,7 @@ class DepositObjectDAO extends DAO {
 		$depositObject->setDateCreated($this->datetimeFromDB($row['date_created']));
 		$depositObject->setDateModified($this->datetimeFromDB($row['date_modified']));
 
-		HookRegistry::call('DepositObjectDAO::_returnDepositObjectFromRow', array(&$depositObject, &$row));
+		HookRegistry::call('DepositObjectDAO::_fromRow', array(&$depositObject, &$row));
 
 		return $depositObject;
 	}

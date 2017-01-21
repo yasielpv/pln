@@ -46,7 +46,7 @@ class DepositDAO extends DAO {
 		);
 		$returner = null;
 		if ($result->RecordCount() != 0) {
-			$returner = $this->_returnDepositFromRow($result->GetRowAssoc(false));
+			$returner = $this->_fromRow($result->GetRowAssoc(false));
 		}
 		$result->Close();
 		return $returner;
@@ -138,7 +138,7 @@ class DepositDAO extends DAO {
 	 * @param $row array
 	 * @return Deposit
 	 */
-	function _returnDepositFromRow($row) {
+	function _fromRow($row) {
 		$deposit = $this->newDataObject();
 		$deposit->setId($row['deposit_id']);
 		$deposit->setJournalId($row['journal_id']);
@@ -148,7 +148,7 @@ class DepositDAO extends DAO {
 		$deposit->setDateCreated($this->datetimeFromDB($row['date_created']));
 		$deposit->setDateModified($this->datetimeFromDB($row['date_modified']));
 
-		HookRegistry::call('DepositDAO::_returnDepositFromRow', array(&$deposit, &$row));
+		HookRegistry::call('DepositDAO::_fromRow', array(&$deposit, &$row));
 
 		return $deposit;
 	}
@@ -169,7 +169,7 @@ class DepositDAO extends DAO {
 		);
 		$returner = null;
 		if ($result->RecordCount() != 0) {
-			$returner = $this->_returnDepositFromRow($result->GetRowAssoc(false));
+			$returner = $this->_fromRow($result->GetRowAssoc(false));
 		}
 		$result->Close();
 		return $returner;
@@ -191,7 +191,7 @@ class DepositDAO extends DAO {
 		);
 		$returner = null;
 		if ($result->RecordCount() != 0) {
-			$returner = $this->_returnDepositFromRow($result->GetRowAssoc(false));
+			$returner = $this->_fromRow($result->GetRowAssoc(false));
 		}
 		$result->Close();
 		return $returner;
@@ -210,7 +210,7 @@ class DepositDAO extends DAO {
 			),
 			$dbResultRange
 		);
-		$returner = new DAOResultFactory($result, $this, '_returnDepositFromRow');
+		$returner = new DAOResultFactory($result, $this, '_fromRow');
 		return $returner;
 	}
 
@@ -227,7 +227,7 @@ class DepositDAO extends DAO {
 				(int) PLN_PLUGIN_DEPOSIT_STATUS_NEW
 			)
 		);
-		$returner = new DAOResultFactory($result, $this, '_returnDepositFromRow');
+		$returner = new DAOResultFactory($result, $this, '_fromRow');
 		return $returner;
 	}
 
@@ -245,7 +245,7 @@ class DepositDAO extends DAO {
 				(int) PLN_PLUGIN_DEPOSIT_STATUS_LOCKSS_AGREEMENT
 			)
 		);
-		$returner = new DAOResultFactory($result, $this, '_returnDepositFromRow');
+		$returner = new DAOResultFactory($result, $this, '_fromRow');
 		return $returner;
 	}
 
@@ -263,7 +263,7 @@ class DepositDAO extends DAO {
 				(int) PLN_PLUGIN_DEPOSIT_STATUS_LOCKSS_AGREEMENT
 			)
 		);
-		$returner = new DAOResultFactory($result, $this, '_returnDepositFromRow');
+		$returner = new DAOResultFactory($result, $this, '_fromRow');
 		return $returner;
 	}
 
@@ -281,7 +281,7 @@ class DepositDAO extends DAO {
 				(int) PLN_PLUGIN_DEPOSIT_STATUS_LOCKSS_AGREEMENT
 			)
 		);
-		$returner = new DAOResultFactory($result, $this, '_returnDepositFromRow');
+		$returner = new DAOResultFactory($result, $this, '_fromRow');
 		return $returner;
 	}
 
