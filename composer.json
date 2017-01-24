@@ -1,0 +1,5 @@
+{
+  "require": {
+    "scholarslab/bagit": "~0.2"
+  }
+}
