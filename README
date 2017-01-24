@@ -62,8 +62,12 @@ Version History
 
 Installation Process
 ---------------------
+The plugin depends on the BagIt component (https://packagist.org/packages/scholarslab/bagit) and 
+it incorporates it as a Composer(https://getcomposer.org/) module. 
+Please make sure you have Composer installed before installing the plugin.
+
 - Clone the repository containing the code.
-- Execute "composer install" from console, being in the cloned folder (https://getcomposer.org/).
+- Execute "composer install" from console, being in the cloned folder .
 - Rename the cloned folder to "pln" 
 - Move the "pln" folder in OJS_ROOT/plugins/generic
 - If not automatically discovered by OJS at the Plugins page, run "php tools/upgrade.php upgrade"  
