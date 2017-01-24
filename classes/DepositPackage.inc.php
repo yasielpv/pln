@@ -260,7 +260,7 @@ class DepositPackage {
 	 */
 	function generatePackage() {
 
-		if( ! @include_once(dirname(__FILE__).'/../lib/bagit.php')) {
+		if( ! @include_once(dirname(__FILE__).'/../vendor/scholarslab/bagit/lib/bagit.php')) {
 			$this->_logMessage(__("plugins.generic.pln.error.include.bagit"));
 			return;
 		}
