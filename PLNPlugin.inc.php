@@ -80,7 +80,6 @@ class PLNPlugin extends GenericPlugin {
 		$success = parent::register($category, $path);
 
 		if ($success) {
-			HookRegistry::register('TemplateManager::display',array($this, 'callbackTemplateDisplay'));
 			HookRegistry::register('Templates::Manager::Setup::JournalArchiving', array($this, 'callbackJournalArchivingSetup'));
 			HookRegistry::register('AcronPlugin::parseCronTab', array($this, 'callbackParseCronTab'));
 
@@ -214,14 +213,6 @@ class PLNPlugin extends GenericPlugin {
 	}
 
 	/**
-	 * Return the location of the plugin's CSS file
-	 * @return string
-	 */
-	function getStyleSheet() {
-		return $this->getPluginPath() . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'pln.css';
-	}
-
-	/**
 	 * @see PKPPlugin::getSetting()
 	 * @param $journalId int
 	 * @param $settingName string
@@ -282,21 +273,6 @@ class PLNPlugin extends GenericPlugin {
 		$depositDao->deleteByJournalId($journalId);
 		$depositObjectDao = DAORegistry::getDAO('DepositObjectDAO');
 		$depositObjectDao->deleteByJournalId($journalId);
-		return false;
-	}
-
-	/**
-	 * @copydoc TemplateManager::display()
-	 */
-	function callbackTemplateDisplay($hookName, $params) {
-		// Get request and context.
-		$request = PKPApplication::getRequest();
-		$journal = $request->getContext();
-
-		// Assign our private stylesheet.
-		$templateMgr = $params[0];
-		$templateMgr->addStylesheet($request->getBaseUrl() . '/' . $this->getStyleSheet());
-
 		return false;
 	}
 
