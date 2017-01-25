@@ -66,7 +66,7 @@ class PLNHandler extends Handler {
 			return false;
 		}
 
-		$deposit = $depositDao->getDepositByUUID($journal->getId(),$depositUuid);
+		$deposit = $depositDao->getByUUID($journal->getId(),$depositUuid);
 
 		if (!$deposit) {
 			error_log(__("plugins.generic.pln.error.handler.uuid.notfound"));
@@ -93,7 +93,6 @@ class PLNHandler extends Handler {
 	 */
 	function status($args=array(), $request) {
 		$router = $request->getRouter();
-		$journal = $request->getJournal();
 		$plnPlugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 		$templateMgr = TemplateManager::getManager();
 		$templateMgr->assign('pageHierarchy', array(array($router->url($request, null, 'about'), 'about.aboutTheJournal')));

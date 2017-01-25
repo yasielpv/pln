@@ -141,7 +141,7 @@ class PLNStatusGridHandler extends GridHandler {
 		$context = $request->getContext();
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$rangeInfo = $this->getGridRangeInfo($request, $this->getId());
-		return $depositDao->getDepositsByJournalId($context->getId(), $rangeInfo);
+		return $depositDao->getByJournalId($context->getId(), $rangeInfo);
 	}
 
 	//
@@ -155,12 +155,11 @@ class PLNStatusGridHandler extends GridHandler {
 	 * @return string Serialized JSON object
 	 */
 	function resetDeposit($args, $request) {
-		$context = $request->getContext();
 		$deposit_id = $args['DepositId'];
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 
 		if (!is_null($deposit_id)) {
-			$deposit = $depositDao->getDepositById($context->getId(), $deposit_id);
+			$deposit = $depositDao->getById($deposit_id);
 			$deposit->setStatus(PLN_PLUGIN_DEPOSIT_STATUS_NEW);
 			$depositDao->updateObject($deposit);
 		}

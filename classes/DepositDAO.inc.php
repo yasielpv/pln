@@ -58,7 +58,7 @@ class DepositDAO extends DAO {
 	 * @return int inserted Deposit id
 	 */
 	function insertObject($deposit) {
-		$ret = $this->update(
+		$this->update(
 			sprintf('
 				INSERT INTO pln_deposits
 					(journal_id,
@@ -87,7 +87,7 @@ class DepositDAO extends DAO {
 	 * @param $deposit Deposit
 	 */
 	function updateObject($deposit) {
-		$ret = $this->update(
+		$this->update(
 			sprintf('
 				UPDATE pln_deposits SET
 					journal_id = ?,
@@ -116,10 +116,10 @@ class DepositDAO extends DAO {
 	function deleteObject($deposit) {
 		$deposit_object_dao = DAORegistry::getDAO('DepositObjectDAO');
 		foreach($deposit->getDepositObjects() as $deposit_object) {
-			$deposit_object_dao->deleteDepositObject($deposit_object);
+			$deposit_object_dao->deleteObject($deposit_object);
 		}
 
-		$ret = $this->update(
+		$this->update(
 			'DELETE from pln_deposits WHERE deposit_id = ?',
 			(int) $deposit->getId()
 		);
@@ -154,34 +154,12 @@ class DepositDAO extends DAO {
 	}
 
 	/**
-	 * Retrieve a deposit by deposit id and journal id.
-	 * @param $journalId int
-	 * @param $depositId int
-	 * @return Deposit
-	 */
-	function getDepositById($journalId, $depositId) {
-		$result = $this->retrieve(
-			'SELECT * FROM pln_deposits WHERE journal_id = ? AND deposit_id = ?',
-			array (
-				(int) $journalId,
-				(int) $depositId
-			)
-		);
-		$returner = null;
-		if ($result->RecordCount() != 0) {
-			$returner = $this->_fromRow($result->GetRowAssoc(false));
-		}
-		$result->Close();
-		return $returner;
-	}
-
-	/**
 	 * Retrieve a deposit by deposit uuid and journal id.
 	 * @param $journalId int
 	 * @param $depositUuid string
 	 * @return Deposit
 	 */
-	function getDepositByUUID($journalId, $depositUuid) {
+	function getByUUID($journalId, $depositUuid) {
 		$result = $this->retrieve(
 			'SELECT * FROM pln_deposits WHERE journal_id = ? AND uuid = ?',
 			array (
@@ -202,16 +180,16 @@ class DepositDAO extends DAO {
 	 * @param $journalId int
 	 * @return array Deposit
 	 */
-	function getDepositsByJournalId($journalId, $dbResultRange = null) {
+	function getByJournalId($journalId, $dbResultRange = null) {
 		$result = $this->retrieveRange(
 			'SELECT * FROM pln_deposits WHERE journal_id = ? ORDER BY deposit_id',
 			array (
-				$journalId
+				(int) $journalId
 			),
 			$dbResultRange
 		);
-		$returner = new DAOResultFactory($result, $this, '_fromRow');
-		return $returner;
+
+		return new DAOResultFactory($result, $this, '_fromRow');
 	}
 
 	/**
@@ -227,8 +205,8 @@ class DepositDAO extends DAO {
 				(int) PLN_PLUGIN_DEPOSIT_STATUS_NEW
 			)
 		);
-		$returner = new DAOResultFactory($result, $this, '_fromRow');
-		return $returner;
+
+		return new DAOResultFactory($result, $this, '_fromRow');
 	}
 
 	/**
@@ -245,8 +223,8 @@ class DepositDAO extends DAO {
 				(int) PLN_PLUGIN_DEPOSIT_STATUS_LOCKSS_AGREEMENT
 			)
 		);
-		$returner = new DAOResultFactory($result, $this, '_fromRow');
-		return $returner;
+
+		return new DAOResultFactory($result, $this, '_fromRow');
 	}
 
 	/**
@@ -263,8 +241,8 @@ class DepositDAO extends DAO {
 				(int) PLN_PLUGIN_DEPOSIT_STATUS_LOCKSS_AGREEMENT
 			)
 		);
-		$returner = new DAOResultFactory($result, $this, '_fromRow');
-		return $returner;
+
+		return new DAOResultFactory($result, $this, '_fromRow');
 	}
 
 	/**
@@ -281,16 +259,16 @@ class DepositDAO extends DAO {
 				(int) PLN_PLUGIN_DEPOSIT_STATUS_LOCKSS_AGREEMENT
 			)
 		);
-		$returner = new DAOResultFactory($result, $this, '_fromRow');
-		return $returner;
+
+		return new DAOResultFactory($result, $this, '_fromRow');
 	}
 
 	/**
 	 * Delete deposits by journal id
 	 * @param $journalId
 	 */
-	function deleteDepositsByJournalId($journalId) {
-		$deposits = $this->getDepositsByJournalId($journalId);
+	function deleteByJournalId($journalId) {
+		$deposits = $this->getByJournalId($journalId);
 		foreach($deposits as $deposit) {
 			$this->deleteDeposit($deposit);
 		}

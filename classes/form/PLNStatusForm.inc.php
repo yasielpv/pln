@@ -18,7 +18,7 @@ import('lib.pkp.classes.form.Form');
 class PLNStatusForm extends Form {
 
 	/**
-	 * @var _contextId int
+	 * @var $_contextId int
 	 */
 	var $_contextId;
 
@@ -58,7 +58,7 @@ class PLNStatusForm extends Form {
 			}
 		}
 		$templateMgr = TemplateManager::getManager();
-		$templateMgr->assign('deposits', $depositDao->getDepositsByJournalId($context->getId(),$rangeInfo));
+		$templateMgr->assign('deposits', $depositDao->getByJournalId($context->getId(),$rangeInfo));
 		$templateMgr->assign('networkStatus', $networkStatus);
 		$templateMgr->assign('networkStatusMessage', $networkStatusMessage);
 		$templateMgr->assign('plnStatusDocs', $this->_plugin->getSetting($context->getId(), 'pln_status_docs'));
