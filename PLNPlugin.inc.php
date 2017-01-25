@@ -3,8 +3,8 @@
 /**
  * @file plugins/generic/pln/PLNPlugin.inc.php
  *
- * Copyright (c) 2013-2016 Simon Fraser University Library
- * Copyright (c) 2003-2016 John Willinsky
+ * Copyright (c) 2013-2017 Simon Fraser University Library
+ * Copyright (c) 2003-2017 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * @class PLNPlugin
@@ -409,7 +409,7 @@ class PLNPlugin extends GenericPlugin {
 					$messageParams = array('contents' => __('plugins.generic.pln.notifications.archive_tar_missing'));
 					break;
 				}
-				
+
 				if(!$this->curlInstalled()) {
 					$message = NOTIFICATION_TYPE_ERROR;
 					$messageParams = array('contents' => __('plugins.generic.pln.notifications.curl_missing'));
