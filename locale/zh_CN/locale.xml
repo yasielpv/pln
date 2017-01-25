@@ -2,21 +2,21 @@
 <!DOCTYPE locale SYSTEM "../../../../../lib/pkp/dtd/locale.dtd">
 
 <!--
-	* plugins/generic/pln/locale/zh_CN/locale.xml
-	*
-	* Copyright (c) 2013-2017 Simon Fraser University Library
-	* Copyright (c) 2003-2017 John Willinsky
-	* Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
-	* Credits: https://pkp.sfu.ca/wiki/index.php?title=OJS:_Chinese_(zh_CN)
-	* 
-	* PLN plugin localization strings
-	-->
+ * plugins/generic/pln/locale/zh_CN/locale.xml
+ *
+ * Copyright (c) 2013-2017 Simon Fraser University Library
+ * Copyright (c) 2003-2017 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+ * Credits: https://pkp.sfu.ca/wiki/index.php?title=OJS:_Chinese_(zh_CN)
+ * 
+ * PLN plugin localization strings
+ -->
 
 <locale name="zh_CN" full_name="简体中文">
 	<message key="plugins.generic.pln">PKP PLN 插件</message>
 	<message key="plugins.generic.pln.description">PKP PLN插件将您出版的内容存储在PKP Private LOCKSS Network中。</message>
 	<message key="plugins.generic.pln.manager.setup.description"><![CDATA[<strong>PKP Private LOCKSS Network</strong><br /><br />请阅读 <a href="https://pkp.sfu.ca/pkp-lockss/" target="_blank"> PKP PLN 概述</a> 并且完成 <a href="{$plnPluginURL}">这个简单的表格</a>. 该操作可以使你的期刊收录到公共知识项目的Private LOCKSS Network (PKP PLN)中。]]></message>
-	
+
 	<message key="plugins.generic.pln.settings_page">PKP PLN 插件 - 设置</message>
 	<message key="plugins.generic.pln.settings">设置</message>
 	<message key="plugins.generic.pln.settings.saved">保存PKP PLN 设置</message>
@@ -27,11 +27,11 @@
 	<message key="plugins.generic.pln.settings.journal_uuid_help">这是您的期刊PKP PLN的唯一标识符。您可能需要与PKP PLN管理员分享以寻求支持。</message>
 	<message key="plugins.generic.pln.settings.refresh">刷新</message>
 	<message key="plugins.generic.pln.settings.refresh_help">如果由于某种原因，没有所列条款，或者您知道的条款已经更新，击刷新更新上面列出的条款。</message>
-	
+
 	<message key="plugins.generic.pln.required.object_type">请选择存储对象类型。</message>
 	<message key="plugins.generic.pln.required.object_threshold">请选择存储对象入口。</message>
 	<message key="plugins.generic.pln.required.terms_of_use_agreement">为了存放到PLN上，须同意网络的使用条款。</message>
-	
+
 	<message key="plugins.generic.pln.objects.article">文章</message>
 	<message key="plugins.generic.pln.objects.issue">期次</message>
 

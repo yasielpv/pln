@@ -8,7 +8,8 @@
  * PLN plugin settings
  *
  *}
- <script>
+
+<script>
 	$(function() {ldelim}
 		// Attach the form handler.
 		$('#plnSettingsForm').pkpHandler('$.pkp.controllers.form.AjaxFormHandler');

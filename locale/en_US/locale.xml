@@ -2,22 +2,22 @@
 <!DOCTYPE locale SYSTEM "../../../../../lib/pkp/dtd/locale.dtd">
 
 <!--
-	* plugins/generic/pln/locale/en_US/locale.xml
-	*
-	* Copyright (c) 2013-2017 Simon Fraser University Library
-	* Copyright (c) 2003-2017 John Willinsky
-	* Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
-	*
-	* PLN plugin localization strings
-	-->
- 
+ * plugins/generic/pln/locale/en_US/locale.xml
+ *
+ * Copyright (c) 2013-2017 Simon Fraser University Library
+ * Copyright (c) 2003-2017 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+ *
+ * PLN plugin localization strings
+ -->
+
 <locale name="en_US" full_name="U.S. English">
 	<message key="plugins.generic.pln">PKP PLN Plugin</message>
 	<message key="plugins.generic.pln.description">The PKP PLN plugin will deposit your published content into the PKP Private LOCKSS Network for preservation.</message>
 	<message key="plugins.generic.pln.manager.setup.description"><![CDATA[<strong>PKP Private LOCKSS Network</strong><br /><br />Please read the <a href="https://pkp.sfu.ca/pkp-lockss/" target="_blank">overview of the PKP PLN</a> and complete <a href="{$plnPluginURL}">this simple form</a>. This option will enable inclusion of your journal in the Public Knowledge Project Private LOCKSS Network (PKP PLN).]]></message>
 	<message key="plugins.generic.pln.enabled">The PKP PLN plugin has been enabled.</message>
 	<message key="plugins.generic.pln.disabled">The PKP PLN plugin has been disabled.</message>
-	
+
 	<message key="plugins.generic.pln.settings_page">PKP PLN Plugin - Settings</message>
 	<message key="plugins.generic.pln.settings">Settings</message>
 	<message key="plugins.generic.pln.settings.acron_required">The PLN plugin requires either the Acron plugin or a periodic scheduling tools such as 'cron.'</message>
@@ -53,7 +53,7 @@
 	<message key="plugins.generic.pln.status.lockss_status">LOCKSS Status</message>
 	<message key="plugins.generic.pln.status.complete">Complete</message>
 	<message key="plugins.generic.pln.status.confirmReset">Are you sure you want to reset this deposit? It will be repackaged and resent to the processing server.</message>
-	
+
 	<!-- entries in the status page table -->
 	<message key="plugins.generic.pln.status.unknown">Unknown</message>
 	<message key="plugins.generic.pln.status.new">New</message>

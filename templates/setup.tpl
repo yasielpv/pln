@@ -8,5 +8,6 @@
  * PLN plugin setup instructions for journal managers
  *
  *}
+
 {plugin_url|assign:"plnPluginURL" page="manager" op="plugin" path="settings"}
 <p>{translate key="plugins.generic.pln.manager.setup.description" plnPluginURL=$plnPluginURL}</p>
