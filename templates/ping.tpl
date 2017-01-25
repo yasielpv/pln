@@ -1,3 +1,14 @@
+{**
+ * plugins/generic/pln/templates/settingsForm.tpl
+ *
+ * Copyright (c) 2013-2016 Simon Fraser University Library
+ * Copyright (c) 2003-2016 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+ *
+ * PLN plugin settings
+ *
+ *}
+ 
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plnplugin SYSTEM "ping.dtd"> 
 <plnplugin>
