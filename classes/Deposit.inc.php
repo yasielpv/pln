@@ -340,7 +340,7 @@ class Deposit extends DataObject {
 
 	/**
 	 * Set set the date of the last status change
-	 * @param $dateLastStatus date
+	 * @param $dateLastStatus DateTime
 	 */
 	function setLastStatusDate($dateLastStatus) {
 		$this->setData('date_status', $dateLastStatus);

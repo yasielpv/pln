@@ -194,7 +194,7 @@ class Depositor extends ScheduledTask {
 	 *
 	 * Create packages for any deposits that don't have any or have been updated
 	 */
-	function _processNeedPackaging(&$journal) {
+	function _processNeedPackaging($journal) {
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$depositQueue = $depositDao->getNeedPackaging($journal->getId());
 		$fileManager = new JournalFileManager($journal);
