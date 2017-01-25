@@ -197,7 +197,7 @@ class DepositObjectDAO extends DAO {
 		}
 		$depositObjects = array();
 		foreach($objects as $object) {
-			$depositObject = $this->_newDataObject();
+			$depositObject = $this->newDataObject();
 			$depositObject->setContent($object);
 			$depositObject->setJournalId($journalId);
 			$this->insertObject($depositObject);
@@ -287,8 +287,7 @@ class DepositObjectDAO extends DAO {
 	 * Construct a new data object corresponding to this DAO.
 	 * @return DepositObject
 	 */
-	function _newDataObject() {
-		$plnPlugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
+	function newDataObject() {
 		return new DepositObject();
 	}
 
@@ -298,7 +297,7 @@ class DepositObjectDAO extends DAO {
 	 * @return DepositObject
 	 */
 	function _fromRow($row) {
-		$depositObject = $this->_newDataObject();
+		$depositObject = $this->newDataObject();
 		$depositObject->setId($row['deposit_object_id']);
 		$depositObject->setJournalId($row['journal_id']);
 		$depositObject->setObjectType($row['object_type']);
