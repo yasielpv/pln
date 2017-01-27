@@ -2,15 +2,15 @@
 <!DOCTYPE locale SYSTEM "../../../../../lib/pkp/dtd/locale.dtd">
 
 <!--
- * plugins/generic/pln/locale/zh_CN/locale.xml
- *
- * Copyright (c) 2013-2017 Simon Fraser University Library
- * Copyright (c) 2003-2017 John Willinsky
- * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
- * Credits: https://pkp.sfu.ca/wiki/index.php?title=OJS:_Chinese_(zh_CN)
- * 
- * PLN plugin localization strings
- -->
+  * plugins/generic/pln/locale/zh_CN/locale.xml
+  *
+  * Copyright (c) 2013-2017 Simon Fraser University Library
+  * Copyright (c) 2003-2017 John Willinsky
+  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+  * Credits: https://pkp.sfu.ca/wiki/index.php?title=OJS:_Chinese_(zh_CN)
+  * 
+  * PLN plugin localization strings
+  -->
 
 <locale name="zh_CN" full_name="简体中文">
 	<message key="plugins.generic.pln">PKP PLN 插件</message>

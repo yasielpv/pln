@@ -2,15 +2,15 @@
 <!DOCTYPE locale SYSTEM "../../../../../lib/pkp/dtd/locale.dtd">
 
 <!--
- * plugins/generic/pln/locale/tr_TR/locale.xml
- *
- * Copyright (c) 2013-2017 Simon Fraser University Library
- * Copyright (c) 2003-2017 John Willinsky
- * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
- * Credits: https://pkp.sfu.ca/wiki/index.php?title=OJS:_Turkish_(tr_TR)
- *
- * PLN plugin localization strings
- -->
+  * plugins/generic/pln/locale/tr_TR/locale.xml
+  *
+  * Copyright (c) 2013-2017 Simon Fraser University Library
+  * Copyright (c) 2003-2017 John Willinsky
+  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+  * Credits: https://pkp.sfu.ca/wiki/index.php?title=OJS:_Turkish_(tr_TR)
+  *
+  * PLN plugin localization strings
+  -->
 
 <locale name="tr_TR" full_name="Türkçe">
 	<message key="plugins.generic.pln.notifications.getting_servicedocument">Hizmet belgesi alınıyor.</message>
