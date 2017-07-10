@@ -185,7 +185,7 @@ class PLNPlugin extends GenericPlugin {
 	 * @return string
 	 */
 	function getInstallSchemaFile() {
-		return $this->getPluginPath() . DIRECTORY_SEPARATOR . 'xml' . DIRECTORY_SEPARATOR . 'schema.xml';
+		return $this->getPluginPath() . '/xml/schema.xml';
 	}
 
 	/**
