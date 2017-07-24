@@ -280,8 +280,8 @@ class PLNPlugin extends GenericPlugin {
 	 * @copydoc AcronPlugin::parseCronTab()
 	 */
 	function callbackParseCronTab($hookName, $args) {
-		$taskFilesPath = $args[0];
-		$taskFilesPath[] = $this->getPluginPath() . DIRECTORY_SEPARATOR . 'xml' . DIRECTORY_SEPARATOR . 'scheduledTasks.xml';
+		$taskFilesPath =& $args[0];
+		$taskFilesPath[] = $this->getPluginPath() . '/xml/scheduledTasks.xml';
 		return false;
 	}
 
@@ -606,7 +606,7 @@ class PLNPlugin extends GenericPlugin {
 	 */
 	function createJournalManagerNotification($contextId, $notificationType) {
 		$roleDao = DAORegistry::getDAO('RoleDAO');
-		$journalManagers = $roleDao->getUsersByRoleId(ROLE_ID_JOURNAL_MANAGER, $contextId);
+		$journalManagers = $roleDao->getUsersByRoleId(ROLE_ID_MANAGER, $contextId);
 		import('classes.notification.NotificationManager');
 		$notificationManager = new NotificationManager();
 		// TODO: this currently gets sent to all journal managers - perhaps only limit to the technical contact's account?
