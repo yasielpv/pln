@@ -74,7 +74,7 @@ class DepositObjectDAO extends DAO {
 	 */
 	function getNew($journalId) {
 		$result = $this->retrieve(
-			'SELECT * FROM pln_deposit_objects WHERE journal_id = ? AND deposit_id is null',
+			'SELECT * FROM pln_deposit_objects WHERE journal_id = ? AND deposit_id = 0',
 			(int) $journalId
 		);
 
