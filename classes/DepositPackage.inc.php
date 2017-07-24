@@ -13,7 +13,7 @@
  * @brief Handle PLN requests
  */
 
-import('classes.file.JournalFileManager');
+import('lib.pkp.classes.file.ContextFileManager');
 import('lib.pkp.classes.scheduledTask.ScheduledTask');
 
 class DepositPackage {
@@ -65,7 +65,7 @@ class DepositPackage {
 	 */
 	function getDepositDir() {
 		$journalDao = DAORegistry::getDAO('JournalDAO');
-		$fileManager = new JournalFileManager($journalDao->getById($this->_deposit->getJournalId()));
+		$fileManager = new ContextFileManager($this->_deposit->getJournalId());
 		return $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER . DIRECTORY_SEPARATOR . $this->_deposit->getUUID();
 	}
 
@@ -120,7 +120,7 @@ class DepositPackage {
 		$plnPlugin = PluginRegistry::getPlugin('generic',PLN_PLUGIN_NAME);
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$journal = $journalDao->getById($this->_deposit->getJournalId());
-		$fileManager = new JournalFileManager($journal);
+		$fileManager = new ContextFileManager($this->_deposit->getJournalId());
 
 		// set up folder and file locations
 		$atomFile = $this->getAtomDocumentPath();
@@ -273,7 +273,7 @@ class DepositPackage {
 		PluginRegistry::loadCategory('importexport');
 		$exportPlugin = PluginRegistry::getPlugin('importexport','NativeImportExportPlugin');
 		$plnPlugin = PluginRegistry::getPlugin('generic',PLN_PLUGIN_NAME);
-		$fileManager = new JournalFileManager($journalDao->getById($this->_deposit->getJournalId()));
+		$fileManager = new ContextFileManager($this->_deposit->getJournalId());
 
 		$journal = $journalDao->getById($this->_deposit->getJournalId());
 		$depositObjects = $this->_deposit->getDepositObjects();
@@ -383,7 +383,7 @@ class DepositPackage {
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$plnPlugin = PluginRegistry::getPlugin('generic',PLN_PLUGIN_NAME);
-		$fileManager = new JournalFileManager($journalDao->getById($journalId));
+		$fileManager = new ContextFileManager($journalId);
 		$plnDir = $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER;
 
 		// post the atom document
@@ -433,7 +433,7 @@ class DepositPackage {
 
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$journalDao = DAORegistry::getDAO('JournalDAO');
-		$fileManager = new JournalFileManager($journalDao->getById($this->_deposit->getJournalId()));
+		$fileManager = new ContextFileManager($this->_deposit->getJournalId());
 		$plnDir = $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER;
 
 		// make sure the pln work directory exists
@@ -532,7 +532,7 @@ class DepositPackage {
 			case 'agreement':
 				if( ! $this->_deposit->getLockssAgreementStatus()) {
 					$journalDao = DAORegistry::getDAO('JournalDAO');
-					$fileManager = new JournalFileManager($journalDao->getById($this->_deposit->getJournalId()));
+					$fileManager = new ContextFileManager($this->_deposit->getJournalId());
 					$depositDir = $this->getDepositDir();
 					$fileManager->rmtree($depositDir);
 				}

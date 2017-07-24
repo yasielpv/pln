@@ -13,7 +13,7 @@
  * @brief Class to perform automated deposits of PLN object.
  */
 
-import('classes.file.JournalFileManager');
+import('lib.pkp.classes.file.ContextFileManager');
 import('lib.pkp.classes.scheduledTask.ScheduledTask');
 
 class Depositor extends ScheduledTask {
@@ -197,7 +197,7 @@ class Depositor extends ScheduledTask {
 	function _processNeedPackaging($journal) {
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$depositQueue = $depositDao->getNeedPackaging($journal->getId());
-		$fileManager = new JournalFileManager($journal);
+		$fileManager = new ContextFileManager($journal->getId());
 		$plnDir = $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER;
 
 		// make sure the pln work directory exists
