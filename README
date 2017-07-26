@@ -66,6 +66,8 @@ it incorporates it as a Composer (https://getcomposer.org/) module.
 Please make sure you have Composer installed before installing the plugin.
 
 - Clone the repository containing the code.
-- Execute "composer install" from console, being in the cloned folder .
+- Run OJS's "php tools/upgrade.php upgrade"
+- Execute "composer install" from console, being in the cloned pln folder. (This process is going to produce a "vendor" folder containing the depending library.)
+- Enable Acron plugin and change config.inc.php variable scheduled_tasks = On
+- Enable the pln plugin
 
-This process is going to produce a "vendor" folder containing the depending library.
