@@ -209,6 +209,11 @@ class DepositPackage {
 		$pkpDetails->setAttribute('issue', $objectIssue);
 		$pkpDetails->setAttribute('pubdate', strftime("%Y-%m-%d",strtotime($objectPublicationDate)));
 
+		// Add OJS Version
+		$versionDao = DAORegistry::getDAO('VersionDAO');
+		$currentVersion = $versionDao->getCurrentVersion();
+		$pkpDetails->setAttribute('ojsVersion', $currentVersion->getVersionString());
+
 		switch ($plnPlugin->getSetting($journal->getId(), 'checksum_type')) {
 			case 'SHA-1':
 				$pkpDetails->setAttribute('checksumType', 'SHA-1');
@@ -362,6 +367,12 @@ class DepositPackage {
 		$bag->addFile($exportFile, $this->_deposit->getObjectType() . $this->_deposit->getUUID() . '.xml');
 		// add the exported content to the bag
 		$bag->addFile($termsFile, 'terms' . $this->_deposit->getUUID() . '.xml');
+
+		// Add OJS Version
+		$versionDao = DAORegistry::getDAO('VersionDAO');
+		$currentVersion = $versionDao->getCurrentVersion();
+		$bag->setBagInfoData('PKP-PLN-OJS-Version', $currentVersion->getVersionString());
+
 		$bag->update();
 
 		// create the bag
