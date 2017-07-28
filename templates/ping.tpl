@@ -8,7 +8,6 @@
  * PLN plugin settings
  *
  *}
- 
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plnplugin SYSTEM "ping.dtd"> 
 <plnplugin>
