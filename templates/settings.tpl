@@ -42,7 +42,7 @@
 							{assign var="checked" value=""}
 						{/if}
 
-						{fbvElement type="checkbox" name="terms_agreed[$term_name]" id="terms_agreed[$term_name]" value="1" checked=$checked label=$term_data.term}
+						{fbvElement type="checkbox" name="terms_agreed[$term_name]" id="terms_agreed[$term_name]" value="1" checked=$checked label=$term_data.term translate=false}
 					{/foreach}
 				{else}
 					<p>{translate key="plugins.generic.pln.notifications.issn_setting"}</p>
