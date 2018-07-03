@@ -197,14 +197,6 @@ class PLNPlugin extends GenericPlugin {
 	}
 
 	/**
-	 * @see PKPPlugin::getTemplatePath()
-	 * @return string
-	 */
-	function getTemplatePath() {
-		return parent::getTemplatePath() . DIRECTORY_SEPARATOR . 'templates';
-	}
-
-	/**
 	 * @see PKPPlugin::getContextSpecificPluginSettingsFile()
 	 * @return string
 	 */
@@ -254,7 +246,7 @@ class PLNPlugin extends GenericPlugin {
 			case 'gateways':
 				$this->import('PLNGatewayPlugin');
 				$gatewayPlugin = new PLNGatewayPlugin($this->getName());
-				$plugins[$gatewayPlugin->getSeq()][$gatewayPlugin->getPluginPath()] =& $gatewayPlugin;
+				PluginRegistry::register('gateways', $gatewayPlugin, $gatewayPlugin->getPluginPath());
 				break;
 		}
 
@@ -296,7 +288,8 @@ class PLNPlugin extends GenericPlugin {
 		$output = $args[2];
 		$templateMgr = TemplateManager::getManager();
 		$templateMgr->register_function('plugin_url', array(&$this, 'smartyPluginUrl'));
-		$output .= $templateMgr->fetch($this->getTemplatePath() . DIRECTORY_SEPARATOR . 'setup.tpl');
+		$output .= $templateMgr->fetch($this->getTemplateResource('setup.tpl'));
+
 		return false;
 	}
 
@@ -402,6 +395,8 @@ class PLNPlugin extends GenericPlugin {
 					}
 				}
 
+				$form->initData();
+
 				return new JSONMessage(true, $form->fetch($request));
 			case 'enable':
 				if(!@include_once('Archive/Tar.php')) {
@@ -450,26 +445,6 @@ class PLNPlugin extends GenericPlugin {
 			$verbs[] = array('status', __('plugins.generic.pln.status'));
 		}
 		return $verbs;
-	}
-
-	/**
-	 * Extend the {url ...} smarty to support this plugin.
-	 */
-	function smartyPluginUrl($params, &$smarty) {
-		$path = array($this->getCategory(), $this->getName());
-		if (is_array($params['path'])) {
-			$params['path'] = array_merge($path, $params['path']);
-		} elseif (!empty($params['path'])) {
-			$params['path'] = array_merge($path, array($params['path']));
-		} else {
-			$params['path'] = $path;
-		}
-
-		if (!empty($params['id'])) {
-			$params['path'] = array_merge($params['path'], array($params['id']));
-			unset($params['id']);
-		}
-		return $smarty->smartyUrl($params, $smarty);
 	}
 
 	/**

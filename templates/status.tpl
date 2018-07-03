@@ -20,13 +20,13 @@
 {assign var="pageTitle" value="plugins.generic.pln.status_page"}
 {/strip}
 
-{translate|assign:"confirmReset" key="plugins.generic.pln.status.confirmReset"}
+{capture assign="confirmReset"}{translate key="plugins.generic.pln.status.confirmReset"}{/capture}
 <div id="plnStatus">
 	<h3>{translate key="plugins.generic.pln.status.deposits"}</h3>
 	<p>{translate key="plugins.generic.pln.status.network_status" networkStatusMessage=$networkStatusMessage}</p>
 	<form class="pkp_form" id="plnStatusForm" method="post" action="{plugin_url path="status"}">
-		{url|assign:depositsGridUrl component="plugins.generic.pln.controllers.grid.PLNStatusGridHandler" op="fetchGrid" escape=false}
-		{load_url_in_div id="depositsGridContainer" url=$depositsGridUrl}
+		{capture assign="depositsGridUrl"}{url component="plugins.generic.pln.controllers.grid.PLNStatusGridHandler" op="fetchGrid" escape=false}{/capture}
+		{load_url_in_div id="statusDepositsGridContainer" url=$depositsGridUrl}
 	</form>
 	<p>{translate key='plugins.generic.pln.status.docs' statusDocsUrl=$plnStatusDocs}</p>
 </div>

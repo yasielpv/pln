@@ -174,9 +174,9 @@ class PLNGatewayPlugin extends GatewayPlugin {
 		$templateMgr->assign_by_ref('articles', $publishedArticles);
 		$templateMgr->assign_by_ref('pln_network', $plugin->getSetting($journal->getId(), 'pln_network'));
 
-		$templateMgr->display($this->getTemplatePath() . DIRECTORY_SEPARATOR . 'ping.tpl', 'text/xml');
+		header('Content-Type: text/xml; charset=' . Config::getVar('i18n', 'client_charset'));
+		echo $templateMgr->fetch($plugin->getTemplateResource('ping.tpl'));
 
 		return true;
 	}
-
 }
