@@ -81,7 +81,6 @@ class PLNPlugin extends GenericPlugin {
 
 		if ($success) {
 			HookRegistry::register('Templates::Manager::Setup::JournalArchiving', array($this, 'callbackJournalArchivingSetup'));
-			HookRegistry::register('AcronPlugin::parseCronTab', array($this, 'callbackParseCronTab'));
 
 			if ($this->getEnabled()) {
 				$this->registerDAOs();
@@ -94,6 +93,8 @@ class PLNPlugin extends GenericPlugin {
 				HookRegistry::register('LoadHandler', array($this, 'callbackLoadHandler'));
 				HookRegistry::register('NotificationManager::getNotificationContents', array($this, 'callbackNotificationContents'));
 				HookRegistry::register('LoadComponentHandler', array($this, 'setupComponentHandlers'));
+
+				HookRegistry::register('AcronPlugin::parseCronTab', array($this, 'callbackParseCronTab'));
 			}
 		}
 
@@ -281,7 +282,7 @@ class PLNPlugin extends GenericPlugin {
 	 */
 	function callbackParseCronTab($hookName, $args) {
 		$taskFilesPath =& $args[0];
-		$taskFilesPath[] = $this->getPluginPath() . '/xml/scheduledTasks.xml';
+		$taskFilesPath[] = $this->getPluginPath() . '/scheduledTasks.xml';
 		return false;
 	}
 
