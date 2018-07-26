@@ -282,7 +282,7 @@ class PLNPlugin extends GenericPlugin {
 	 */
 	function callbackParseCronTab($hookName, $args) {
 		$taskFilesPath =& $args[0];
-		$taskFilesPath[] = $this->getPluginPath() . '/scheduledTasks.xml';
+		$taskFilesPath[] = $this->getPluginPath() . '/xml/scheduledTasks.xml';
 		return false;
 	}
 
