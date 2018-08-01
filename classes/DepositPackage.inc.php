@@ -441,7 +441,7 @@ class DepositPackage {
 	 * Package a deposit for transfer to and retrieval by the PLN.
 	 */
 	function packageDeposit() {
-
+		$this->_task->addExecutionLogEntry("Start packageDeposit:: ". $this->_deposit->getId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$fileManager = new ContextFileManager($this->_deposit->getJournalId());
@@ -456,6 +456,8 @@ class DepositPackage {
 		$fileManager->mkdir($depositDir);
 
 		$packagePath = $this->generatePackage();
+
+		$this->_task->addExecutionLogEntry("packagePath:: ". $packagePath, SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 		if( ! $packagePath) {
 			return;
 		}
@@ -474,7 +476,7 @@ class DepositPackage {
 		// update the deposit's status
 		$this->_deposit->setPackagedStatus();
 		$depositDao->updateObject($this->_deposit);
-
+		$this->_task->addExecutionLogEntry("END packageDeposit:: ". $this->_deposit->getId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 	}
 
 	/**

@@ -178,15 +178,21 @@ class Depositor extends ScheduledTask {
 	 * If a deposit hasn't been transferred, transfer it
 	 */
 	function _processNeedTransferring(&$journal) {
+		$this->addExecutionLogEntry("STARTING need transfering", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 		// fetch the deposits we need to send to the pln
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$depositQueue = $depositDao->getNeedTransferring($journal->getId());
 
 		while ($deposit = $depositQueue->next()) {
+			$this->addExecutionLogEntry("Start transfering deposit::". $deposit->getId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 			$depositPackage = new DepositPackage($deposit, $this);
 			$depositPackage->transferDeposit();
+			$this->addExecutionLogEntry("End transfering deposit::". $deposit->getId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 			unset($deposit);
 		}
+
+		$this->addExecutionLogEntry("ENDING need transfering", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+
 	}
 
 	/**
@@ -206,10 +212,13 @@ class Depositor extends ScheduledTask {
 			$fileManager->mkdirtree($plnDir);
 		}
 
+		$this->addExecutionLogEntry("Starting processing need packaging::". $plnDir, SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 		// loop though all of the deposits that need packaging
 		while ($deposit = $depositQueue->next()) {
+			$this->addExecutionLogEntry("START processing DEPOSIT::". $deposit->getId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 			$depositPackage = new DepositPackage($deposit, $this);
 			$depositPackage->packageDeposit();
+			$this->addExecutionLogEntry("END processing DEPOSIT::". $deposit->getId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 			unset($deposit);
 		}
 	}
@@ -256,17 +265,19 @@ class Depositor extends ScheduledTask {
 
 				break;
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
-
+				$this->addExecutionLogEntry("Starting processing new deposits for ISSUE type", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 				// create a new deposit for reach deposit object
 				while ($newObject = $newObjects->next()) {
+					$this->addExecutionLogEntry("NEW OBJECT", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 					$newDeposit = new Deposit($this->_plugin->newUUID());
 					$newDeposit->setJournalId($journal->getId());
 					$depositDao->insertObject($newDeposit);
 					$newObject->setDepositId($newDeposit->getId());
 					$depositObjectDao->updateObject($newObject);
+					$this->addExecutionLogEntry("END NEW OBJECT:: ". $newObject->setDepositId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 					unset($newObject);
 				}
-
+				$this->addExecutionLogEntry("Ending processing new deposits for ISSUE type", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 				break;
 			default:
 		}
