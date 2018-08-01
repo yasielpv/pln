@@ -46,6 +46,8 @@ class Depositor extends ScheduledTask {
 	function executeActions() {
 		if (!$this->_plugin) return false;
 
+		$this->addExecutionLogEntry('PLN Depositor executeActions started', SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 
 		// Get all journals

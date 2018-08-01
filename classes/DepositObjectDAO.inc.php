@@ -104,7 +104,7 @@ class DepositObjectDAO extends DAO {
 					$row = $result->GetRowAssoc(false);
 					$depositObject = $this->getById($journalId, $row['deposit_object_id']);
 					$deposit = $depositDao->getById($depositObject->getDepositId());
-					if($deposit->getSentStatus() || ! $deposit->getTransferredStatus()) {
+					if($deposit->getSentStatus() || !$deposit->getTransferredStatus()) {
 						// only update a deposit after it has been synced in LOCKSS.
 						$depositObject->setDateModified($row['last_modified']);
 						$this->updateObject($depositObject);

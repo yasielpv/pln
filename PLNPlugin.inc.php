@@ -21,7 +21,8 @@ import('classes.issue.Issue');
 define('PLN_PLUGIN_NAME','plnplugin');
 
 // defined here in case an upgrade doesn't pick up the default value.
-define('PLN_DEFAULT_NETWORK', 'http://pkp-pln.lib.sfu.ca');
+// define('PLN_DEFAULT_NETWORK', 'http://pkp-pln.lib.sfu.ca');
+define('PLN_DEFAULT_NETWORK', 'http://localhost:8082/symfony/pkppln/web');
 
 define('PLN_DEFAULT_STATUS_SUFFIX', '/docs/status');
 
@@ -186,7 +187,7 @@ class PLNPlugin extends GenericPlugin {
 	 * @return string
 	 */
 	function getInstallSchemaFile() {
-		return $this->getPluginPath() . '/xml/schema.xml';
+		return $this->getPluginPath() . DIRECTORY_SEPARATOR . 'xml' . DIRECTORY_SEPARATOR . 'schema.xml';
 	}
 
 	/**
@@ -194,16 +195,15 @@ class PLNPlugin extends GenericPlugin {
 	 * @return string
 	 */
 	function getHandlerPath() {
-		return $this->getPluginPath() . '/' . 'pages';
+		return $this->getPluginPath() . DIRECTORY_SEPARATOR . 'pages';
 	}
 
-	/**
-	 * @see PKPPlugin::getTemplatePath()
-	 * @return string
-	 */
-	function getTemplatePath() {
-		return parent::getTemplatePath() . DIRECTORY_SEPARATOR . 'templates';
-	}
+	///**
+	// * @copydoc Plugin::getTemplatePath()
+	// */
+	//function getTemplatePath($inCore = false) {
+	//  return parent::getTemplatePath($inCore) . 'templates/';
+	//}
 
 	/**
 	 * @see PKPPlugin::getContextSpecificPluginSettingsFile()
@@ -297,7 +297,7 @@ class PLNPlugin extends GenericPlugin {
 		$output = $args[2];
 		$templateMgr = TemplateManager::getManager();
 		$templateMgr->register_function('plugin_url', array(&$this, 'smartyPluginUrl'));
-		$output .= $templateMgr->fetch($this->getTemplatePath() . DIRECTORY_SEPARATOR . 'setup.tpl');
+		$output .= $templateMgr->fetch($this->getTemplateResource('setup.tpl'));
 		return false;
 	}
 
