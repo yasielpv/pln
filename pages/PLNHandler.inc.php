@@ -99,6 +99,11 @@ class PLNHandler extends Handler {
 		$templateMgr->display($plnPlugin->getTemplatePath() . DIRECTORY_SEPARATOR . 'status.tpl');
 	}
 
+	function reset($args=array(), $request) {
+		$depositDao = DAORegistry::getDAO('DepositDAO');
+		$depositDao->updateLastRun();
+	}
+
 	//
 	// Private helper methods
 	//

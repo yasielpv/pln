@@ -334,7 +334,7 @@ class PLNPlugin extends GenericPlugin {
 		if ($page == 'pln') {
 			$op =& $args[1];
 			if ($op) {
-				if (in_array($op, array('deposits'))) {
+				if (in_array($op, array('deposits', 'reset'))) {
 					define('HANDLER_CLASS', 'PLNHandler');
 					define('PLN_PLUGIN_NAME', $this->getName());
 					AppLocale::requireComponents(LOCALE_COMPONENT_APPLICATION_COMMON);

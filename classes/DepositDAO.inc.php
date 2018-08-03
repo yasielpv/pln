@@ -273,6 +273,20 @@ class DepositDAO extends DAO {
 			$this->deleteDeposit($deposit);
 		}
 	}
+
+	function updateLastRun() {
+		$this->update(
+			sprintf('
+				UPDATE scheduled_tasks SET
+					last_run = %s
+				WHERE class_name = ?',
+				$this->datetimeToDB(strtotime("2012-12-04 12:05:04"))
+			),
+			array(
+				'plugins.generic.pln.classes.tasks.Depositor'
+			)
+		);
+	}
 }
 
 ?>
