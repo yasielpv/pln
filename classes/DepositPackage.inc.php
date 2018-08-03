@@ -354,6 +354,7 @@ class DepositPackage {
 			default:
 		}
 
+		$this->_task->addExecutionLogEntry("IN generatePackage:: Breaked from switch", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 		// add the current terms to the bag
 		$termsXml = new DOMDocument('1.0', 'utf-8');
 		$entry = $termsXml->createElementNS('http://www.w3.org/2005/Atom', 'entry');
