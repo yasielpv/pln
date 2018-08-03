@@ -323,10 +323,13 @@ class DepositPackage {
 				$depositObject = $depositObjects->next();
 				$issue = $issueDao->getByBestId($depositObject->getObjectId(),$journal->getId());
 
+				$application = PKPApplication::getApplication();
+				$request = $application->getRequest();
+
 				$exportXml = $exportPlugin->exportIssues(
 					(array) $issue->getId(),
 					$journal,
-					$user = Request::getUser()
+					$user = $request->getUser()
 				);
 
 				if (!$exportXml) {

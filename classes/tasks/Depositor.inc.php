@@ -274,7 +274,7 @@ class Depositor extends ScheduledTask {
 					$depositDao->insertObject($newDeposit);
 					$newObject->setDepositId($newDeposit->getId());
 					$depositObjectDao->updateObject($newObject);
-					$this->addExecutionLogEntry("END NEW OBJECT:: ". $newObject->setDepositId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+					$this->addExecutionLogEntry("END NEW OBJECT:: ". $newObject->getDepositId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 					unset($newObject);
 				}
 				$this->addExecutionLogEntry("Ending processing new deposits for ISSUE type", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
