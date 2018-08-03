@@ -349,6 +349,7 @@ class DepositPackage {
 						return false;
 					}
 
+					$this->_task->addExecutionLogEntry("IN generatePackage:: XML Exists - write file to" . $exportFile, SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 					import('lib.pkp.classes.file.FileManager');
 					$fileManager = new FileManager();
 					$fileManager->writeFile($exportFile, $exportXml);
