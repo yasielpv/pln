@@ -344,6 +344,7 @@ class DepositPackage {
 
 					$this->_task->addExecutionLogEntry("IN generatePackage:: ExportedXML", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 					if (!$exportXml) {
+						$this->_task->addExecutionLogEntry("IN generatePackage:: error for exporting", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 						$this->_logMessage(__("plugins.generic.pln.error.depositor.export.issue.error"));
 						return false;
 					}
