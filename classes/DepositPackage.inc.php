@@ -355,6 +355,7 @@ class DepositPackage {
 					import('lib.pkp.classes.file.FileManager');
 					$fileManager = new FileManager();
 					$success = $fileManager->writeFile($exportFile, $exportXml);
+					unset($exportXml);
 
 					break;
 				default:
