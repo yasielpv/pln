@@ -270,142 +270,149 @@ class DepositPackage {
 			return;
 		}
 
-		$this->_task->addExecutionLogEntry("IN generatePackage - Bagit Found:: ". $this->_deposit->getId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-		// get DAOs, plugins and settings
-		$journalDao = DAORegistry::getDAO('JournalDAO');
-		$issueDao = DAORegistry::getDAO('IssueDAO');
-		$sectionDao = DAORegistry::getDAO('SectionDAO');
-		$publishedArticleDao = DAORegistry::getDAO('PublishedArticleDAO');
-		PluginRegistry::loadCategory('importexport');
-		$exportPlugin = PluginRegistry::getPlugin('importexport','NativeImportExportPlugin');
-		$plnPlugin = PluginRegistry::getPlugin('generic',PLN_PLUGIN_NAME);
-		$fileManager = new ContextFileManager($this->_deposit->getJournalId());
+		try {
+			$this->_task->addExecutionLogEntry("IN generatePackage - Bagit Found:: ". $this->_deposit->getId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+			// get DAOs, plugins and settings
+			$journalDao = DAORegistry::getDAO('JournalDAO');
+			$issueDao = DAORegistry::getDAO('IssueDAO');
+			$sectionDao = DAORegistry::getDAO('SectionDAO');
+			$publishedArticleDao = DAORegistry::getDAO('PublishedArticleDAO');
+			PluginRegistry::loadCategory('importexport');
+			$exportPlugin = PluginRegistry::getPlugin('importexport','NativeImportExportPlugin');
+			$plnPlugin = PluginRegistry::getPlugin('generic',PLN_PLUGIN_NAME);
+			$fileManager = new ContextFileManager($this->_deposit->getJournalId());
 
-		$journal = $journalDao->getById($this->_deposit->getJournalId());
-		$depositObjects = $this->_deposit->getDepositObjects();
+			$journal = $journalDao->getById($this->_deposit->getJournalId());
+			$depositObjects = $this->_deposit->getDepositObjects();
 
-		$this->_task->addExecutionLogEntry("IN generatePackage - Before setup folders:: ". $this->_deposit->getId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-		// set up folder and file locations
-		$bagDir = $this->getDepositDir() . DIRECTORY_SEPARATOR . $this->_deposit->getUUID();
-		$packageFile = $this->getPackageFilePath();
-		$exportFile =  tempnam(sys_get_temp_dir(), 'ojs-pln-export-');
-		$termsFile =  tempnam(sys_get_temp_dir(), 'ojs-pln-terms-');
+			$this->_task->addExecutionLogEntry("IN generatePackage - Before setup folders:: ". $this->_deposit->getId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+			// set up folder and file locations
+			$bagDir = $this->getDepositDir() . DIRECTORY_SEPARATOR . $this->_deposit->getUUID();
+			$packageFile = $this->getPackageFilePath();
+			$exportFile =  tempnam(sys_get_temp_dir(), 'ojs-pln-export-');
+			$termsFile =  tempnam(sys_get_temp_dir(), 'ojs-pln-terms-');
 
-		$this->_task->addExecutionLogEntry("IN generatePackage - Bagit Found:: ". $bagDir . "-" . $packageFile . "-" . $exportFile . "-" . $termsFile, SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+			$this->_task->addExecutionLogEntry("IN generatePackage - Bagit Found:: ". $bagDir . "-" . $packageFile . "-" . $exportFile . "-" . $termsFile, SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 
-		$bag = new BagIt($bagDir);
+			$bag = new BagIt($bagDir);
 
-		$this->_task->addExecutionLogEntry("IN generatePackage - Bagit Found:: Bag Made", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-		switch ($this->_deposit->getObjectType()) {
-			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
-				$articles = array();
+			$this->_task->addExecutionLogEntry("IN generatePackage - Bagit Found:: Bag Made", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+			switch ($this->_deposit->getObjectType()) {
+				case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
+					$articles = array();
 
-				// we need to add all of the relevant articles to an array to export as a batch
-				while ($depositObject = $depositObjects->next()) {
-					$article = $publishedArticleDao->getPublishedArticleByArticleId($this->_deposit->getObjectId(), $journal->getId());
-					$issue = $issueDao->getIssueById($article->getIssueId(), $journal->getId());
-					$section = $sectionDao->getSection($article->getSectionId());
+					// we need to add all of the relevant articles to an array to export as a batch
+					while ($depositObject = $depositObjects->next()) {
+						$article = $publishedArticleDao->getPublishedArticleByArticleId($this->_deposit->getObjectId(), $journal->getId());
+						$issue = $issueDao->getIssueById($article->getIssueId(), $journal->getId());
+						$section = $sectionDao->getSection($article->getSectionId());
 
-					// add the article to the array we'll pass for export
-					$articles[] = array(
-						'publishedArticle' => $article,
-						'section' => $section,
-						'issue' => $issue,
-						'journal' => $journal
+						// add the article to the array we'll pass for export
+						$articles[] = array(
+							'publishedArticle' => $article,
+							'section' => $section,
+							'issue' => $issue,
+							'journal' => $journal
+						);
+						unset($depositObject);
+					}
+
+					// export all of the articles together
+					if ($exportPlugin->exportArticles($articles, $exportFile) !== true) {
+						$this->_logMessage(__("plugins.generic.pln.error.depositor.export.articles.error"));
+						return false;
+					}
+					break;
+				case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
+
+					$this->_task->addExecutionLogEntry("IN generatePackage:: Make issue process", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+					// we only ever do one issue at a time, so get that issue
+					$depositObject = $depositObjects->next();
+					$issue = $issueDao->getByBestId($depositObject->getObjectId(),$journal->getId());
+
+					$this->_task->addExecutionLogEntry("IN generatePackage:: Issue" . $issue->getId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+
+					$application = PKPApplication::getApplication();
+					$request = $application->getRequest();
+
+					$exportXml = $exportPlugin->exportIssues(
+						(array) $issue->getId(),
+						$journal,
+						$user = $request->getUser()
 					);
-					unset($depositObject);
-				}
 
-				// export all of the articles together
-				if ($exportPlugin->exportArticles($articles, $exportFile) !== true) {
-					$this->_logMessage(__("plugins.generic.pln.error.depositor.export.articles.error"));
-					return false;
-				}
-				break;
-			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
+					$this->_task->addExecutionLogEntry("IN generatePackage:: ExportedXML", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+					if (!$exportXml) {
+						$this->_logMessage(__("plugins.generic.pln.error.depositor.export.issue.error"));
+						return false;
+					}
 
-				$this->_task->addExecutionLogEntry("IN generatePackage:: Make issue process", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-				// we only ever do one issue at a time, so get that issue
-				$depositObject = $depositObjects->next();
-				$issue = $issueDao->getByBestId($depositObject->getObjectId(),$journal->getId());
+					import('lib.pkp.classes.file.FileManager');
+					$fileManager = new FileManager();
+					$fileManager->writeFile($exportFile, $exportXml);
 
-				$this->_task->addExecutionLogEntry("IN generatePackage:: Issue" . $issue->getId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+					break;
+				default:
+			}
 
-				$application = PKPApplication::getApplication();
-				$request = $application->getRequest();
+			$this->_task->addExecutionLogEntry("IN generatePackage:: Breaked from switch", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+			// add the current terms to the bag
+			$termsXml = new DOMDocument('1.0', 'utf-8');
+			$entry = $termsXml->createElementNS('http://www.w3.org/2005/Atom', 'entry');
+			$entry->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:dcterms', 'http://purl.org/dc/terms/');
+			$entry->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:pkp', PLN_PLUGIN_NAME);
 
-				$exportXml = $exportPlugin->exportIssues(
-					(array) $issue->getId(),
-					$journal,
-					$user = $request->getUser()
-				);
+			$terms = unserialize($plnPlugin->getSetting($this->_deposit->getJournalId(), 'terms_of_use'));
+			$agreement = unserialize($plnPlugin->getSetting($this->_deposit->getJournalId(), 'terms_of_use_agreement'));
 
-				$this->_task->addExecutionLogEntry("IN generatePackage:: ExportedXML", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-				if (!$exportXml) {
-					$this->_logMessage(__("plugins.generic.pln.error.depositor.export.issue.error"));
-					return false;
-				}
+			$pkpTermsOfUse = $termsXml->createElementNS(PLN_PLUGIN_NAME, 'pkp:terms_of_use');
+			foreach ($terms as $termName => $termData) {
+				$element = $termsXml->createElementNS(PLN_PLUGIN_NAME, $termName, $termData['term']);
+				$element->setAttribute('updated',$termData['updated']);
+				$element->setAttribute('agreed', $agreement[$termName]);
+				$pkpTermsOfUse->appendChild($element);
+			}
 
-				import('lib.pkp.classes.file.FileManager');
-				$fileManager = new FileManager();
-				$fileManager->writeFile($exportFile, $exportXml);
+			$entry->appendChild($pkpTermsOfUse);
+			$termsXml->appendChild($entry);
+			$termsXml->save($termsFile);
 
-				break;
-			default:
+			$this->_task->addExecutionLogEntry("IN generatePackage:: Before Bag Add File XML", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+
+			// add the exported content to the bag
+			$bag->addFile($exportFile, $this->_deposit->getObjectType() . $this->_deposit->getUUID() . '.xml');
+
+			$this->_task->addExecutionLogEntry("IN generatePackage:: Before Bag Add terms", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+			// add the exported content to the bag
+			$bag->addFile($termsFile, 'terms' . $this->_deposit->getUUID() . '.xml');
+
+			// Add OJS Version
+			$versionDao = DAORegistry::getDAO('VersionDAO');
+			$currentVersion = $versionDao->getCurrentVersion();
+
+			$this->_task->addExecutionLogEntry("IN generatePackage:: Before setBagInfoData", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+			$bag->setBagInfoData('PKP-PLN-OJS-Version', $currentVersion->getVersionString());
+
+			$this->_task->addExecutionLogEntry("IN generatePackage:: Before bag->update()", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+			$bag->update();
+
+			$this->_task->addExecutionLogEntry("IN generatePackage:: Before bag->package()", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+			// create the bag
+			$bag->package($packageFile,'zip');
+
+			$this->_task->addExecutionLogEntry("IN generatePackage:: Finalising", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+			// remove the temporary bag directory and temp files
+			$fileManager->rmtree($bagDir);
+			$fileManager->deleteFile($exportFile);
+			$fileManager->deleteFile($termsFile);
+
+			return $packageFile;
+		}
+		catch (Exception $e) {
+			$this->_task->addExecutionLogEntry("IN generatePackage:: Caught exception:" . $e->getMessage(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+			return false;
 		}
 
-		$this->_task->addExecutionLogEntry("IN generatePackage:: Breaked from switch", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-		// add the current terms to the bag
-		$termsXml = new DOMDocument('1.0', 'utf-8');
-		$entry = $termsXml->createElementNS('http://www.w3.org/2005/Atom', 'entry');
-		$entry->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:dcterms', 'http://purl.org/dc/terms/');
-		$entry->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:pkp', PLN_PLUGIN_NAME);
-
-		$terms = unserialize($plnPlugin->getSetting($this->_deposit->getJournalId(), 'terms_of_use'));
-		$agreement = unserialize($plnPlugin->getSetting($this->_deposit->getJournalId(), 'terms_of_use_agreement'));
-
-		$pkpTermsOfUse = $termsXml->createElementNS(PLN_PLUGIN_NAME, 'pkp:terms_of_use');
-		foreach ($terms as $termName => $termData) {
-			$element = $termsXml->createElementNS(PLN_PLUGIN_NAME, $termName, $termData['term']);
-			$element->setAttribute('updated',$termData['updated']);
-			$element->setAttribute('agreed', $agreement[$termName]);
-			$pkpTermsOfUse->appendChild($element);
-		}
-
-		$entry->appendChild($pkpTermsOfUse);
-		$termsXml->appendChild($entry);
-		$termsXml->save($termsFile);
-
-		$this->_task->addExecutionLogEntry("IN generatePackage:: Before Bag Add File XML", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-
-		// add the exported content to the bag
-		$bag->addFile($exportFile, $this->_deposit->getObjectType() . $this->_deposit->getUUID() . '.xml');
-
-		$this->_task->addExecutionLogEntry("IN generatePackage:: Before Bag Add terms", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-		// add the exported content to the bag
-		$bag->addFile($termsFile, 'terms' . $this->_deposit->getUUID() . '.xml');
-
-		// Add OJS Version
-		$versionDao = DAORegistry::getDAO('VersionDAO');
-		$currentVersion = $versionDao->getCurrentVersion();
-
-		$this->_task->addExecutionLogEntry("IN generatePackage:: Before setBagInfoData", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-		$bag->setBagInfoData('PKP-PLN-OJS-Version', $currentVersion->getVersionString());
-
-		$this->_task->addExecutionLogEntry("IN generatePackage:: Before bag->update()", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-		$bag->update();
-
-		$this->_task->addExecutionLogEntry("IN generatePackage:: Before bag->package()", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-		// create the bag
-		$bag->package($packageFile,'zip');
-
-		$this->_task->addExecutionLogEntry("IN generatePackage:: Finalising", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-		// remove the temporary bag directory and temp files
-		$fileManager->rmtree($bagDir);
-		$fileManager->deleteFile($exportFile);
-		$fileManager->deleteFile($termsFile);
-
-		return $packageFile;
 	}
 
 	/**
