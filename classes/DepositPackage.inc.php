@@ -352,10 +352,20 @@ class DepositPackage {
 					}
 
 					$this->_task->addExecutionLogEntry("IN generatePackage:: XML Exists - write file to " . $exportFile, SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-					import('lib.pkp.classes.file.FileManager');
-					$fileManager = new FileManager();
-					$success = $fileManager->writeFile($exportFile, $exportXml);
-					$exportXml=null;
+
+
+					$memoryAllocated = memory_get_usage();
+					$strlength = strlen($exportXml);
+					$totalMemory = $this->return_bytes(ini_get('memory_limit'));
+
+					$this->_task->addExecutionLogEntry("IN generatePackage:: Memory USAGE Total: " . $totalMemory . " Current: ". $memoryAllocated. " To_be: ". $strlength, SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+
+					if ($totalMemory > $memoryAllocated + $strlength) {
+						import('lib.pkp.classes.file.FileManager');
+						$fileManager = new FileManager();
+						$success = $fileManager->writeFile($exportFile, $exportXml);
+						$exportXml=null;
+					}
 
 					break;
 				default:
@@ -426,6 +436,22 @@ class DepositPackage {
 			return false;
 		}
 
+	}
+
+	function return_bytes($val) {
+    $val = trim($val);
+    $last = strtolower($val[strlen($val)-1]);
+    switch($last) {
+			// The 'G' modifier is available since PHP 5.1.0
+			case 'g':
+				$val *= 1024;
+			case 'm':
+				$val *= 1024;
+			case 'k':
+				$val *= 1024;
+    }
+
+    return $val;
 	}
 
 	/**
