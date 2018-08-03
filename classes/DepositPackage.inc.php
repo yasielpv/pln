@@ -296,6 +296,8 @@ class DepositPackage {
 
 			$bag = new BagIt($bagDir);
 
+			$success = false;
+
 			$this->_task->addExecutionLogEntry("IN generatePackage - Bagit Found:: Bag Made", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 			switch ($this->_deposit->getObjectType()) {
 				case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
@@ -349,67 +351,72 @@ class DepositPackage {
 						return false;
 					}
 
-					$this->_task->addExecutionLogEntry("IN generatePackage:: XML Exists - write file to" . $exportFile, SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+					$this->_task->addExecutionLogEntry("IN generatePackage:: XML Exists - write file to " . $exportFile, SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 					import('lib.pkp.classes.file.FileManager');
 					$fileManager = new FileManager();
-					$fileManager->writeFile($exportFile, $exportXml);
+					$success = $fileManager->writeFile($exportFile, $exportXml);
 
 					break;
 				default:
 			}
 
-			$this->_task->addExecutionLogEntry("IN generatePackage:: Breaked from switch", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-			// add the current terms to the bag
-			$termsXml = new DOMDocument('1.0', 'utf-8');
-			$entry = $termsXml->createElementNS('http://www.w3.org/2005/Atom', 'entry');
-			$entry->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:dcterms', 'http://purl.org/dc/terms/');
-			$entry->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:pkp', PLN_PLUGIN_NAME);
+			if ($success) {
+				$this->_task->addExecutionLogEntry("IN generatePackage:: Breaked from switch", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+				// add the current terms to the bag
+				$termsXml = new DOMDocument('1.0', 'utf-8');
+				$entry = $termsXml->createElementNS('http://www.w3.org/2005/Atom', 'entry');
+				$entry->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:dcterms', 'http://purl.org/dc/terms/');
+				$entry->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:pkp', PLN_PLUGIN_NAME);
 
-			$terms = unserialize($plnPlugin->getSetting($this->_deposit->getJournalId(), 'terms_of_use'));
-			$agreement = unserialize($plnPlugin->getSetting($this->_deposit->getJournalId(), 'terms_of_use_agreement'));
+				$terms = unserialize($plnPlugin->getSetting($this->_deposit->getJournalId(), 'terms_of_use'));
+				$agreement = unserialize($plnPlugin->getSetting($this->_deposit->getJournalId(), 'terms_of_use_agreement'));
 
-			$pkpTermsOfUse = $termsXml->createElementNS(PLN_PLUGIN_NAME, 'pkp:terms_of_use');
-			foreach ($terms as $termName => $termData) {
-				$element = $termsXml->createElementNS(PLN_PLUGIN_NAME, $termName, $termData['term']);
-				$element->setAttribute('updated',$termData['updated']);
-				$element->setAttribute('agreed', $agreement[$termName]);
-				$pkpTermsOfUse->appendChild($element);
+				$pkpTermsOfUse = $termsXml->createElementNS(PLN_PLUGIN_NAME, 'pkp:terms_of_use');
+				foreach ($terms as $termName => $termData) {
+					$element = $termsXml->createElementNS(PLN_PLUGIN_NAME, $termName, $termData['term']);
+					$element->setAttribute('updated',$termData['updated']);
+					$element->setAttribute('agreed', $agreement[$termName]);
+					$pkpTermsOfUse->appendChild($element);
+				}
+
+				$entry->appendChild($pkpTermsOfUse);
+				$termsXml->appendChild($entry);
+				$termsXml->save($termsFile);
+
+				$this->_task->addExecutionLogEntry("IN generatePackage:: Before Bag Add File XML", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+
+				// add the exported content to the bag
+				$bag->addFile($exportFile, $this->_deposit->getObjectType() . $this->_deposit->getUUID() . '.xml');
+
+				$this->_task->addExecutionLogEntry("IN generatePackage:: Before Bag Add terms", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+				// add the exported content to the bag
+				$bag->addFile($termsFile, 'terms' . $this->_deposit->getUUID() . '.xml');
+
+				// Add OJS Version
+				$versionDao = DAORegistry::getDAO('VersionDAO');
+				$currentVersion = $versionDao->getCurrentVersion();
+
+				$this->_task->addExecutionLogEntry("IN generatePackage:: Before setBagInfoData", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+				$bag->setBagInfoData('PKP-PLN-OJS-Version', $currentVersion->getVersionString());
+
+				$this->_task->addExecutionLogEntry("IN generatePackage:: Before bag->update()", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+				$bag->update();
+
+				$this->_task->addExecutionLogEntry("IN generatePackage:: Before bag->package()", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+				// create the bag
+				$bag->package($packageFile,'zip');
+
+				$this->_task->addExecutionLogEntry("IN generatePackage:: Finalising", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+				// remove the temporary bag directory and temp files
+				$fileManager->rmtree($bagDir);
+				$fileManager->deleteFile($exportFile);
+				$fileManager->deleteFile($termsFile);
+
+				return $packageFile;
 			}
 
-			$entry->appendChild($pkpTermsOfUse);
-			$termsXml->appendChild($entry);
-			$termsXml->save($termsFile);
+			return false;
 
-			$this->_task->addExecutionLogEntry("IN generatePackage:: Before Bag Add File XML", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-
-			// add the exported content to the bag
-			$bag->addFile($exportFile, $this->_deposit->getObjectType() . $this->_deposit->getUUID() . '.xml');
-
-			$this->_task->addExecutionLogEntry("IN generatePackage:: Before Bag Add terms", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-			// add the exported content to the bag
-			$bag->addFile($termsFile, 'terms' . $this->_deposit->getUUID() . '.xml');
-
-			// Add OJS Version
-			$versionDao = DAORegistry::getDAO('VersionDAO');
-			$currentVersion = $versionDao->getCurrentVersion();
-
-			$this->_task->addExecutionLogEntry("IN generatePackage:: Before setBagInfoData", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-			$bag->setBagInfoData('PKP-PLN-OJS-Version', $currentVersion->getVersionString());
-
-			$this->_task->addExecutionLogEntry("IN generatePackage:: Before bag->update()", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-			$bag->update();
-
-			$this->_task->addExecutionLogEntry("IN generatePackage:: Before bag->package()", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-			// create the bag
-			$bag->package($packageFile,'zip');
-
-			$this->_task->addExecutionLogEntry("IN generatePackage:: Finalising", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-			// remove the temporary bag directory and temp files
-			$fileManager->rmtree($bagDir);
-			$fileManager->deleteFile($exportFile);
-			$fileManager->deleteFile($termsFile);
-
-			return $packageFile;
 		}
 		catch (Exception $e) {
 			$this->_task->addExecutionLogEntry("IN generatePackage:: Caught exception:" . $e->getMessage(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
@@ -491,7 +498,7 @@ class DepositPackage {
 		$packagePath = $this->generatePackage();
 
 		$this->_task->addExecutionLogEntry("packagePath:: ". $packagePath, SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
-		if( ! $packagePath) {
+		if(!$packagePath) {
 			return;
 		}
 		if (!$fileManager->fileExists($packagePath)) {
