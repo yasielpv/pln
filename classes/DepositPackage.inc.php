@@ -270,6 +270,7 @@ class DepositPackage {
 			return;
 		}
 
+		$this->_task->addExecutionLogEntry("IN generatePackage - Bagit Found:: ". $this->_deposit->getId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 		// get DAOs, plugins and settings
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$issueDao = DAORegistry::getDAO('IssueDAO');
@@ -283,14 +284,18 @@ class DepositPackage {
 		$journal = $journalDao->getById($this->_deposit->getJournalId());
 		$depositObjects = $this->_deposit->getDepositObjects();
 
+		$this->_task->addExecutionLogEntry("IN generatePackage - Before setup folders:: ". $this->_deposit->getId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 		// set up folder and file locations
 		$bagDir = $this->getDepositDir() . DIRECTORY_SEPARATOR . $this->_deposit->getUUID();
 		$packageFile = $this->getPackageFilePath();
 		$exportFile =  tempnam(sys_get_temp_dir(), 'ojs-pln-export-');
 		$termsFile =  tempnam(sys_get_temp_dir(), 'ojs-pln-terms-');
 
+		$this->_task->addExecutionLogEntry("IN generatePackage - Bagit Found:: ". $bagDir . "-" . $packageFile . "-" . $exportFile . "-" . $termsFile, SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+
 		$bag = new BagIt($bagDir);
 
+		$this->_task->addExecutionLogEntry("IN generatePackage - Bagit Found:: Bag Made", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 		switch ($this->_deposit->getObjectType()) {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
 				$articles = array();
@@ -319,9 +324,12 @@ class DepositPackage {
 				break;
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
 
+				$this->_task->addExecutionLogEntry("IN generatePackage:: Make issue process", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 				// we only ever do one issue at a time, so get that issue
 				$depositObject = $depositObjects->next();
 				$issue = $issueDao->getByBestId($depositObject->getObjectId(),$journal->getId());
+
+				$this->_task->addExecutionLogEntry("IN generatePackage:: Issue" . $issue->getId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 
 				$application = PKPApplication::getApplication();
 				$request = $application->getRequest();
@@ -332,6 +340,7 @@ class DepositPackage {
 					$user = $request->getUser()
 				);
 
+				$this->_task->addExecutionLogEntry("IN generatePackage:: ExportedXML", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 				if (!$exportXml) {
 					$this->_logMessage(__("plugins.generic.pln.error.depositor.export.issue.error"));
 					return false;
@@ -366,21 +375,30 @@ class DepositPackage {
 		$termsXml->appendChild($entry);
 		$termsXml->save($termsFile);
 
+		$this->_task->addExecutionLogEntry("IN generatePackage:: Before Bag Add File XML", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+
 		// add the exported content to the bag
 		$bag->addFile($exportFile, $this->_deposit->getObjectType() . $this->_deposit->getUUID() . '.xml');
+
+		$this->_task->addExecutionLogEntry("IN generatePackage:: Before Bag Add terms", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 		// add the exported content to the bag
 		$bag->addFile($termsFile, 'terms' . $this->_deposit->getUUID() . '.xml');
 
 		// Add OJS Version
 		$versionDao = DAORegistry::getDAO('VersionDAO');
 		$currentVersion = $versionDao->getCurrentVersion();
+
+		$this->_task->addExecutionLogEntry("IN generatePackage:: Before setBagInfoData", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 		$bag->setBagInfoData('PKP-PLN-OJS-Version', $currentVersion->getVersionString());
 
+		$this->_task->addExecutionLogEntry("IN generatePackage:: Before bag->update()", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 		$bag->update();
 
+		$this->_task->addExecutionLogEntry("IN generatePackage:: Before bag->package()", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 		// create the bag
 		$bag->package($packageFile,'zip');
 
+		$this->_task->addExecutionLogEntry("IN generatePackage:: Finalising", SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 		// remove the temporary bag directory and temp files
 		$fileManager->rmtree($bagDir);
 		$fileManager->deleteFile($exportFile);
@@ -458,6 +476,7 @@ class DepositPackage {
 		if ($fileManager->fileExists($depositDir,'dir')) $fileManager->rmtree($depositDir);
 		$fileManager->mkdir($depositDir);
 
+		$this->_task->addExecutionLogEntry("Before generatePackage:: ". $this->_deposit->getId(), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 		$packagePath = $this->generatePackage();
 
 		$this->_task->addExecutionLogEntry("packagePath:: ". $packagePath, SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
