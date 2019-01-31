@@ -21,8 +21,7 @@ import('classes.issue.Issue');
 define('PLN_PLUGIN_NAME','plnplugin');
 
 // defined here in case an upgrade doesn't pick up the default value.
-// define('PLN_DEFAULT_NETWORK', 'http://pkp-pln.lib.sfu.ca');
-define('PLN_DEFAULT_NETWORK', 'http://localhost:8082/symfony/pkppln/web');
+define('PLN_DEFAULT_NETWORK', 'http://pkp-pln.lib.sfu.ca');
 
 define('PLN_DEFAULT_STATUS_SUFFIX', '/docs/status');
 
@@ -37,16 +36,17 @@ define('PLN_PLUGIN_BASE_IRI', '/api/sword/2.0');
 // used to retrieve the service document
 define('PLN_PLUGIN_SD_IRI', PLN_PLUGIN_BASE_IRI . '/sd-iri');
 // used to submit a deposit
-define('PLN_PLUGIN_COL_IRI',PLN_PLUGIN_BASE_IRI . '/col-iri');
+define('PLN_PLUGIN_COL_IRI', PLN_PLUGIN_BASE_IRI . '/col-iri');
 // used to edit and query the state of a deposit
-define('PLN_PLUGIN_CONT_IRI',PLN_PLUGIN_BASE_IRI . '/cont-iri');
+define('PLN_PLUGIN_CONT_IRI', PLN_PLUGIN_BASE_IRI . '/cont-iri');
 
-define('PLN_PLUGIN_ARCHIVE_FOLDER','pln');
+define('PLN_PLUGIN_ARCHIVE_FOLDER', 'pln');
 
 // local statuses
 define('PLN_PLUGIN_DEPOSIT_STATUS_NEW',					0x00);
 define('PLN_PLUGIN_DEPOSIT_STATUS_PACKAGED',			0x01);
 define('PLN_PLUGIN_DEPOSIT_STATUS_TRANSFERRED',			0x02);
+define('PLN_PLUGIN_DEPOSIT_STATUS_PACKAGING_FAILED',			0x03);
 
 // status on the processing server
 define('PLN_PLUGIN_DEPOSIT_STATUS_RECEIVED',			0x04);
@@ -779,9 +779,4 @@ class PLNPlugin extends GenericPlugin {
 	function newUUID() {
 		return PKPString::generateUUID();
 	}
-
-
-
 }
-
-?>

@@ -111,5 +111,3 @@ class PLNHandler extends Handler {
 		return $plugin;
 	}
 }
-
-?>

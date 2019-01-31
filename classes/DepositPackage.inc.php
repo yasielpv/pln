@@ -30,7 +30,6 @@ class DepositPackage {
 	 */
 	var $_task;
 
-
 	/**
 	 * Constructor.
 	 *
@@ -276,8 +275,8 @@ class DepositPackage {
 		$sectionDao = DAORegistry::getDAO('SectionDAO');
 		$publishedArticleDao = DAORegistry::getDAO('PublishedArticleDAO');
 		PluginRegistry::loadCategory('importexport');
-		$exportPlugin = PluginRegistry::getPlugin('importexport','NativeImportExportPlugin');
-		$plnPlugin = PluginRegistry::getPlugin('generic',PLN_PLUGIN_NAME);
+		$exportPlugin = PluginRegistry::getPlugin('importexport', 'NativeImportExportPlugin');
+		$plnPlugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 		$fileManager = new ContextFileManager($this->_deposit->getJournalId());
 
 		$journal = $journalDao->getById($this->_deposit->getJournalId());
@@ -318,26 +317,34 @@ class DepositPackage {
 				}
 				break;
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
-
 				// we only ever do one issue at a time, so get that issue
 				$depositObject = $depositObjects->next();
-				$issue = $issueDao->getByBestId($depositObject->getObjectId(),$journal->getId());
+				$issue = $issueDao->getByBestId($depositObject->getObjectId(), $journal->getId());
 
-				$exportXml = $exportPlugin->exportIssues(
-					(array) $issue->getId(),
-					$journal,
-					$user = Request::getUser()
-				);
+				$callback = new DepositUnregisterableErrorCallback($depositObject->getDepositId(), $this);
 
-				if (!$exportXml) {
-					$this->_logMessage(__("plugins.generic.pln.error.depositor.export.issue.error"));
-					return false;
+				try {
+					$exportXml = $exportPlugin->exportIssues(
+						(array) $issue->getId(),
+						$journal,
+						$user = Request::getUser()
+					);
+
+					if (!$exportXml) {
+						$this->_logMessage(__("plugins.generic.pln.error.depositor.export.issue.error"));
+						$this->importExportErrorHandler($depositObject->getDepositId(), __("plugins.generic.pln.error.depositor.export.issue.error"));
+					}
 				}
+				catch (Exception $exception) {
+					$this->_logMessage(__("plugins.generic.pln.error.depositor.export.issue.exception") . $exception->getMessage());
+					$this->importExportErrorHandler($depositObject->getDepositId(), $exception->getMessage());
+				}
+				
+				$callback->unregister();
 
 				import('lib.pkp.classes.file.FileManager');
 				$fileManager = new FileManager();
 				$fileManager->writeFile($exportFile, $exportXml);
-
 				break;
 			default:
 		}
@@ -376,12 +383,12 @@ class DepositPackage {
 		$bag->update();
 
 		// create the bag
-		$bag->package($packageFile,'zip');
+		$bag->package($packageFile, 'zip');
 
 		// remove the temporary bag directory and temp files
 		$fileManager->rmtree($bagDir);
-		$fileManager->deleteFile($exportFile);
-		$fileManager->deleteFile($termsFile);
+		$fileManager->deleteByPath($exportFile);
+		$fileManager->deleteByPath($termsFile);
 
 		return $packageFile;
 	}
@@ -430,6 +437,7 @@ class DepositPackage {
 			} else {
 				$this->_logMessage(__("plugins.generic.pln.error.http.deposit", array('error' => $result['status'])));
 			}
+
 			$this->_deposit->setLockssReceivedStatus();
 			$this->_deposit->setLastStatusDate(time());
 			$depositDao->updateObject($this->_deposit);
@@ -441,24 +449,29 @@ class DepositPackage {
 	 * Package a deposit for transfer to and retrieval by the PLN.
 	 */
 	function packageDeposit() {
-
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$fileManager = new ContextFileManager($this->_deposit->getJournalId());
 		$plnDir = $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER;
 
 		// make sure the pln work directory exists
-		if ($fileManager->fileExists($plnDir,'dir') !== true) { $fileManager->mkdir($plnDir); }
+		if (!$fileManager->fileExists($plnDir, 'dir')) {
+			$fileManager->mkdir($plnDir);
+		}
 
 		// make a location for our work and clear it out if it's there
 		$depositDir = $plnDir . DIRECTORY_SEPARATOR . $this->_deposit->getUUID();
-		if ($fileManager->fileExists($depositDir,'dir')) $fileManager->rmtree($depositDir);
+		if ($fileManager->fileExists($depositDir, 'dir')) {
+			$fileManager->rmtree($depositDir);
+		}
+
 		$fileManager->mkdir($depositDir);
 
 		$packagePath = $this->generatePackage();
-		if( ! $packagePath) {
+		if (!$packagePath) {
 			return;
 		}
+
 		if (!$fileManager->fileExists($packagePath)) {
 			$this->_deposit->setPackagedStatus(false);
 			$depositDao->updateObject($this->_deposit);
@@ -474,7 +487,6 @@ class DepositPackage {
 		// update the deposit's status
 		$this->_deposit->setPackagedStatus();
 		$depositDao->updateObject($this->_deposit);
-
 	}
 
 	/**
@@ -499,6 +511,7 @@ class DepositPackage {
 			} else {
 				error_log(__('plugins.generic.pln.error.http.swordstatement', array('error' => $result['status'])));
 			}
+
 			return;
 		}
 
@@ -541,7 +554,7 @@ class DepositPackage {
 				$this->_deposit->setLockssSyncingStatus();
 				break;
 			case 'agreement':
-				if( ! $this->_deposit->getLockssAgreementStatus()) {
+				if(!$this->_deposit->getLockssAgreementStatus()) {
 					$journalDao = DAORegistry::getDAO('JournalDAO');
 					$fileManager = new ContextFileManager($this->_deposit->getJournalId());
 					$depositDir = $this->getDepositDir();
@@ -556,5 +569,42 @@ class DepositPackage {
 		$this->_deposit->setLastStatusDate(time());
 		$depositDao->updateObject($this->_deposit);
 	}
+
+	function importExportErrorHandler($depositId, $message) {
+		$this->_depositPackageErrored = true;
+
+		$depositDao = DAORegistry::getDAO('DepositDAO'); /** @var $depositDao DepositDAO */
+		$deposit = $depositDao->getById($depositId);
+		if ($deposit) {
+			$deposit->setExportDepositError($message);
+			$deposit->setPackagingFailedStatus();
+			$depositDao->updateObject($deposit);
+		}
+	}
 }
-?>
+
+class DepositUnregisterableErrorCallback {
+	private $_depositId;
+	private $_depositPackage;
+	private $_isUnregistered = false;
+
+	function __construct($depositId, $depositPackage) {
+		$this->_depositId = $depositId;
+		$this->_depositPackage = $depositPackage;
+	}
+
+	function __destruct() {
+		if (!$this->_isUnregistered) {
+			$this->_depositPackage->importExportErrorHandler($this->_depositId, "Deposit Import/export error");
+			$taskDao = DAORegistry::getDao('ScheduledTaskDAO'); /** @var $taskDao ScheduledTaskDAO */
+
+			$taskDao->updateLastRunTime("plugins.generic.pln.classes.tasks.Depositor", 0);
+
+			$this->unregister();
+		}
+	}
+
+	function unregister() {
+	  $this->_isUnregistered = true;
+	}
+}

@@ -107,6 +107,13 @@ class PLNStatusGridHandler extends GridHandler {
 			'controllers/grid/gridCell.tpl', // Default null not supported in OMP 1.1
 			$cellProvider
 		));
+		$this->addColumn(new GridColumn(
+			'exportDepositError',
+			'plugins.generic.pln.deposit.exportDepositError',
+			null,
+			'controllers/grid/gridCell.tpl', // Default null not supported in OMP 1.1
+			$cellProvider
+		));
 	}
 
 	/**
@@ -161,11 +168,10 @@ class PLNStatusGridHandler extends GridHandler {
 		if (!is_null($deposit_id)) {
 			$deposit = $depositDao->getById($deposit_id);
 			$deposit->setStatus(PLN_PLUGIN_DEPOSIT_STATUS_NEW);
+			$deposit->setExportDepositError("");
 			$depositDao->updateObject($deposit);
 		}
 
 		return DAO::getDataChangedEvent();
 	}
 }
-
-?>

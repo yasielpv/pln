@@ -39,7 +39,9 @@ class DepositDAO extends DAO {
 	 */
 	function getById($depositId) {
 		$result = $this->retrieve(
-			'SELECT * FROM pln_deposits WHERE deposit_id = ?',
+			'SELECT *
+			FROM pln_deposits
+			WHERE deposit_id = ?',
 			array (
 				(int) $depositId
 			)
@@ -95,7 +97,8 @@ class DepositDAO extends DAO {
 					status = ?,
 					date_status = %s,
 					date_created = %s,
-					date_modified = NOW()
+					date_modified = NOW(),
+					export_deposit_error = ?
 				WHERE deposit_id = ?',
 				$this->datetimeToDB($deposit->getLastStatusDate()),
 				$this->datetimeToDB($deposit->getDateCreated())
@@ -104,6 +107,7 @@ class DepositDAO extends DAO {
 				(int) $deposit->getJournalId(),
 				$deposit->getUUID(),
 				(int) $deposit->getStatus(),
+				$deposit->getExportDepositError(),
 				(int) $deposit->getId()
 			)
 		);
@@ -147,6 +151,7 @@ class DepositDAO extends DAO {
 		$deposit->setLastStatusDate($this->datetimeFromDB($row['date_status']));
 		$deposit->setDateCreated($this->datetimeFromDB($row['date_created']));
 		$deposit->setDateModified($this->datetimeFromDB($row['date_modified']));
+		$deposit->setExportDepositError($row['export_deposit_error']);
 
 		HookRegistry::call('DepositDAO::_fromRow', array(&$deposit, &$row));
 
@@ -161,7 +166,10 @@ class DepositDAO extends DAO {
 	 */
 	function getByUUID($journalId, $depositUuid) {
 		$result = $this->retrieve(
-			'SELECT * FROM pln_deposits WHERE journal_id = ? AND uuid = ?',
+			'SELECT *
+			FROM pln_deposits
+			WHERE journal_id = ?
+			AND uuid = ?',
 			array (
 				(int) $journalId,
 				$depositUuid
@@ -182,7 +190,10 @@ class DepositDAO extends DAO {
 	 */
 	function getByJournalId($journalId, $dbResultRange = null) {
 		$result = $this->retrieveRange(
-			'SELECT * FROM pln_deposits WHERE journal_id = ? ORDER BY deposit_id',
+			'SELECT *
+			FROM pln_deposits
+			WHERE journal_id = ?
+			ORDER BY deposit_id',
 			array (
 				(int) $journalId
 			),
@@ -216,9 +227,15 @@ class DepositDAO extends DAO {
 	 */
 	function getNeedTransferring($journalId) {
 		$result = $this->retrieve(
-			'SELECT * FROM pln_deposits AS d WHERE d.journal_id = ? AND d.status & ? = 0 AND d.status & ? = 0',
+			'SELECT *
+			FROM pln_deposits AS d
+			WHERE d.journal_id = ?
+			AND d.status & ? = 0
+			AND d.status & ? = 0
+			AND d.status & ? = 0',
 			array (
 				(int) $journalId,
+				(int) PLN_PLUGIN_DEPOSIT_STATUS_PACKAGING_FAILED,
 				(int) PLN_PLUGIN_DEPOSIT_STATUS_TRANSFERRED,
 				(int) PLN_PLUGIN_DEPOSIT_STATUS_LOCKSS_AGREEMENT
 			)
@@ -234,7 +251,11 @@ class DepositDAO extends DAO {
 	 */
 	function getNeedPackaging($journalId) {
 		$result = $this->retrieve(
-			'SELECT * FROM pln_deposits AS d WHERE d.journal_id = ? AND d.status & ? = 0 AND d.status & ? = 0',
+			'SELECT *
+			FROM pln_deposits AS d
+			WHERE d.journal_id = ?
+			AND d.status & ? = 0
+			AND d.status & ? = 0',
 			array(
 				(int) $journalId,
 				(int) PLN_PLUGIN_DEPOSIT_STATUS_PACKAGED,
@@ -252,7 +273,11 @@ class DepositDAO extends DAO {
 	 */
 	function getNeedStagingStatusUpdate($journalId) {
 		$result = $this->retrieve(
-			'SELECT * FROM pln_deposits AS d WHERE d.journal_id = ? AND d.status & ? <> 0 AND d.status & ? = 0',
+			'SELECT *
+			FROM pln_deposits AS d
+			WHERE d.journal_id = ?
+			AND d.status & ? <> 0
+			AND d.status & ? = 0',
 			array (
 				(int) $journalId,
 				(int) PLN_PLUGIN_DEPOSIT_STATUS_TRANSFERRED,
@@ -274,5 +299,3 @@ class DepositDAO extends DAO {
 		}
 	}
 }
-
-?>

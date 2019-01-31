@@ -102,13 +102,16 @@ class Deposit extends DataObject {
 	 * @return string
 	 */
 	function getLocalStatus() {
-		if($this->getTransferredStatus()) {
+		if ($this->getPackagingFailedStatus()) {
+			return __('plugins.generic.pln.status.packagingFailed');
+		}
+		if ($this->getTransferredStatus()) {
 			return __('plugins.generic.pln.status.transferred');
 		}
-		if($this->getPackagedStatus()) {
+		if ($this->getPackagedStatus()) {
 			return __('plugins.generic.pln.status.packaged');
 		}
-		if($this->getNewStatus()) {
+		if ($this->getNewStatus()) {
 			return __('plugins.generic.pln.status.new');
 		}
 		return __('plugins.generic.pln.status.unknown');
@@ -232,6 +235,22 @@ class Deposit extends DataObject {
 	 */
 	function setTransferredStatus($status = true) {
 		$this->_setStatusField($status, PLN_PLUGIN_DEPOSIT_STATUS_TRANSFERRED);
+	}
+
+	/**
+	 * Get whether the PLN has been notified of the available deposit
+	 * @return int
+	 */
+	function getPackagingFailedStatus() {
+		return $this->_getStatusField(PLN_PLUGIN_DEPOSIT_STATUS_PACKAGING_FAILED);
+	}
+
+	/**
+	 * Set whether the PLN has been notified of the available deposit
+	 * @param $status boolean
+	 */
+	function setPackagingFailedStatus($status = true) {
+		$this->_setStatusField($status, PLN_PLUGIN_DEPOSIT_STATUS_PACKAGING_FAILED);
 	}
 
 	/**
@@ -378,6 +397,11 @@ class Deposit extends DataObject {
 		$this->setData('date_modified', $dateModified);
 	}
 
-}
+	function setExportDepositError($exportDepositError) {
+		$this->setData('export_deposit_error', $exportDepositError);
+	}
 
-?>
+	function getExportDepositError() {
+		return $this->getData('export_deposit_error');
+	}
+}
