@@ -18,17 +18,18 @@ import('lib.pkp.classes.config.Config');
 import('classes.article.PublishedArticle');
 import('classes.issue.Issue');
 
-define('PLN_PLUGIN_NAME','plnplugin');
+define('PLN_PLUGIN_NAME', 'plnplugin');
 
 // defined here in case an upgrade doesn't pick up the default value.
-define('PLN_DEFAULT_NETWORK', 'http://pkp-pln.lib.sfu.ca');
+// define('PLN_DEFAULT_NETWORK', 'http://pkp-pln.lib.sfu.ca');
+define('PLN_DEFAULT_NETWORK', 'http://localhost:8080/symfony/pkppln/web');
 
 define('PLN_DEFAULT_STATUS_SUFFIX', '/docs/status');
 
 define('PLN_PLUGIN_HTTP_STATUS_OK', 200);
 define('PLN_PLUGIN_HTTP_STATUS_CREATED', 201);
 
-define('PLN_PLUGIN_XML_NAMESPACE','http://pkp.sfu.ca/SWORD');
+define('PLN_PLUGIN_XML_NAMESPACE', 'http://pkp.sfu.ca/SWORD');
 
 // base IRI for the SWORD server. IRIs are constructed by appending to
 // this constant.
@@ -240,7 +241,7 @@ class PLNPlugin extends GenericPlugin {
 			default:
 				break;
 		}
-		return parent::getSetting($journalId,$settingName);
+		return parent::getSetting($journalId, $settingName);
 	}
 
 	/**
