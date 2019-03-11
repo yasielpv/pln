@@ -119,11 +119,11 @@ class PLNGatewayPlugin extends GatewayPlugin {
 		$templateMgr = TemplateManager::getManager();
 
 		$journal = Request::getJournal();
-		$templateMgr->assign_by_ref('journal', $journal);
+		$templateMgr->assign('journal', $journal);
 
 		$pluginVersionFile = $this->getPluginPath() . DIRECTORY_SEPARATOR . 'version.xml';
 		$pluginVersion = VersionCheck::parseVersionXml($pluginVersionFile);
-		$templateMgr->assign_by_ref('pluginVersion', $pluginVersion);
+		$templateMgr->assign('pluginVersion', $pluginVersion);
 
 		$terms = array();
 		$termsAccepted = $plugin->termsAgreed($journal->getId());
@@ -148,9 +148,9 @@ class PLNGatewayPlugin extends GatewayPlugin {
 			'zipInstalled' => class_exists('ZipArchive') ? 'yes' : 'no',
 			'tarInstalled' => class_exists('Archive_Tar') ? 'yes' : 'no',
 			'acron' => isset($products['acron']) ? 'yes' : 'no',
-			'tasks' => Config::getVar('general', 'scheduled_tasks', false) ? 'yes' : 'no',
+			//'tasks' => Config::getVar('general', 'scheduled_tasks', false) ? 'yes' : 'no',
 		);
-		$templateMgr->assign_by_ref('prerequisites', $prerequisites);
+		$templateMgr->assign('prerequisites', $prerequisites);
 
 		$termKeys = array_keys($terms);
 		$termsDisplay = array();
@@ -171,8 +171,8 @@ class PLNGatewayPlugin extends GatewayPlugin {
 		$publishedArticlesDAO = DAORegistry::getDAO('PublishedArticleDAO');
 		$range = new DBResultRange(PLN_PLUGIN_PING_ARTICLE_COUNT);
 		$publishedArticles = $publishedArticlesDAO->getPublishedArticlesByJournalId($journal->getId(), $range, true);
-		$templateMgr->assign_by_ref('articles', $publishedArticles);
-		$templateMgr->assign_by_ref('pln_network', $plugin->getSetting($journal->getId(), 'pln_network'));
+		$templateMgr->assign('articles', $publishedArticles);
+		$templateMgr->assign('pln_network', $plugin->getSetting($journal->getId(), 'pln_network'));
 
 		header('Content-Type: text/xml; charset=' . Config::getVar('i18n', 'client_charset'));
 		echo $templateMgr->fetch($plugin->getTemplateResource('ping.tpl'));

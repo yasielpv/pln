@@ -50,8 +50,8 @@ class PLNStatusGridCellProvider extends GridCellProvider {
 				return array('label' => $deposit->getLockssStatus());
 			case 'complete':
 				return array('label' => $deposit->getComplete());
+			case 'exportDepositError':
+				return array('label' => $deposit->getExportDepositError());
 		}
 	}
 }
-
-?>

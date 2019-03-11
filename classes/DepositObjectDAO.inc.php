@@ -132,7 +132,7 @@ class DepositObjectDAO extends DAO {
 					$row = $result->GetRowAssoc(false);
 					$depositObject = $this->getById($journalId, $row['deposit_object_id']);
 					$deposit = $depositDao->getById($depositObject->getDepositId());
-					if($deposit->getSentStatus() || ! $deposit->getTransferredStatus()) {
+					if($deposit->getSentStatus() || !$deposit->getTransferredStatus()) {
 						// only update a deposit after it has been synced in LOCKSS.
 						if ($row['issue_modified'] > $row['article_modified']) {
 							$depositObject->setDateModified($row['issue_modified']);
@@ -180,21 +180,25 @@ class DepositObjectDAO extends DAO {
 				$result->Close();
 				break;
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
-				$issue_dao = DAORegistry::getDAO('IssueDAO');
+				$issueDao = DAORegistry::getDAO('IssueDAO');
 				$result = $this->retrieve(
-					'SELECT i.issue_id FROM issues i
+					'SELECT i.issue_id
+					FROM issues i
 					LEFT JOIN pln_deposit_objects pdo ON pdo.object_id = i.issue_id
-					WHERE i.journal_id = ? AND i.published = 1 AND pdo.object_id is null',
+					WHERE i.journal_id = ?
+					AND i.published = 1
+					AND pdo.object_id is null',
 					(int) $journalId
 				);
 				while (!$result->EOF) {
 					$row = $result->GetRowAssoc(false);
-					$objects[] = $issue_dao->getById($row['issue_id']);
+					$objects[] = $issueDao->getById($row['issue_id']);
 					$result->MoveNext();
 				}
 				$result->Close();
 				break;
 		}
+
 		$depositObjects = array();
 		foreach($objects as $object) {
 			$depositObject = $this->newDataObject();
@@ -203,6 +207,7 @@ class DepositObjectDAO extends DAO {
 			$this->insertObject($depositObject);
 			$depositObjects[] = $depositObject;
 		}
+
 		return $depositObjects;
 	}
 
@@ -311,4 +316,3 @@ class DepositObjectDAO extends DAO {
 		return $depositObject;
 	}
 }
-?>
