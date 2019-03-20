@@ -397,51 +397,60 @@ class DepositPackage {
 	 * Transfer the atom document to the PLN.
 	 */
 	function transferDeposit() {
-		$journalId = $this->_deposit->getJournalId();
 		$depositDao = DAORegistry::getDAO('DepositDAO');
-		$journalDao = DAORegistry::getDAO('JournalDAO');
-		$plnPlugin = PluginRegistry::getPlugin('generic',PLN_PLUGIN_NAME);
-		$fileManager = new ContextFileManager($journalId);
-		$plnDir = $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER;
 
-		// post the atom document
-		$url = $plnPlugin->getSetting($journalId, 'pln_network');
-		if ($this->_deposit->getLockssAgreementStatus()) {
-			$url .= PLN_PLUGIN_CONT_IRI . '/' . $plnPlugin->getSetting($journalId, 'journal_uuid');
-			$url .= '/' . $this->_deposit->getUUID() . '/edit';
-			$result = $plnPlugin->_curlPutFile(
-				$url,
-				$this->getAtomDocumentPath()
-			);
-		} else {
-			$url .= PLN_PLUGIN_COL_IRI . '/' . $plnPlugin->getSetting($journalId, 'journal_uuid');
-			$result = $plnPlugin->_curlPostFile(
-				$url,
-				$this->getAtomDocumentPath()
-			);
-		}
+		try {
+			$journalId = $this->_deposit->getJournalId();
+			$journalDao = DAORegistry::getDAO('JournalDAO');
+			$plnPlugin = PluginRegistry::getPlugin('generic',PLN_PLUGIN_NAME);
+			$fileManager = new ContextFileManager($journalId);
+			$plnDir = $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER;
 
-		// if we get the OK, set the status as transferred
-		if (($result['status'] == PLN_PLUGIN_HTTP_STATUS_OK) || ($result['status'] == PLN_PLUGIN_HTTP_STATUS_CREATED)) {
-			$this->_deposit->setTransferredStatus();
-			// unset a remote error if this worked
-			$this->_deposit->setLockssReceivedStatus(false);
-			// if this was an update, unset the update flag
-			$this->_deposit->setLockssAgreementStatus(false);
-			$this->_deposit->setLastStatusDate(time());
-			$depositDao->updateObject($this->_deposit);
-		} else {
-			// we got an error back from the staging server
-			if($result['status'] == FALSE) {
-				$this->_logMessage(__("plugins.generic.pln.error.network.deposit", array('error' => $result['error'])));
+			// post the atom document
+			$url = $plnPlugin->getSetting($journalId, 'pln_network');
+			if ($this->_deposit->getLockssAgreementStatus()) {
+				$url .= PLN_PLUGIN_CONT_IRI . '/' . $plnPlugin->getSetting($journalId, 'journal_uuid');
+				$url .= '/' . $this->_deposit->getUUID() . '/edit';
+				$result = $plnPlugin->_curlPutFile(
+					$url,
+					$this->getAtomDocumentPath()
+				);
 			} else {
-				$this->_logMessage(__("plugins.generic.pln.error.http.deposit", array('error' => $result['status'])));
+				$url .= PLN_PLUGIN_COL_IRI . '/' . $plnPlugin->getSetting($journalId, 'journal_uuid');
+				$result = $plnPlugin->_curlPostFile(
+					$url,
+					$this->getAtomDocumentPath()
+				);
 			}
 
-			$this->_deposit->setLockssReceivedStatus();
-			$this->_deposit->setLastStatusDate(time());
+			// if we get the OK, set the status as transferred
+			if (($result['status'] == PLN_PLUGIN_HTTP_STATUS_OK) || ($result['status'] == PLN_PLUGIN_HTTP_STATUS_CREATED)) {
+				$this->_deposit->setTransferredStatus();
+				// unset a remote error if this worked
+				$this->_deposit->setLockssReceivedStatus(false);
+				// if this was an update, unset the update flag
+				$this->_deposit->setLockssAgreementStatus(false);
+				$this->_deposit->setLastStatusDate(time());
+				$depositDao->updateObject($this->_deposit);
+			} else {
+				// we got an error back from the staging server
+				if($result['status'] == FALSE) {
+					$this->_logMessage(__("plugins.generic.pln.error.network.deposit", array('error' => $result['error'])));
+				} else {
+					$this->_logMessage(__("plugins.generic.pln.error.http.deposit", array('error' => $result['status'])));
+				}
+
+				$this->_deposit->setLockssReceivedStatus();
+				$this->_deposit->setLastStatusDate(time());
+				$depositDao->updateObject($this->_deposit);
+			}
+		} 
+		catch (Exception $e) {
+			$this->_logMessage(__("plugins.generic.pln.error.depositor.export.issue.exception") . $e->getMessage());
+			$this->_deposit->setExportDepositError('transferDeposit:' . $e->getMessage());
 			$depositDao->updateObject($this->_deposit);
 		}
+		
 
 	}
 
@@ -450,124 +459,142 @@ class DepositPackage {
 	 */
 	function packageDeposit() {
 		$depositDao = DAORegistry::getDAO('DepositDAO');
-		$journalDao = DAORegistry::getDAO('JournalDAO');
-		$fileManager = new ContextFileManager($this->_deposit->getJournalId());
-		$plnDir = $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER;
 
-		// make sure the pln work directory exists
-		if (!$fileManager->fileExists($plnDir, 'dir')) {
-			$fileManager->mkdir($plnDir);
-		}
-
-		// make a location for our work and clear it out if it's there
-		$depositDir = $plnDir . DIRECTORY_SEPARATOR . $this->_deposit->getUUID();
-		if ($fileManager->fileExists($depositDir, 'dir')) {
-			$fileManager->rmtree($depositDir);
-		}
-
-		$fileManager->mkdir($depositDir);
-
-		$packagePath = $this->generatePackage();
-		if (!$packagePath) {
-			return;
-		}
-
-		if (!$fileManager->fileExists($packagePath)) {
-			$this->_deposit->setPackagedStatus(false);
+		try {
+			$journalDao = DAORegistry::getDAO('JournalDAO');
+			$fileManager = new ContextFileManager($this->_deposit->getJournalId());
+			$plnDir = $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER;
+	
+			// make sure the pln work directory exists
+			if (!$fileManager->fileExists($plnDir, 'dir')) {
+				$fileManager->mkdir($plnDir);
+			}
+	
+			// make a location for our work and clear it out if it's there
+			$depositDir = $plnDir . DIRECTORY_SEPARATOR . $this->_deposit->getUUID();
+			if ($fileManager->fileExists($depositDir, 'dir')) {
+				$fileManager->rmtree($depositDir);
+			}
+	
+			$fileManager->mkdir($depositDir);
+	
+			$packagePath = $this->generatePackage();
+			if (!$packagePath) {
+				return;
+			}
+	
+			if (!$fileManager->fileExists($packagePath)) {
+				$this->_deposit->setPackagedStatus(false);
+				$depositDao->updateObject($this->_deposit);
+				return;
+			}
+	
+			if (!$fileManager->fileExists($this->generateAtomDocument())) {
+				$this->_deposit->setPackagedStatus(false);
+				$depositDao->updateObject($this->_deposit);
+				return;
+			}
+	
+			// update the deposit's status
+			$this->_deposit->setPackagedStatus();
 			$depositDao->updateObject($this->_deposit);
-			return;
 		}
-
-		if (!$fileManager->fileExists($this->generateAtomDocument())) {
-			$this->_deposit->setPackagedStatus(false);
+		catch (Exception $e) {
+			$this->_logMessage(__("plugins.generic.pln.error.depositor.export.issue.exception") . $e->getMessage());
+			$this->_deposit->setExportDepositError('packageDeposit:' . $e->getMessage());
 			$depositDao->updateObject($this->_deposit);
-			return;
 		}
-
-		// update the deposit's status
-		$this->_deposit->setPackagedStatus();
-		$depositDao->updateObject($this->_deposit);
+		
 	}
 
 	/**
 	 * Update the deposit's status by checking with the PLN.
 	 */
 	function updateDepositStatus() {
-		$journalId = $this->_deposit->getJournalID();
 		$depositDao = DAORegistry::getDAO('DepositDAO');
-		$plnPlugin = PluginRegistry::getPlugin('generic', 'plnplugin');
 
-		$url = $plnPlugin->getSetting($journalId, 'pln_network') . PLN_PLUGIN_CONT_IRI;
-		$url .= '/' . $plnPlugin->getSetting($journalId, 'journal_uuid');
-		$url .= '/' . $this->_deposit->getUUID() . '/state';
-
-		// retrieve the content document
-		$result = $plnPlugin->_curlGet($url);
-
-		if ($result['status'] != PLN_PLUGIN_HTTP_STATUS_OK) {
-			// stop here if we didn't get an OK
-			if($result['status'] === FALSE) {
-				error_log(__('plugins.generic.pln.error.network.swordstatement', array('error' => $result['error'])));
-			} else {
-				error_log(__('plugins.generic.pln.error.http.swordstatement', array('error' => $result['status'])));
-			}
-
-			return;
-		}
-
-		$contentDOM = new DOMDocument();
-		$contentDOM->preserveWhiteSpace = false;
-		$contentDOM->loadXML($result['result']);
-
-		// get the remote deposit state
-		$processingState = $contentDOM->getElementsByTagName('category')->item(0)->getAttribute('term');
-		switch ($processingState) {
-			case 'depositedByJournal':
-				$this->_deposit->setTransferredStatus(true);
-				break;
-			case 'harvested':
-			case 'xml-validated':
-			case 'payload-validated':
-			case 'virus-checked':
-				$this->_deposit->setReceivedStatus(true);
-				break;
-			case 'bag-validated':
-			case 'reserialized':
-				$this->_deposit->setValidatedStatus(true);
-				break;
-			case 'deposited':
-				$this->_deposit->setSentStatus(true);
-				break;
-			default:
-				$this->_logMessage('Deposit ' . $this->_deposit->getId() . ' has unknown processing state ' . $processingState);
-		}
-
-		$lockssState = $contentDOM->getElementsByTagName('category')->item(1)->getAttribute('term');
-		switch($lockssState) {
-			case '':
-				// do nothing.
-				break;
-			case 'received':
-				$this->_deposit->setLockssReceivedStatus();
-				break;
-			case 'syncing':
-				$this->_deposit->setLockssSyncingStatus();
-				break;
-			case 'agreement':
-				if(!$this->_deposit->getLockssAgreementStatus()) {
-					$journalDao = DAORegistry::getDAO('JournalDAO');
-					$fileManager = new ContextFileManager($this->_deposit->getJournalId());
-					$depositDir = $this->getDepositDir();
-					$fileManager->rmtree($depositDir);
+		try {
+			$journalId = $this->_deposit->getJournalID();
+			
+			$plnPlugin = PluginRegistry::getPlugin('generic', 'plnplugin');
+	
+			$url = $plnPlugin->getSetting($journalId, 'pln_network') . PLN_PLUGIN_CONT_IRI;
+			$url .= '/' . $plnPlugin->getSetting($journalId, 'journal_uuid');
+			$url .= '/' . $this->_deposit->getUUID() . '/state';
+	
+			// retrieve the content document
+			$result = $plnPlugin->_curlGet($url);
+	
+			if ($result['status'] != PLN_PLUGIN_HTTP_STATUS_OK) {
+				// stop here if we didn't get an OK
+				if($result['status'] === FALSE) {
+					error_log(__('plugins.generic.pln.error.network.swordstatement', array('error' => $result['error'])));
+				} else {
+					error_log(__('plugins.generic.pln.error.http.swordstatement', array('error' => $result['status'])));
 				}
-				$this->_deposit->setLockssAgreementStatus(true);
-				break;
-			default:
-				$this->_logMessage('Deposit ' . $this->_deposit->getId() . ' has unknown LOCKSS state ' . $processingState);
+	
+				return;
+			}
+	
+			$contentDOM = new DOMDocument();
+			$contentDOM->preserveWhiteSpace = false;
+			$contentDOM->loadXML($result['result']);
+	
+			// get the remote deposit state
+			$processingState = $contentDOM->getElementsByTagName('category')->item(0)->getAttribute('term');
+			switch ($processingState) {
+				case 'depositedByJournal':
+					$this->_deposit->setTransferredStatus(true);
+					break;
+				case 'harvested':
+				case 'xml-validated':
+				case 'payload-validated':
+				case 'virus-checked':
+					$this->_deposit->setReceivedStatus(true);
+					break;
+				case 'bag-validated':
+				case 'reserialized':
+					$this->_deposit->setValidatedStatus(true);
+					break;
+				case 'deposited':
+					$this->_deposit->setSentStatus(true);
+					break;
+				default:
+					$this->_logMessage('Deposit ' . $this->_deposit->getId() . ' has unknown processing state ' . $processingState);
+			}
+	
+			$lockssState = $contentDOM->getElementsByTagName('category')->item(1)->getAttribute('term');
+			switch($lockssState) {
+				case '':
+					// do nothing.
+					break;
+				case 'received':
+					$this->_deposit->setLockssReceivedStatus();
+					break;
+				case 'syncing':
+					$this->_deposit->setLockssSyncingStatus();
+					break;
+				case 'agreement':
+					if(!$this->_deposit->getLockssAgreementStatus()) {
+						$journalDao = DAORegistry::getDAO('JournalDAO');
+						$fileManager = new ContextFileManager($this->_deposit->getJournalId());
+						$depositDir = $this->getDepositDir();
+						$fileManager->rmtree($depositDir);
+					}
+					$this->_deposit->setLockssAgreementStatus(true);
+					break;
+				default:
+					$this->_logMessage('Deposit ' . $this->_deposit->getId() . ' has unknown LOCKSS state ' . $processingState);
+			}
+	
+			$this->_deposit->setLastStatusDate(time());
+			$depositDao->updateObject($this->_deposit);
 		}
-
-		$this->_deposit->setLastStatusDate(time());
-		$depositDao->updateObject($this->_deposit);
+		catch (Exception $e) {
+			$this->_logMessage(__("plugins.generic.pln.error.depositor.export.issue.exception") . $e->getMessage());
+			$this->_deposit->setExportDepositError('updateDepositStatus:' . $e->getMessage());
+			$depositDao->updateObject($this->_deposit);
+		}
 	}
 
 	function importExportErrorHandler($depositId, $message) {
