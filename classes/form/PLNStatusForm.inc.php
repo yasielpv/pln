@@ -36,7 +36,7 @@ class PLNStatusForm extends Form {
 		$this->_contextId = $contextId;
 		$this->_plugin = $plugin;
 
-		parent::__construct($plugin->getTemplateResource('status.tpl'));
+		parent::__construct($plugin->getTemplatePath() . 'status.tpl');
 	}
 
 	/**

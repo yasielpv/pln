@@ -298,7 +298,7 @@ class PLNPlugin extends GenericPlugin {
 		$output = $args[2];
 		$templateMgr = TemplateManager::getManager();
 		$templateMgr->register_function('plugin_url', array(&$this, 'smartyPluginUrl'));
-		$output .= $templateMgr->fetch($this->getTemplateResource('setup.tpl'));
+		$output .= $templateMgr->fetch($this->getTemplatePath() . 'setup.tpl');
 		return false;
 	}
 
@@ -781,10 +781,13 @@ class PLNPlugin extends GenericPlugin {
 		return PKPString::generateUUID();
 	}
 
+	
 	/**
 	 * @copydoc PKPPlugin::getTemplatePath
 	 */
+	
 	public function getTemplatePath($inCore = false) {
-		return parent::getTemplatePath($inCore) . '/templates/';
+		return parent::getTemplatePath($inCore) . 'templates'  . DIRECTORY_SEPARATOR;
 	}
+	
 }
