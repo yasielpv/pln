@@ -21,8 +21,8 @@ import('classes.issue.Issue');
 define('PLN_PLUGIN_NAME', 'plnplugin');
 
 // defined here in case an upgrade doesn't pick up the default value.
-define('PLN_DEFAULT_NETWORK', 'http://pkp-pln.lib.sfu.ca');
-// define('PLN_DEFAULT_NETWORK', 'http://localhost:8080/symfony/pkppln/web');
+// define('PLN_DEFAULT_NETWORK', 'http://pkp-pln.lib.sfu.ca');
+define('PLN_DEFAULT_NETWORK', 'http://localhost:8080/symfony/pkppln/web');
 
 define('PLN_DEFAULT_STATUS_SUFFIX', '/docs/status');
 
@@ -47,7 +47,7 @@ define('PLN_PLUGIN_ARCHIVE_FOLDER', 'pln');
 define('PLN_PLUGIN_DEPOSIT_STATUS_NEW',					0x00);
 define('PLN_PLUGIN_DEPOSIT_STATUS_PACKAGED',			0x01);
 define('PLN_PLUGIN_DEPOSIT_STATUS_TRANSFERRED',			0x02);
-define('PLN_PLUGIN_DEPOSIT_STATUS_PACKAGING_FAILED',			0x03);
+define('PLN_PLUGIN_DEPOSIT_STATUS_PACKAGING_FAILED',			0x200);
 
 // status on the processing server
 define('PLN_PLUGIN_DEPOSIT_STATUS_RECEIVED',			0x04);
@@ -350,7 +350,7 @@ class PLNPlugin extends GenericPlugin {
 	 * @copydoc PKPPlugin::manage()
 	 */
 	function manage($args, $request) {
-		$journal = Request::getJournal();
+		$journal = $request->getJournal();
 
 		switch($request->getUserVar('verb')) {
 			case 'settings':
@@ -394,8 +394,8 @@ class PLNPlugin extends GenericPlugin {
 				$this->import('classes.form.PLNStatusForm');
 				$form = new PLNStatusForm($this, $context->getId());
 
-				if (Request::getUserVar('reset')) {
-					$deposit_ids = array_keys(Request::getUserVar('reset'));
+				if ($request->getUserVar('reset')) {
+					$deposit_ids = array_keys($request->getUserVar('reset'));
 					$depositDao = DAORegistry::getDAO('DepositDAO');
 					foreach ($deposit_ids as $deposit_id) {
 						$deposit = $depositDao->getById($deposit_id);

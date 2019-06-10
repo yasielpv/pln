@@ -60,9 +60,11 @@ class PLNSettingsForm extends Form {
 	 * Assign form data to user-submitted data.
 	 */
 	function readInputData() {
+		$this->readUserVars(array('terms_agreed'));
+		
 		$terms_agreed = $this->getData('terms_of_use_agreement');
-		if (Request::getUserVar('terms_agreed')) {
-			foreach (array_keys(Request::getUserVar('terms_agreed')) as $term_agreed) {
+		if ($this->getData('terms_agreed')) {
+			foreach (array_keys($this->getData('terms_agreed')) as $term_agreed) {
 				$terms_agreed[$term_agreed] = gmdate('c');
 			}
 			$this->setData('terms_of_use_agreement', $terms_agreed);
@@ -98,7 +100,7 @@ class PLNSettingsForm extends Form {
 	 * @copydoc Form::fetch()
 	 */
 	function fetch($request) {
-		$context = Request::getContext();
+		$context = $request->getContext();
 		$issn = '';
 		if ($context->getSetting('onlineIssn')) {
 			$issn = $context->getSetting('onlineIssn');

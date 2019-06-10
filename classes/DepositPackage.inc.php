@@ -318,6 +318,7 @@ class DepositPackage {
 				break;
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
 				// we only ever do one issue at a time, so get that issue
+				$request = Application::get()->getRequest();
 				$depositObject = $depositObjects->next();
 				$issue = $issueDao->getByBestId($depositObject->getObjectId(), $journal->getId());
 
@@ -327,7 +328,7 @@ class DepositPackage {
 					$exportXml = $exportPlugin->exportIssues(
 						(array) $issue->getId(),
 						$journal,
-						$user = Request::getUser()
+						$user = $request->getUser()
 					);
 
 					if (!$exportXml) {

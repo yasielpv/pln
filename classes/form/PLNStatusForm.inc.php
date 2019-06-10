@@ -44,7 +44,7 @@ class PLNStatusForm extends Form {
 	 * @copydoc Form::fetch()
 	 */
 	function fetch($request) {
-		$context = Request::getContext();
+		$context = $request->getContext();
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$networkStatus = $this->_plugin->getSetting($context->getId(), 'pln_accepting');
 		$networkStatusMessage = $this->_plugin->getSetting($context->getId(), 'pln_accepting_message');
