@@ -47,7 +47,7 @@ define('PLN_PLUGIN_ARCHIVE_FOLDER', 'pln');
 define('PLN_PLUGIN_DEPOSIT_STATUS_NEW',					0x00);
 define('PLN_PLUGIN_DEPOSIT_STATUS_PACKAGED',			0x01);
 define('PLN_PLUGIN_DEPOSIT_STATUS_TRANSFERRED',			0x02);
-define('PLN_PLUGIN_DEPOSIT_STATUS_PACKAGING_FAILED',			0x200);
+define('PLN_PLUGIN_DEPOSIT_STATUS_PACKAGING_FAILED',	0x200);
 
 // status on the processing server
 define('PLN_PLUGIN_DEPOSIT_STATUS_RECEIVED',			0x04);
@@ -543,8 +543,8 @@ class PLNPlugin extends GenericPlugin {
 		$result = $this->_curlGet(
 			$network . PLN_PLUGIN_SD_IRI,
 			array(
-				'On-Behalf-Of: '.$this->getSetting($contextId, 'journal_uuid'),
-				'Journal-URL: '.$dispatcher->url($request, ROUTE_PAGE, $context->getPath()),
+				'On-Behalf-Of: ' . $this->getSetting($contextId, 'journal_uuid'),
+				'Journal-URL: ' . $dispatcher->url($request, ROUTE_PAGE, $context->getPath()),
 				'Accept-language:' . $language,
 			)
 		);
@@ -573,7 +573,7 @@ class PLNPlugin extends GenericPlugin {
 
 		// update the network status
 		$element = $serviceDocument->getElementsByTagName('pln_accepting')->item(0);
-		$this->updateSetting($contextId, 'pln_accepting', (($element->getAttribute('is_accepting')=='Yes')?true:false));
+		$this->updateSetting($contextId, 'pln_accepting', (($element->getAttribute('is_accepting') == 'Yes') ? true : false));
 		$this->updateSetting($contextId, 'pln_accepting_message', $element->nodeValue);
 
 		// update the terms of use
@@ -698,14 +698,14 @@ class PLNPlugin extends GenericPlugin {
 	 * @param $headers array
 	 * @return array
 	 */
-	function _curlPostFile($url,$filename) {
+	function _curlPostFile($url, $filename) {
 
 		$curl = curl_init();
 
 		curl_setopt_array($curl, array(
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_POST => true,
-			CURLOPT_HTTPHEADER => array("Content-Length: ".filesize($filename)),
+			CURLOPT_HTTPHEADER => array("Content-Length: " . filesize($filename)),
 			CURLOPT_INFILE => fopen($filename, "r"),
 			CURLOPT_INFILESIZE => filesize($filename),
 			CURLOPT_URL => $url
