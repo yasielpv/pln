@@ -530,6 +530,7 @@ class DepositPackage {
 			case 'xml-validated':
 			case 'payload-validated':
 			case 'virus-checked':
+			//case 'harvest-error':
 				$this->_deposit->setReceivedStatus(true);
 				break;
 			case 'bag-validated':

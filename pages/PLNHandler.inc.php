@@ -66,7 +66,7 @@ class PLNHandler extends Handler {
 			return false;
 		}
 
-		$deposit = $depositDao->getByUUID($journal->getId(),$depositUuid);
+		$deposit = $depositDao->getByUUID($journal->getId(), $depositUuid);
 
 		if (!$deposit) {
 			error_log(__("plugins.generic.pln.error.handler.uuid.notfound"));
@@ -83,7 +83,7 @@ class PLNHandler extends Handler {
 			return false;
 		}
 
-		return $fileManager->downloadFile($depositBag, mime_content_type($depositBag), true);
+		return $fileManager->downloadByPath($depositBag, PKPString::mime_content_type($depositBag), true);
 	}
 
 	/**

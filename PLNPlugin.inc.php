@@ -333,7 +333,7 @@ class PLNPlugin extends GenericPlugin {
 	function callbackLoadHandler($hookName, $args) {
 		$page =& $args[0];
 		if ($page == 'pln') {
-			$op =& $args[1];
+			$op = $args[1];
 			if ($op) {
 				if (in_array($op, array('deposits'))) {
 					define('HANDLER_CLASS', 'PLNHandler');
