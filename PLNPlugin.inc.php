@@ -77,9 +77,9 @@ class PLNPlugin extends GenericPlugin {
 	/**
 	 * @copydoc LazyLoadPlugin::register()
 	 */
-	function register($category, $path) {
+	function register($category, $path, $mainContextId = null) {
 
-		$success = parent::register($category, $path);
+		$success = parent::register($category, $path, $mainContextId);
 
 		if ($success) {
 			HookRegistry::register('Templates::Manager::Setup::JournalArchiving', array($this, 'callbackJournalArchivingSetup'));
@@ -456,17 +456,9 @@ class PLNPlugin extends GenericPlugin {
 
 	/**
 	 * Extend the {url ...} smarty to support this plugin.
+	 * @copydoc Plugin::smartyPluginUrl
 	 */
-	function smartyPluginUrl($params, &$smarty) {
-		$path = array($this->getCategory(), $this->getName());
-		if (is_array($params['path'])) {
-			$params['path'] = array_merge($path, $params['path']);
-		} elseif (!empty($params['path'])) {
-			$params['path'] = array_merge($path, array($params['path']));
-		} else {
-			$params['path'] = $path;
-		}
-
+	function smartyPluginUrl($params, $smarty) {
 		if (!empty($params['id'])) {
 			$params['path'] = array_merge($params['path'], array($params['id']));
 			unset($params['id']);
