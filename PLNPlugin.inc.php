@@ -112,7 +112,7 @@ class PLNPlugin extends GenericPlugin {
 		$component = $params[0];
 		switch ($component) {
 			case 'plugins.generic.pln.controllers.grid.PLNStatusGridHandler':
-				// Allow the static page grid handler to get the plugin object
+				// Allow the PLN status grid handler to get the plugin object
 				import($component);
 				$className = array_pop(explode('.', $component));
 				$className::setPlugin($this);
