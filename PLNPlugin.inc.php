@@ -537,7 +537,8 @@ class PLNPlugin extends GenericPlugin {
 		$locale = $context->getPrimaryLocale();
 		$language = strtolower(str_replace('_', '-', $locale));
 		$network = $this->getSetting($context->getId(), 'pln_network');
-		$dispatcher = $request->getDispatcher();
+		$application = Application::getApplication();
+		$dispatcher = $application->getDispatcher();
 
 		// retrieve the service document
 		$result = $this->_curlGet(

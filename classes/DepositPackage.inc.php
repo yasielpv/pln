@@ -143,7 +143,8 @@ class DepositPackage {
 		$entry->appendChild($title);
 
 		$request = PKPApplication::getRequest();
-		$dispatcher = $request->getDispatcher();
+		$application = PKPApplication::getApplication();
+		$dispatcher = $application->getDispatcher();
 
 		$pkpJournalUrl = $this->_generateElement($atom, 'pkp:journal_url', $dispatcher->url($request, ROUTE_PAGE, $journal->getPath()), 'http://pkp.sfu.ca/SWORD');
 		$entry->appendChild($pkpJournalUrl);
@@ -318,7 +319,8 @@ class DepositPackage {
 				break;
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
 				// we only ever do one issue at a time, so get that issue
-				$request = Application::get()->getRequest();
+				$application = Application::getApplication();
+				$request = $application->getRequest();
 				$depositObject = $depositObjects->next();
 				$issue = $issueDao->getByBestId($depositObject->getObjectId(), $journal->getId());
 
