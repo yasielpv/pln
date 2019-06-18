@@ -92,7 +92,7 @@ class PLNSettingsForm extends Form {
 	 * Fetch the form.
 	 * @copydoc Form::fetch()
 	 */
-	function fetch($request) {
+	function fetch($request, $template = null, $display = false) {
 		$context = $request->getContext();
 		$issn = '';
 		if ($context->getSetting('onlineIssn')) {
@@ -114,7 +114,7 @@ class PLNSettingsForm extends Form {
 			'terms_of_use_agreement' => $this->getData('terms_of_use_agreement'),
 		));
 
-		return parent::fetch($request);
+		return parent::fetch($request, $template, $display);
 	}
 
 	/**
