@@ -38,13 +38,6 @@ class PLNSettingsForm extends Form {
 	}
 
 	/**
-	 * @see Form::validate()
-	 */
-	function validate() {
-		return parent::validate();
-	}
-
-	/**
 	 * Initialize form data.
 	 */
 	function initData() {
