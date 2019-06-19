@@ -37,7 +37,6 @@
 			<NOTNULL/>
 		</field>
 		<field name="date_modified" type="T"/>
-		<field name="export_deposit_error" type="C2" size="1000" />
 		<descr>PLN Deposit Objects</descr>
 	</table>
 
@@ -63,6 +62,7 @@
 			<NOTNULL/>
 		</field>
 		<field name="date_modified" type="T"/>
+		<field name="export_deposit_error" type="C2" size="1000" />
 		<descr>PLN Deposits</descr>
 	</table>
 
