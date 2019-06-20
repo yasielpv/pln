@@ -59,7 +59,7 @@
 				<input type="submit" id="refresh" name="refresh" class="button" value="{translate key="plugins.generic.pln.settings.refresh"}"/>
 			{/fbvFormSection}
 			
-			{fbvFormButtons}
+			{fbvFormButtons id="plnPluginSettingsFormSubmit" submitText="common.save" hideCancel=true}
 		{/fbvFormArea}
 	</form>
 </div>
