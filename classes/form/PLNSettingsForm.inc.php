@@ -38,13 +38,6 @@ class PLNSettingsForm extends Form {
 	}
 
 	/**
-	 * @see Form::validate()
-	 */
-	function validate() {
-		return parent::validate();
-	}
-
-	/**
 	 * Initialize form data.
 	 */
 	function initData() {
@@ -99,7 +92,7 @@ class PLNSettingsForm extends Form {
 	 * Fetch the form.
 	 * @copydoc Form::fetch()
 	 */
-	function fetch($request) {
+	function fetch($request, $template = null, $display = false) {
 		$context = $request->getContext();
 		$issn = '';
 		if ($context->getSetting('onlineIssn')) {
@@ -111,15 +104,17 @@ class PLNSettingsForm extends Form {
 		if ($issn != '') {
 			$hasIssn = true;
 		}
-		$templateMgr = TemplateManager::getManager();
-		$templateMgr->assign('pluginName', $this->_plugin->getName());
-		$templateMgr->assign('hasIssn', $hasIssn);
-		$templateMgr->assign('prerequisitesMissing', $this->_checkPrerequisites());
-		$templateMgr->assign('journal_uuid', $this->_plugin->getSetting($this->_contextId, 'journal_uuid'));
-		$templateMgr->assign('terms_of_use', unserialize($this->_plugin->getSetting($this->_contextId, 'terms_of_use')));
-		$templateMgr->assign('terms_of_use_agreement', $this->getData('terms_of_use_agreement'));
+		$templateMgr = TemplateManager::getManager($request);
+		$templateMgr->assign(array(
+			'pluginName' => $this->_plugin->getName(),
+			'hasIssn' => $hasIssn,
+			'prerequisitesMissing' => $this->_checkPrerequisites(),
+			'journal_uuid' => $this->_plugin->getSetting($this->_contextId, 'journal_uuid'),
+			'terms_of_use' => unserialize($this->_plugin->getSetting($this->_contextId, 'terms_of_use')),
+			'terms_of_use_agreement' => $this->getData('terms_of_use_agreement'),
+		));
 
-		return parent::fetch($request);
+		return parent::fetch($request, $template, $display);
 	}
 
 	/**

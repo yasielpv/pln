@@ -43,7 +43,7 @@ class PLNStatusForm extends Form {
 	 * Fetch the form.
 	 * @copydoc Form::fetch()
 	 */
-	function fetch($request) {
+	function fetch($request, $template = null, $display = false) {
 		$context = $request->getContext();
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$networkStatus = $this->_plugin->getSetting($context->getId(), 'pln_accepting');
@@ -63,7 +63,7 @@ class PLNStatusForm extends Form {
 		$templateMgr->assign('networkStatusMessage', $networkStatusMessage);
 		$templateMgr->assign('plnStatusDocs', $this->_plugin->getSetting($context->getId(), 'pln_status_docs'));
 
-		return parent::fetch($request);
+		return parent::fetch($request, $template, $display);
 	}
 
 }

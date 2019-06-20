@@ -29,7 +29,7 @@ class PLNStatusGridHandler extends GridHandler {
 			array(ROLE_ID_MANAGER),
 			array('fetchGrid', 'fetchRow', 'resetDeposit')
 		);
-		$this->plugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
+		self::$plugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 	}
 
 	/**
