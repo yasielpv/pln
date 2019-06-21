@@ -662,7 +662,9 @@ class PLNPlugin extends GenericPlugin {
 
 		curl_setopt_array($curl, array(
 			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_HTTPHEADER => $headers,
+			CURLOPT_HTTPHEADER => array_merge(array(
+				'Expect:',
+			), $headers),
 			CURLOPT_URL => $url
 		));
 		if ($httpProxyHost = Config::getVar('proxy', 'http_host')) {
@@ -698,7 +700,10 @@ class PLNPlugin extends GenericPlugin {
 		curl_setopt_array($curl, array(
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_POST => true,
-			CURLOPT_HTTPHEADER => array("Content-Length: " . filesize($filename)),
+			CURLOPT_HTTPHEADER => array(
+				'Content-Length: ' . filesize($filename),
+				'Expect:',
+			),
 			CURLOPT_INFILE => fopen($filename, "r"),
 			CURLOPT_INFILESIZE => filesize($filename),
 			CURLOPT_URL => $url
@@ -730,18 +735,16 @@ class PLNPlugin extends GenericPlugin {
 	 * @return array
 	 */
 	function _curlPutFile($url,$filename) {
-
-		$headers = array (
-			"Content-Type: ".mime_content_type($filename),
-			"Content-Length: ".filesize($filename)
-		);
-
 		$curl = curl_init();
 
 		curl_setopt_array($curl, array(
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_PUT => true,
-			CURLOPT_HTTPHEADER => $headers,
+			CURLOPT_HTTPHEADER => array(
+				'Content-Type: ' . mime_content_type($filename),
+				'Content-Length: ' . filesize($filename),
+				'Expect:',
+			),
 			CURLOPT_INFILE => fopen($filename, "r"),
 			CURLOPT_INFILESIZE => filesize($filename),
 			CURLOPT_URL => $url
