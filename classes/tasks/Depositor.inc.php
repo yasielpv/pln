@@ -201,7 +201,7 @@ class Depositor extends ScheduledTask {
 		$depositDao = DAORegistry::getDAO('DepositDAO'); /** @var $depositDao DepositDAO */
 		$depositQueue = $depositDao->getNeedPackaging($journal->getId());
 		$fileManager = new ContextFileManager($journal->getId());
-		$plnDir = $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER;
+		$plnDir = $fileManager->getBasePath() . PLN_PLUGIN_ARCHIVE_FOLDER;
 
 		// make sure the pln work directory exists
 		// TOOD: use FileManager calls instead of PHP ones where possible

@@ -65,7 +65,7 @@ class DepositPackage {
 	function getDepositDir() {
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$fileManager = new ContextFileManager($this->_deposit->getJournalId());
-		return $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER . DIRECTORY_SEPARATOR . $this->_deposit->getUUID();
+		return $fileManager->getBasePath() . PLN_PLUGIN_ARCHIVE_FOLDER . DIRECTORY_SEPARATOR . $this->_deposit->getUUID();
 	}
 
 	/**
@@ -405,7 +405,7 @@ class DepositPackage {
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$plnPlugin = PluginRegistry::getPlugin('generic',PLN_PLUGIN_NAME);
 		$fileManager = new ContextFileManager($journalId);
-		$plnDir = $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER;
+		$plnDir = $fileManager->getBasePath() . PLN_PLUGIN_ARCHIVE_FOLDER;
 
 		// post the atom document
 		$url = $plnPlugin->getSetting($journalId, 'pln_network');
@@ -455,7 +455,7 @@ class DepositPackage {
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$fileManager = new ContextFileManager($this->_deposit->getJournalId());
-		$plnDir = $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER;
+		$plnDir = $fileManager->getBasePath() . PLN_PLUGIN_ARCHIVE_FOLDER;
 
 		// make sure the pln work directory exists
 		if (!$fileManager->fileExists($plnDir, 'dir')) {
