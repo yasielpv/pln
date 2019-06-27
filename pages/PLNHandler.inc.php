@@ -16,21 +16,12 @@
 import('classes.handler.Handler');
 
 class PLNHandler extends Handler {
-
-	/**
-	 * Constructor
-	 * @param $request Request
-	 */
-	function __construct($request) {
-		parent::__construct();
-	}
-
 	/**
 	 * Index handler: redirect to journal page.
 	 * @param $args array
 	 * @param $request PKPRequest
 	 */
-	function index($args, &$request) {
+	function index($args, $request) {
 		$request->redirect(null, 'index');
 	}
 
@@ -91,7 +82,7 @@ class PLNHandler extends Handler {
 	 * @param array $args
 	 * @param Request $request
 	 */
-	function status($args=array(), $request) {
+	function status($args, $request) {
 		$router = $request->getRouter();
 		$plnPlugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 		$templateMgr = TemplateManager::getManager();
