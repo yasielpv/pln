@@ -1,8 +1,8 @@
 {**
  * plugins/generic/pln/templates/settingsForm.tpl
  *
- * Copyright (c) 2013-2017 Simon Fraser University Library
- * Copyright (c) 2003-2017 John Willinsky
+ * Copyright (c) 2013-2019 Simon Fraser University
+ * Copyright (c) 2003-2019 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * PLN plugin settings
@@ -33,7 +33,7 @@
 		</terms>
 	</pluginInfo>
 	<journalInfo>
-		<title>{$journal->getLocalizedName()|escape}</title>
+		<title>{$currentJournal->getLocalizedName()|escape}</title>
 		<articles count="{$articles->getCount()|escape}">
 			{iterate from=articles item=article}
 			<article pubDate="{$article->getDatePublished()|escape}">{$article->getLocalizedTitle()|escape}</article>
