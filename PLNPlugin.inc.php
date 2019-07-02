@@ -282,7 +282,7 @@ class PLNPlugin extends GenericPlugin {
 		$smarty = $args[1];
 		$output = $args[2];
 		$application = Application::get();
-		$templateMgr = TemplateManager::getManaager($application->getRequest());
+		$templateMgr = TemplateManager::getManager($application->getRequest());
 		$output .= $templateMgr->fetch($this->getTemplateResource('setup.tpl'));
 		return false;
 	}
