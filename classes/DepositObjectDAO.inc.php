@@ -157,7 +157,7 @@ class DepositObjectDAO extends DAO {
 
 		switch ($objectType) {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
-				$published_article_dao = DAORegistry::getDAO('PublishedArticleDAO');
+				$published_article_dao = DAORegistry::getDAO('PublishedSubmissionDAO');
 				$result = $this->retrieve(
 					'SELECT pa.submission_id FROM published_submissions pa
 					LEFT JOIN submissions a ON pa.submission_id = a.submission_id
@@ -167,7 +167,7 @@ class DepositObjectDAO extends DAO {
 				);
 				while (!$result->EOF) {
 					$row = $result->GetRowAssoc(false);
-					$objects[] = $published_article_dao->getPublishedArticleByArticleId($row['article_id']);
+					$objects[] = $published_article_dao->getPublishedSubmissionById($row['article_id']);
 					$result->MoveNext();
 				}
 				$result->Close();

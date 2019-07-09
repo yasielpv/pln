@@ -157,9 +157,9 @@ class PLNGatewayPlugin extends GatewayPlugin {
 		$ojsVersion = $versionDao->getCurrentVersion();
 		$templateMgr->assign('ojsVersion', $ojsVersion->getVersionString());
 
-		$publishedArticlesDAO = DAORegistry::getDAO('PublishedArticleDAO');
+		$publishedArticlesDAO = DAORegistry::getDAO('PublishedSubmissionDAO');
 		$range = new DBResultRange(PLN_PLUGIN_PING_ARTICLE_COUNT);
-		$publishedArticles = $publishedArticlesDAO->getPublishedArticlesByJournalId($journal->getId(), $range, true);
+		$publishedArticles = $publishedArticlesDAO->getPublishedSubmissionsByJournalId($journal->getId(), $range, true);
 		$templateMgr->assign('articles', $publishedArticles);
 		$templateMgr->assign('pln_network', $plugin->getSetting($journal->getId(), 'pln_network'));
 

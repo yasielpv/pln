@@ -167,8 +167,8 @@ class DepositPackage {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
 				$depositObjects = $this->_deposit->getDepositObjects();
 				while ($depositObject = $depositObjects->next()) {
-					$publishedArticleDao = DAORegistry::getDAO('PublishedArticleDAO');
-					$article = $publishedArticleDao->getPublishedArticleByArticleId($depositObject->getObjectId());
+					$publishedArticleDao = DAORegistry::getDAO('PublishedSubmissionDAO');
+					$article = $publishedArticleDao->getPublishedSubmissionById($depositObject->getObjectId());
 					if ($article->getDatePublished() > $objectPublicationDate)
 						$objectPublicationDate = $article->getDatePublished();
 					unset($depositObject);
@@ -255,7 +255,7 @@ class DepositPackage {
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$issueDao = DAORegistry::getDAO('IssueDAO');
 		$sectionDao = DAORegistry::getDAO('SectionDAO');
-		$publishedArticleDao = DAORegistry::getDAO('PublishedArticleDAO');
+		$publishedArticleDao = DAORegistry::getDAO('PublishedSubmissionDAO');
 		PluginRegistry::loadCategory('importexport');
 		$exportPlugin = PluginRegistry::getPlugin('importexport', 'NativeImportExportPlugin');
 		$plnPlugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
@@ -278,7 +278,7 @@ class DepositPackage {
 
 				// we need to add all of the relevant articles to an array to export as a batch
 				while ($depositObject = $depositObjects->next()) {
-					$article = $publishedArticleDao->getPublishedArticleByArticleId($this->_deposit->getObjectId(), $journal->getId());
+					$article = $publishedArticleDao->getPublishedSubmissionById($this->_deposit->getObjectId(), $journal->getId());
 					$issue = $issueDao->getIssueById($article->getIssueId(), $journal->getId());
 					$section = $sectionDao->getSection($article->getSectionId());
 
