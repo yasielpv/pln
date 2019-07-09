@@ -376,7 +376,7 @@ class PLNPlugin extends GenericPlugin {
 							$notificationMgr = new NotificationManager();
 							$notificationMgr->createTrivialNotification($currentUser->getId(), NOTIFICATION_TYPE_SUCCESS, array('contents' => $notificationContent));
 
-							return new JSONMessage(false);
+							return new JSONMessage(true);
 						}
 					}
 				}
