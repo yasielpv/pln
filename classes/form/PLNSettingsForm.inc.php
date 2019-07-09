@@ -3,8 +3,8 @@
 /**
  * @file plugins/generic/pln/classes/form/PLNSettingsForm.inc.php
  *
- * Copyright (c) 2013-2017 Simon Fraser University Library
- * Copyright (c) 2003-2017 John Willinsky
+ * Copyright (c) 2013-2019 Simon Fraser University
+ * Copyright (c) 2003-2019 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * @class PLNSettingsForm
@@ -15,32 +15,27 @@
 import('lib.pkp.classes.form.Form');
 
 class PLNSettingsForm extends Form {
-
-	/**
-	 * @var $_contextId int
-	 */
+	/** @var int */
 	var $_contextId;
 
-	/**
-	 * @var $plugin object
-	 */
+	/** @var Plugin */
 	var $_plugin;
 
 	/**
 	 * Constructor
-	 * @param $plugin object
+	 * @param $plugin Plugin
 	 * @param $contextId int
 	 */
-	function __construct($plugin, $contextId) {
+	public function __construct($plugin, $contextId) {
 		$this->_contextId = $contextId;
 		$this->_plugin = $plugin;
 		parent::__construct($plugin->getTemplateResource('settings.tpl'));
 	}
 
 	/**
-	 * Initialize form data.
+	 * @copydoc Form::initData
 	 */
-	function initData() {
+	public function initData() {
 		$contextId = $this->_contextId;
 		if (!$this->_plugin->getSetting($contextId, 'terms_of_use')) {
 			$this->_plugin->getServiceDocument($contextId);
@@ -50,9 +45,9 @@ class PLNSettingsForm extends Form {
 	}
 
 	/**
-	 * Assign form data to user-submitted data.
+	 * @copydoc Form::readInputData
 	 */
-	function readInputData() {
+	public function readInputData() {
 		$this->readUserVars(array('terms_agreed'));
 		
 		$terms_agreed = $this->getData('terms_of_use_agreement');
@@ -70,29 +65,28 @@ class PLNSettingsForm extends Form {
 	 *
 	 * @return array
 	 */
-	function _checkPrerequisites() {
+	public function _checkPrerequisites() {
 		$messages = array();
 
-		if( ! @include_once('Archive/Tar.php')) {
+		if (!@include_once('Archive/Tar.php')) {
 			$messages[] = __('plugins.generic.pln.notifications.archive_tar_missing');
 		}
-		if( ! $this->_plugin->curlInstalled()) {
+		if (!$this->_plugin->curlInstalled()) {
 			$messages[] = __('plugins.generic.pln.notifications.curl_missing');
 		}
-		if( ! $this->_plugin->zipInstalled()) {
+		if (!$this->_plugin->zipInstalled()) {
 			$messages = __('plugins.generic.pln.notifications.zip_missing');
 		}
-		if( ! $this->_plugin->cronEnabled()) {
+		if (!$this->_plugin->cronEnabled()) {
 			$messages = __('plugins.generic.pln.settings.acron_required');
 		}
 		return $messages;
 	}
 
 	/**
-	 * Fetch the form.
 	 * @copydoc Form::fetch()
 	 */
-	function fetch($request, $template = null, $display = false) {
+	public function fetch($request, $template = null, $display = false) {
 		$context = $request->getContext();
 		$issn = '';
 		if ($context->getSetting('onlineIssn')) {
@@ -118,13 +112,12 @@ class PLNSettingsForm extends Form {
 	}
 
 	/**
-	 * @see Form::execute()
+	 * @copydoc Form::execute()
 	 */
-	function execute() {
+	public function execute() {
 		$this->_plugin->updateSetting($this->_contextId, 'terms_of_use_agreement', serialize($this->getData('terms_of_use_agreement')), 'object');
 
 		$pluginSettingsDao = DAORegistry::getDAO('PluginSettingsDAO');
 		$pluginSettingsDao->installSettings($this->_contextId, $this->_plugin->getName(), $this->_plugin->getContextSpecificPluginSettingsFile());
 	}
-
 }

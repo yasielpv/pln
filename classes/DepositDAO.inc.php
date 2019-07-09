@@ -3,8 +3,8 @@
 /**
  * @file plugins/generic/pln/classes/DepositDAO.inc.php
  *
- * Copyright (c) 2013-2017 Simon Fraser University Library
- * Copyright (c) 2003-2017 John Willinsky
+ * Copyright (c) 2013-2019 Simon Fraser University
+ * Copyright (c) 2003-2019 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * @class DepositDAO
@@ -16,35 +16,29 @@
 import('lib.pkp.classes.db.DAO');
 
 class DepositDAO extends DAO {
-
-	/**
-	 * Constructor
-	 */
-	function __construct() {
-		parent::__construct();
-	}
-
 	/**
 	 * Construct a new deposit object.
 	 * @return Deposit
 	 */
-	function newDataObject() {
+	public function newDataObject() {
 		return new Deposit(null);
 	}
 
 	/**
 	 * Retrieve deposit by ID.
 	 * @param $depositId int
+	 * @param $journalId int optional
 	 * @return Deposit Object
 	 */
-	function getById($depositId) {
+	public function getById($depositId, $journalId = null) {
+		$params = array((int) $depositId);
+		if ($journalId !== null) $params[] = (int) $journalId;
 		$result = $this->retrieve(
 			'SELECT *
 			FROM pln_deposits
-			WHERE deposit_id = ?',
-			array (
-				(int) $depositId
-			)
+			WHERE deposit_id = ?'
+			. ($journalId !== null?' AND journal_id = ?':''),
+			$params
 		);
 		$returner = null;
 		if ($result->RecordCount() != 0) {
@@ -59,7 +53,7 @@ class DepositDAO extends DAO {
 	 * @param $deposit Deposit
 	 * @return int inserted Deposit id
 	 */
-	function insertObject($deposit) {
+	public function insertObject($deposit) {
 		$this->update(
 			sprintf('
 				INSERT INTO pln_deposits
@@ -88,7 +82,7 @@ class DepositDAO extends DAO {
 	 * Update deposit
 	 * @param $deposit Deposit
 	 */
-	function updateObject($deposit) {
+	public function updateObject($deposit) {
 		$this->update(
 			sprintf('
 				UPDATE pln_deposits SET
@@ -117,10 +111,10 @@ class DepositDAO extends DAO {
 	 * Delete deposit
 	 * @param $deposit Deposit
 	 */
-	function deleteObject($deposit) {
-		$deposit_object_dao = DAORegistry::getDAO('DepositObjectDAO');
-		foreach($deposit->getDepositObjects() as $deposit_object) {
-			$deposit_object_dao->deleteObject($deposit_object);
+	public function deleteObject($deposit) {
+		$depositObjectDao = DAORegistry::getDAO('DepositObjectDAO');
+		foreach($deposit->getDepositObjects() as $depositObject) {
+			$depositObjectDao->deleteObject($depositObject);
 		}
 
 		$this->update(
@@ -133,7 +127,7 @@ class DepositDAO extends DAO {
 	 * Get the ID of the last inserted deposit.
 	 * @return int
 	 */
-	function getInsertId() {
+	public function getInsertId() {
 		return $this->_getInsertId('pln_deposits', 'deposit_id');
 	}
 
@@ -142,7 +136,7 @@ class DepositDAO extends DAO {
 	 * @param $row array
 	 * @return Deposit
 	 */
-	function _fromRow($row) {
+	public function _fromRow($row) {
 		$deposit = $this->newDataObject();
 		$deposit->setId($row['deposit_id']);
 		$deposit->setJournalId($row['journal_id']);
@@ -164,7 +158,7 @@ class DepositDAO extends DAO {
 	 * @param $depositUuid string
 	 * @return Deposit
 	 */
-	function getByUUID($journalId, $depositUuid) {
+	public function getByUUID($journalId, $depositUuid) {
 		$result = $this->retrieve(
 			'SELECT *
 			FROM pln_deposits
@@ -188,7 +182,7 @@ class DepositDAO extends DAO {
 	 * @param $journalId int
 	 * @return array Deposit
 	 */
-	function getByJournalId($journalId, $dbResultRange = null) {
+	public function getByJournalId($journalId, $dbResultRange = null) {
 		$result = $this->retrieveRange(
 			'SELECT *
 			FROM pln_deposits
@@ -208,7 +202,7 @@ class DepositDAO extends DAO {
 	 * @param $journalId int
 	 * @return array Deposit
 	 */
-	function getNew($journalId) {
+	public function getNew($journalId) {
 		$result = $this->retrieve(
 			'SELECT * FROM pln_deposits WHERE journal_id = ? AND status = ?',
 			array(
@@ -225,7 +219,7 @@ class DepositDAO extends DAO {
 	 * @param $journalId int
 	 * @return array Deposit
 	 */
-	function getNeedTransferring($journalId) {
+	public function getNeedTransferring($journalId) {
 		$result = $this->retrieve(
 			'SELECT *
 			FROM pln_deposits AS d
@@ -249,7 +243,7 @@ class DepositDAO extends DAO {
 	 * @param $journalId int
 	 * @return array Deposit
 	 */
-	function getNeedPackaging($journalId) {
+	public function getNeedPackaging($journalId) {
 		$result = $this->retrieve(
 			'SELECT *
 			FROM pln_deposits AS d
@@ -271,7 +265,7 @@ class DepositDAO extends DAO {
 	 * @param $journalId int
 	 * @return array Deposit
 	 */
-	function getNeedStagingStatusUpdate($journalId) {
+	public function getNeedStagingStatusUpdate($journalId) {
 		$result = $this->retrieve(
 			'SELECT *
 			FROM pln_deposits AS d
@@ -292,7 +286,7 @@ class DepositDAO extends DAO {
 	 * Delete deposits by journal id
 	 * @param $journalId
 	 */
-	function deleteByJournalId($journalId) {
+	public function deleteByJournalId($journalId) {
 		$deposits = $this->getByJournalId($journalId);
 		foreach($deposits as $deposit) {
 			$this->deleteDeposit($deposit);

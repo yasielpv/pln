@@ -3,8 +3,8 @@
 /**
  * @file plugins/generic/pln/controllers/grid/PLNStatusGridCellProvider.inc.php
  *
- * Copyright (c) 2014-2017 Simon Fraser University Library
- * Copyright (c) 2000-2017 John Willinsky
+ * Copyright (c) 2014-2019 Simon Fraser University
+ * Copyright (c) 2000-2019 John Willinsky
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  *
  * @class PLNStatusGridCellProvider
@@ -18,20 +18,13 @@ import('lib.pkp.classes.linkAction.request.RedirectAction');
 
 class PLNStatusGridCellProvider extends GridCellProvider {
 	/**
-	 * Constructor
-	 */
-	function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Extracts variables for a given column from a data element
 	 * so that they may be assigned to template before rendering.
 	 * @param $row GridRow
 	 * @param $column GridColumn
 	 * @return array
 	 */
-	function getTemplateVarsFromRowColumn($row, $column) {
+	public function getTemplateVarsFromRowColumn($row, $column) {
 		$deposit = $row->getData();
 
 		switch ($column->getId()) {
