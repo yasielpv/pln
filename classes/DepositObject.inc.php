@@ -3,8 +3,8 @@
 /**
  * @file plugins/generic/pln/classes/DepositObject.inc.php
  *
- * Copyright (c) 2013-2017 Simon Fraser University Library
- * Copyright (c) 2003-2017 John Willinsky
+ * Copyright (c) 2013-2019 Simon Fraser University
+ * Copyright (c) 2003-2019 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * @class DepositObject
@@ -14,20 +14,11 @@
  */
 
 class DepositObject extends DataObject {
-
-	/**
-	 * Constructor
-	 * @return DepositObject
-	 */
-	function __construct() {
-		parent::__construct();
-	}
-
 	/**
 	 * Get the content object that's referenced by this deposit object
 	 * @return Object (Issue,Article)
 	 */
-	function getContent() {
+	public function getContent() {
 		switch ($this->getObjectType()) {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
 				$issueDao = DAORegistry::getDAO('IssueDAO');
@@ -35,6 +26,7 @@ class DepositObject extends DataObject {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
 				$articleDao = DAORegistry::getDAO('ArticleDAO');
 				return $articleDao->getArticle($this->getObjectId(),$this->getJournalId());
+			default: assert(false);
 		}
 	}
 
@@ -42,16 +34,14 @@ class DepositObject extends DataObject {
 	 * Set the content object that's referenced by this deposit object
 	 * @param $content Object (Issue,Article)
 	 */
-	function setContent(&$content) {
+	public function setContent($content) {
 		switch (get_class($content)) {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
-				$objectType = get_class($content);
-				$objectId = $content->getId();
-				$this->setData('object_id', $objectId);
-				$this->setData('object_type', $objectType);
+				$this->setObjectId($content->getId());
+				$this->setObjectType(get_class($content));
 				break;
-			default:
+			default: assert(false);
 		}
 
 	}
@@ -60,96 +50,95 @@ class DepositObject extends DataObject {
 	 * Get type of the object being referenced by this deposit object
 	 * @return string
 	 */
-	function getObjectType() {
-		return $this->getData('object_type');
+	public function getObjectType() {
+        return $this->getData('objectType');
 	}
 
 	/**
 	 * Set type of the object being referenced by this deposit object
 	 * @param string
 	 */
-	function setObjectType($objectType) {
-		$this->setData('object_type', $objectType);
+	public function setObjectType($objectType) {
+        $this->setData('objectType', $objectType);
 	}
 
 	/**
 	 * Get the id of the object being referenced by this deposit object
-	 * @return string
+	 * @return int
 	 */
-	function getObjectId() {
-		return $this->getData('object_id');
+	public function getObjectId() {
+        return $this->getData('objectId');
 	}
 
 	/**
 	 * Set the id of the object being referenced by this deposit object
-	 * @param string
+	 * @param int
 	 */
-	function setObjectId($objectId) {
-		$this->setData('object_id', $objectId);
+	public function setObjectId($objectId) {
+        $this->setData('objectId', $objectId);
 	}
 
 	/**
 	 * Get the journal id of this deposit object
-	 * @return string
+	 * @return int
 	 */
-	function getJournalId() {
-		return $this->getData('journal_id');
+	public function getJournalId() {
+        return $this->getData('journalId');
 	}
 
 	/**
 	 * Set the journal id of this deposit object
-	 * @param string
+	 * @param int
 	 */
-	function setJournalId($journalId) {
-		$this->setData('journal_id', $journalId);
+	public function setJournalId($journalId) {
+        $this->setData('journalId', $journalId);
 	}
 
 	/**
 	 * Get the id of the deposit which includes this deposit object
-	 * @return string
+	 * @return int
 	 */
-	function getDepositId() {
-		return $this->getData('deposit_id');
+	public function getDepositId() {
+        return $this->getData('depositId');
 	}
 
 	/**
 	 * Set the id of the deposit which includes this deposit object
-	 * @param string
+	 * @param int
 	 */
-	function setDepositId($depositId) {
-		$this->setData('deposit_id', $depositId);
+	public function setDepositId($depositId) {
+        $this->setData('depositId', $depositId);
 	}
 
 	/**
 	 * Get the date of deposit object creation
 	 * @return DateTime
 	 */
-	function getDateCreated() {
-		return $this->getData('date_created');
+	public function getDateCreated() {
+        return $this->getData('dateCreated');
 	}
 
 	/**
 	 * Set the date of deposit object creation
-	 * @param $dateCreated boolean
+	 * @param $dateCreated DateTime
 	 */
-	function setDateCreated($dateCreated) {
-		$this->setData('date_created', $dateCreated);
+	public function setDateCreated($dateCreated) {
+        $this->setData('dateCreated', $dateCreated);
 	}
 
 	/**
 	 * Get the modification date of the deposit object
 	 * @return DateTime
 	 */
-	function getDateModified() {
-		return $this->getData('date_modified');
+	public function getDateModified() {
+        return $this->getData('dateModified');
 	}
 
 	/**
 	 * Set the modification date of the deposit object
-	 * @param $dateModified boolean
+	 * @param $dateModified DateTime
 	 */
-	function setDateModified($dateModified) {
-		$this->setData('date_modified', $dateModified);
+	public function setDateModified($dateModified) {
+        $this->setData('dateModified', $dateModified);
 	}
-
 }

@@ -3,8 +3,8 @@
 /**
  * @file plugins/generic/pln/classes/DepositObjectDAO.inc.php
  *
- * Copyright (c) 2013-2017 Simon Fraser University Library
- * Copyright (c) 2003-2017 John Willinsky
+ * Copyright (c) 2013-2019 Simon Fraser University
+ * Copyright (c) 2003-2019 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * @class DepositObjectDAO
@@ -16,21 +16,13 @@
 import('lib.pkp.classes.db.DAO');
 
 class DepositObjectDAO extends DAO {
-
-	/**
-	 * Constructor
-	 */
-	function __construct() {
-		parent::__construct();
-	}
-
 	/**
 	 * Retrieve a deposit object by deposit object id.
 	 * @param $journalId int
 	 * @param $depositObjectId int
 	 * @return DepositObject
 	 */
-	function getById($journalId, $depositObjectId) {
+	public function getById($journalId, $depositObjectId) {
 		$result = $this->retrieve(
 			'SELECT * FROM pln_deposit_objects WHERE journal_id = ? and deposit_object_id = ?',
 			array(
@@ -55,7 +47,7 @@ class DepositObjectDAO extends DAO {
 	 * @param $depositId int
 	 * @return array DepositObject ordered by sequence
 	 */
-	function getByDepositId($journalId, $depositId) {
+	public function getByDepositId($journalId, $depositId) {
 		$result = $this->retrieve(
 			'SELECT * FROM pln_deposit_objects WHERE journal_id = ? AND deposit_id = ?',
 			array (
@@ -72,7 +64,7 @@ class DepositObjectDAO extends DAO {
 	 * @param $journalId int
 	 * @return array DepositObject ordered by sequence
 	 */
-	function getNew($journalId) {
+	public function getNew($journalId) {
 		$result = $this->retrieve(
 			'SELECT * FROM pln_deposit_objects WHERE journal_id = ? AND deposit_id = 0',
 			(int) $journalId
@@ -86,7 +78,7 @@ class DepositObjectDAO extends DAO {
 	 * @param $journalId int
 	 * @param $objectType string
 	 */
-	function markHavingUpdatedContent($journalId, $objectType) {
+	public function markHavingUpdatedContent($journalId, $objectType) {
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 
 		switch ($objectType) {
@@ -149,6 +141,7 @@ class DepositObjectDAO extends DAO {
 				}
 				$result->Close();
 				break;
+			default: assert(false);
 		}
 	}
 
@@ -159,7 +152,7 @@ class DepositObjectDAO extends DAO {
 	 * @param $objectType string
 	 * @return array DepositObject ordered by sequence
 	 */
-	function createNew($journalId, $objectType) {
+	public function createNew($journalId, $objectType) {
 		$objects = array();
 
 		switch ($objectType) {
@@ -197,6 +190,7 @@ class DepositObjectDAO extends DAO {
 				}
 				$result->Close();
 				break;
+			default: assert(false);
 		}
 
 		$depositObjects = array();
@@ -216,7 +210,7 @@ class DepositObjectDAO extends DAO {
 	 * @param $depositObject DepositObject
 	 * @return int inserted DepositObject id
 	 */
-	function insertObject($depositObject) {
+	public function insertObject($depositObject) {
 		$this->update(
 			sprintf('
 				INSERT INTO pln_deposit_objects
@@ -246,7 +240,7 @@ class DepositObjectDAO extends DAO {
 	 * Update deposit object
 	 * @param $depositObject DepositObject
 	 */
-	function updateObject($depositObject) {
+	public function updateObject($depositObject) {
 		$this->update(
 			sprintf('
 				UPDATE pln_deposit_objects SET
@@ -273,7 +267,7 @@ class DepositObjectDAO extends DAO {
 	 * Delete deposit object
 	 * @param $depositObject Deposit
 	 */
-	function deleteObject($depositObject) {
+	public function deleteObject($depositObject) {
 		$this->update(
 			'DELETE from pln_deposit_objects WHERE deposit_object_id = ?',
 			(int) $depositObject->getId()
@@ -284,7 +278,7 @@ class DepositObjectDAO extends DAO {
 	 * Get the ID of the last inserted deposit object.
 	 * @return int
 	 */
-	function getInsertId() {
+	public function getInsertId() {
 		return $this->_getInsertId('pln_deposit_objects', 'object_id');
 	}
 
@@ -292,7 +286,7 @@ class DepositObjectDAO extends DAO {
 	 * Construct a new data object corresponding to this DAO.
 	 * @return DepositObject
 	 */
-	function newDataObject() {
+	public function newDataObject() {
 		return new DepositObject();
 	}
 
@@ -301,7 +295,7 @@ class DepositObjectDAO extends DAO {
 	 * @param $row array
 	 * @return DepositObject
 	 */
-	function _fromRow($row) {
+	public function _fromRow($row) {
 		$depositObject = $this->newDataObject();
 		$depositObject->setId($row['deposit_object_id']);
 		$depositObject->setJournalId($row['journal_id']);

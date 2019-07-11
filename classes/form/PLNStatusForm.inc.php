@@ -3,8 +3,8 @@
 /**
  * @file plugins/generic/pln/classes/form/PLNStatusForm.inc.php
  *
- * Copyright (c) 2013-2017 Simon Fraser University Library
- * Copyright (c) 2003-2017 John Willinsky
+ * Copyright (c) 2013-2019 Simon Fraser University
+ * Copyright (c) 2003-2019 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * @class PLNStatusForm
@@ -17,34 +17,30 @@ import('lib.pkp.classes.form.Form');
 
 class PLNStatusForm extends Form {
 
-	/**
-	 * @var $_contextId int
-	 */
+	/** @var int */
 	var $_contextId;
 
-	/**
-	 * @var $plugin Object
-	 */
+	/** @var Plugin */
 	var $_plugin;
 
 	/**
 	 * Constructor
-	 * @param $plugin object
+	 * @param $plugin Plugin
 	 * @param $contextId int
 	 */
-	function __construct($plugin, $contextId) {
+	public function __construct($plugin, $contextId) {
 		$this->_contextId = $contextId;
 		$this->_plugin = $plugin;
 
-		parent::__construct($plugin->getTemplatePath() . 'status.tpl');
+		parent::__construct($plugin->getTemplateResource('status.tpl'));
 	}
 
 	/**
-	 * Fetch the form.
 	 * @copydoc Form::fetch()
 	 */
-	function fetch($request) {
-		$context = Request::getContext();
+	public function fetch($request, $template = null, $display = false) {
+		$context = $request->getContext();
+
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$networkStatus = $this->_plugin->getSetting($context->getId(), 'pln_accepting');
 		$networkStatusMessage = $this->_plugin->getSetting($context->getId(), 'pln_accepting_message');
@@ -57,13 +53,14 @@ class PLNStatusForm extends Form {
 				$networkStatusMessage = __('plugins.generic.pln.notifications.pln_not_accepting');
 			}
 		}
-		$templateMgr = TemplateManager::getManager();
-		$templateMgr->assign('deposits', $depositDao->getByJournalId($context->getId(),$rangeInfo));
-		$templateMgr->assign('networkStatus', $networkStatus);
-		$templateMgr->assign('networkStatusMessage', $networkStatusMessage);
-		$templateMgr->assign('plnStatusDocs', $this->_plugin->getSetting($context->getId(), 'pln_status_docs'));
+		$templateMgr = TemplateManager::getManager($request);
+        $templateMgr->assign(array(
+            'deposits' => $depositDao->getByJournalId($context->getId(), $rangeInfo),
+            'networkStatus' => $networkStatus,
+            'networkStatusMessage' => $networkStatusMessage,
+            'plnStatusDocs' => $this->_plugin->getSetting($context->getId(), 'pln_status_docs'),
+        ));
 
-		return parent::fetch($request);
+		return parent::fetch($request, $template, $display);
 	}
-
 }

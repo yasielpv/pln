@@ -3,8 +3,8 @@
 /**
  * @file plugins/generic/pln/classes/tasks/Depositor.inc.php
  *
- * Copyright (c) 2013-2017 Simon Fraser University Library
- * Copyright (c) 2003-2017 John Willinsky
+ * Copyright (c) 2013-2019 Simon Fraser University
+ * Copyright (c) 2003-2019 John Willinsky
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  *
  * @class PLNPluginDepositor
@@ -18,16 +18,14 @@ import('lib.pkp.classes.scheduledTask.ScheduledTask');
 
 class Depositor extends ScheduledTask {
 
-	/*
-	 * @var $_plugin Object
-	 */
+	/** @var Plugin */
 	var $_plugin;
 
 	/**
 	 * Constructor.
-	 * @param $argv array task arguments
+	 * @param $args array task arguments
 	 */
-	function __construct($args) {
+	public function __construct($args) {
 		PluginRegistry::loadCategory('generic');
 		$this->_plugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 		parent::__construct($args);
@@ -36,14 +34,14 @@ class Depositor extends ScheduledTask {
 	/**
 	 * @copydoc ScheduledTask::getName()
 	 */
-	function getName() {
+	public function getName() {
 		return __('plugins.generic.pln.depositorTask.name');
 	}
 
 	/**
 	 * @copydoc ScheduledTask::executeActions()
 	 */
-	function executeActions() {
+	public function executeActions() {
 		if (!$this->_plugin) return false;
 
 		$this->addExecutionLogEntry('PLN Depositor executeActions started', SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
@@ -81,7 +79,7 @@ class Depositor extends ScheduledTask {
 				continue;
 			}
 
-			if(!$this->_plugin->tarInstalled()) {
+			if (!$this->_plugin->tarInstalled()) {
 				$this->addExecutionLogEntry(__('plugins.generic.pln.notifications.tar_missing'), SCHEDULED_TASK_MESSAGE_TYPE_WARNING);
 				$this->_plugin->createJournalManagerNotification($journal->getId(),PLN_PLUGIN_NOTIFICATION_TYPE_TAR_MISSING);
 				continue;
@@ -140,19 +138,16 @@ class Depositor extends ScheduledTask {
 			// transfer the deposit atom documents
 			$this->addExecutionLogEntry(__("plugins.generic.pln.depositor.transferringdeposits"), SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
 			$this->_processNeedTransferring($journal);
-
-			unset($journal);
 		}
 
 		return true;
 	}
 
 	/**
-	 * @param $journal Journal Object
-	 *
 	 * Go through existing deposits and fetch their status from the PLN
+	 * @param $journal Journal
 	 */
-	function _processStatusUpdates(&$journal) {
+	protected function _processStatusUpdates($journal) {
 		// get deposits that need status updates
 		$depositDao = DAORegistry::getDAO('DepositDAO'); /** @var $depositDao DepositDAO */
 		$depositQueue = $depositDao->getNeedStagingStatusUpdate($journal->getId());
@@ -160,27 +155,24 @@ class Depositor extends ScheduledTask {
 		while ($deposit = $depositQueue->next()) {
 			$depositPackage = new DepositPackage($deposit, $this);
 			$depositPackage->updateDepositStatus();
-			unset($deposit);
 		}
 	}
 
 	/**
-	 * @param $journal Journal Object
-	 *
 	 * Go thourgh the deposits and mark them as updated if they have been
+	 * @param $journal Journal
 	 */
-	function _processHavingUpdatedContent(&$journal) {
+	protected function _processHavingUpdatedContent($journal) {
 		// get deposits that have updated content
 		$depositObjectDao = DAORegistry::getDAO('DepositObjectDAO'); /** @var $depositObjectDao DepositObjectDAO */
 		$depositObjectDao->markHavingUpdatedContent($journal->getId(), $this->_plugin->getSetting($journal->getId(), 'object_type'));
 	}
 
 	/**
-	 * @param $journal Journal Object
-	 *
 	 * If a deposit hasn't been transferred, transfer it
+	 * @param $journal Journal
 	 */
-	function _processNeedTransferring(&$journal) {
+	protected function _processNeedTransferring($journal) {
 		// fetch the deposits we need to send to the pln
 		$depositDao = DAORegistry::getDAO('DepositDAO'); /** @var $depositDao DepositDAO */
 		$depositQueue = $depositDao->getNeedTransferring($journal->getId());
@@ -193,19 +185,18 @@ class Depositor extends ScheduledTask {
 	}
 
 	/**
-	 * @param $journal Journal Object
-	 *
 	 * Create packages for any deposits that don't have any or have been updated
+	 * @param $journal Journal
 	 */
-	function _processNeedPackaging($journal) {
+	protected function _processNeedPackaging($journal) {
 		$depositDao = DAORegistry::getDAO('DepositDAO'); /** @var $depositDao DepositDAO */
 		$depositQueue = $depositDao->getNeedPackaging($journal->getId());
 		$fileManager = new ContextFileManager($journal->getId());
-		$plnDir = $fileManager->filesDir . PLN_PLUGIN_ARCHIVE_FOLDER;
+		$plnDir = $fileManager->getBasePath() . PLN_PLUGIN_ARCHIVE_FOLDER;
 
 		// make sure the pln work directory exists
 		// TOOD: use FileManager calls instead of PHP ones where possible
-		if ($fileManager->fileExists($plnDir,'dir') !== true) {
+		if ($fileManager->fileExists($plnDir, 'dir') !== true) {
 			$fileManager->mkdirtree($plnDir);
 		}
 
@@ -213,16 +204,14 @@ class Depositor extends ScheduledTask {
 		while ($deposit = $depositQueue->next()) {
 			$depositPackage = new DepositPackage($deposit, $this);
 			$depositPackage->packageDeposit();
-			unset($deposit);
 		}
 	}
 
 	/**
-	 * @param $journal Journal Object
-	 *
 	 * Create new deposits for deposit objects
+	 * @param $journal Journal
 	 */
-	function _processNewDepositObjects(&$journal) {
+	protected function _processNewDepositObjects($journal) {
 		// get the object type we'll be dealing with
 		$objectType = $this->_plugin->getSetting($journal->getId(), 'object_type');
 
@@ -256,10 +245,8 @@ class Depositor extends ScheduledTask {
 						}
 					}
 				}
-
 				break;
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
-
 				// create a new deposit for reach deposit object
 				while ($newObject = $newObjects->next()) {
 					$newDeposit = new Deposit($this->_plugin->newUUID());
@@ -269,9 +256,8 @@ class Depositor extends ScheduledTask {
 					$depositObjectDao->updateObject($newObject);
 					unset($newObject);
 				}
-
 				break;
-			default:
+			default: assert(false);
 		}
 	}
 }

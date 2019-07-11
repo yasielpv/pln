@@ -3,14 +3,14 @@
 /**
  * @file plugins/generic/pln/PLNGatewayPlugin.inc.php
  *
- * Copyright (c) 2013-2017 Simon Fraser University Library
- * Copyright (c) 2003-2017 John Willinsky
+ * Copyright (c) 2013-2019 Simon Fraser University
+ * Copyright (c) 2003-2019 John Willinsky
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  *
  * @class PLNGatewayPlugin
  * @ingroup plugins_generic_pln
  *
- * @brief Gateway component of web feed plugin
+ * @brief Gateway component of web PLN plugin
  *
  */
 
@@ -30,39 +30,39 @@ class PLNGatewayPlugin extends GatewayPlugin {
 
 	/**
 	 * Constructor.
-	 *
 	 * @param $parentPluginName string
 	 */
-	function __construct($parentPluginName) {
+	public function __construct($parentPluginName) {
 		parent::__construct();
 		$this->parentPluginName = $parentPluginName;
 	}
 
 	/**
 	 * Hide this plugin from the management interface (it's subsidiary)
+	 * @return boolean
 	 */
-	function getHideManagement() {
+	public function getHideManagement() {
 		return true;
 	}
 
 	/**
-		 * @copydoc Plugin::getName
-		 */
-	function getName() {
+  	 * @copydoc Plugin::getName
+     */
+    public function getName() {
 		return 'PLNGatewayPlugin';
 	}
 
-		/**
-		 * @copydoc Plugin::getDisplayName
-		 */
-	function getDisplayName() {
+	/**
+     * @copydoc Plugin::getDisplayName
+     */
+    public function getDisplayName() {
 		return __('plugins.generic.plngateway.displayName');
 	}
 
-		/**
-		 * @copydoc Plugin::getDescription
-		 */
-	function getDescription() {
+	/**
+     * @copydoc Plugin::getDescription
+     */
+    public function getDescription() {
 		return __('plugins.generic.plngateway.description');
 	}
 
@@ -70,15 +70,15 @@ class PLNGatewayPlugin extends GatewayPlugin {
 	 * Get the PLN plugin
 	 * @return object
 	 */
-	function getPLNPlugin() {
-		$plugin = PluginRegistry::getPlugin('generic', $this->parentPluginName);
-		return $plugin;
+	public function getPLNPlugin() {
+        return PluginRegistry::getPlugin('generic', $this->parentPluginName);
 	}
 
 	/**
 	 * Override the builtin to get the correct plugin path.
+	 * @return string
 	 */
-	function getPluginPath() {
+	public function getPluginPath() {
 		$plugin = $this->getPLNPlugin();
 		return $plugin->getPluginPath();
 	}
@@ -87,7 +87,7 @@ class PLNGatewayPlugin extends GatewayPlugin {
 	 * Override the builtin to get the correct template path.
 	 * @return string
 	 */
-	function getTemplatePath() {
+	public function getTemplatePath() {
 		$plugin = $this->getPLNPlugin();
 		return $plugin->getTemplatePath();
 	}
@@ -97,29 +97,18 @@ class PLNGatewayPlugin extends GatewayPlugin {
 	 * parent plugin will take care of loading this one when needed)
 	 * @return boolean
 	 */
-	function getEnabled() {
+	public function getEnabled() {
 		$plugin = $this->getPLNPlugin();
 		return $plugin->getEnabled(); // Should always be true anyway if this is loaded
 	}
 
 	/**
-	 * Get the management verbs for this plugin (override to none so that the parent
-	 * plugin can handle this)
-	 * @return array
+	 * @copydoc GatewayPlugin::fetch
 	 */
-	function getManagementVerbs() {
-		return array();
-	}
-
-	/**
-	 * Handle fetch requests for this plugin.
-	 */
-	function fetch($args, $request) {
+	public function fetch($args, $request) {
 		$plugin = $this->getPLNPlugin();
-		$templateMgr = TemplateManager::getManager();
-
-		$journal = Request::getJournal();
-		$templateMgr->assign('journal', $journal);
+		$templateMgr = TemplateManager::getManager($request);
+        $journal = $request->getJournal();
 
 		$pluginVersionFile = $this->getPluginPath() . DIRECTORY_SEPARATOR . 'version.xml';
 		$pluginVersion = VersionCheck::parseVersionXml($pluginVersionFile);
@@ -175,9 +164,8 @@ class PLNGatewayPlugin extends GatewayPlugin {
 		$templateMgr->assign('pln_network', $plugin->getSetting($journal->getId(), 'pln_network'));
 
 		header('Content-Type: text/xml; charset=' . Config::getVar('i18n', 'client_charset'));
-		echo $templateMgr->fetch($plugin->getTemplatePath() . 'ping.tpl');
+		$templateMgr->display($plugin->getTemplateResource('ping.tpl'));
 
 		return true;
 	}
-
 }

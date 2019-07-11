@@ -3,8 +3,8 @@
 /**
  * @file plugins/generic/pln/classes/Deposit.inc.php
  *
- * Copyright (c) 2013-2017 Simon Fraser University Library
- * Copyright (c) 2003-2017 John Willinsky
+ * Copyright (c) 2013-2019 Simon Fraser University
+ * Copyright (c) 2003-2019 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * @class Deposit
@@ -17,10 +17,10 @@ class Deposit extends DataObject {
 
 	/**
 	 * Constructor
-	 * @param string
+	 * @param $uuid string|null
 	 * @return Deposit
 	 */
-	function __construct($uuid) {
+	public function __construct($uuid) {
 		parent::__construct();
 
 		//Set up new deposits with a UUID
@@ -31,7 +31,7 @@ class Deposit extends DataObject {
 	 * Get the type of deposit objects in this deposit.
 	 * @return string One of PLN_PLUGIN_DEPOSIT_SUPPORTED_OBJECTS
 	 */
-	function getObjectType() {
+	public function getObjectType() {
 		$depositObjects = $this->getDepositObjects();
 		$depositObject = $depositObjects->next();
 		return ($depositObject?$depositObject->getObjectType():null);
@@ -41,7 +41,7 @@ class Deposit extends DataObject {
 	 * Get all deposit objects of this deposit.
 	 * @return array of DepositObject
 	 */
-	function getDepositObjects() {
+	public function getDepositObjects() {
 		$depositObjectDao = DAORegistry::getDAO('DepositObjectDAO');
 		return $depositObjectDao->getByDepositId($this->getJournalID(), $this->getId());
 	}
@@ -50,7 +50,7 @@ class Deposit extends DataObject {
 	 * Get deposit uuid
 	 * @return string
 	 */
-	function getUUID() {
+	public function getUUID() {
 		return $this->getData('uuid');
 	}
 
@@ -58,7 +58,7 @@ class Deposit extends DataObject {
 	 * Set deposit uuid
 	 * @param $uuid string
 	 */
-	function setUUID($uuid) {
+	public function setUUID($uuid) {
 		$this->setData('uuid', $uuid);
 	}
 
@@ -66,15 +66,15 @@ class Deposit extends DataObject {
 	 * Get journal id
 	 * @return int
 	 */
-	function getJournalId() {
+	public function getJournalId() {
 		return $this->getData('journal_id');
 	}
 
 	/**
 	 * Set journal id
-	 * @param #journalId int
+	 * @param $journalId int
 	 */
-	function setJournalId($journalId) {
+	public function setJournalId($journalId) {
 		$this->setData('journal_id', $journalId);
 	}
 
@@ -83,7 +83,7 @@ class Deposit extends DataObject {
 	 * functions are more immediately useful.
 	 * @return int
 	 */
-	function getStatus() {
+	public function getStatus() {
 		return $this->getData('status');
 	}
 
@@ -92,16 +92,15 @@ class Deposit extends DataObject {
 	 * functions are more immediately useful.
 	 * @param $status int
 	 */
-	function setStatus($status) {
+	public function setStatus($status) {
 		$this->setData('status', $status);
 	}
 
 	/**
 	 * Return a string representation of the local status.
-	 *
 	 * @return string
 	 */
-	function getLocalStatus() {
+	public function getLocalStatus() {
 		if ($this->getPackagingFailedStatus()) {
 			return __('plugins.generic.pln.status.packagingFailed');
 		}
@@ -119,17 +118,16 @@ class Deposit extends DataObject {
 
 	/**
 	 * Return a string representation of the processing status.
-	 *
 	 * @return string
 	 */
-	function getProcessingStatus() {
-		if($this->getSentStatus()) {
+	public function getProcessingStatus() {
+        if ($this->getSentStatus()) {
 			return __('plugins.generic.pln.status.sent');
 		}
-		if($this->getValidatedStatus()) {
+		if ($this->getValidatedStatus()) {
 			return __('plugins.generic.pln.status.validated');
 		}
-		if($this->getReceivedStatus()) {
+		if ($this->getReceivedStatus()) {
 			return __('plugins.generic.pln.status.received');
 		}
 		return __('plugins.generic.pln.status.unknown');
@@ -137,17 +135,16 @@ class Deposit extends DataObject {
 
 	/**
 	 * Return a string representation of the LOCKSS status.
-	 *
 	 * @return string
 	 */
-	function getLockssStatus() {
-		if($this->getLockssAgreementStatus()) {
+	public function getLockssStatus() {
+		if ($this->getLockssAgreementStatus()) {
 			return __('plugins.generic.pln.status.agreement');
 		}
-		if($this->getLockssSyncingStatus()) {
+		if ($this->getLockssSyncingStatus()) {
 			return __('plugins.generic.pln.status.syncing');
 		}
-		if($this->getLockssReceivedStatus()) {
+		if ($this->getLockssReceivedStatus()) {
 			return __('plugins.generic.pln.status.received');
 		}
 		return __('plugins.generic.pln.status.unknown');
@@ -159,25 +156,22 @@ class Deposit extends DataObject {
 	 *
 	 * @return string
 	 */
-	function getComplete() {
-		if($this->getLockssAgreementStatus()) {
-			return __('common.yes');
-		}
-		return __('common.no');
+	public function getComplete() {
+		return __($this->getLockssAgreementStatus()?'common.yes':'common.no');
 	}
 
 	/**
 	 * Get new (blank) deposit status
 	 * @return int
 	 */
-	function getNewStatus() {
+	public function getNewStatus() {
 		return $this->getStatus() == PLN_PLUGIN_DEPOSIT_STATUS_NEW;
 	}
 
 	/**
 	 * Set new (blank) deposit status
 	 */
-	function setNewStatus() {
+	public function setNewStatus() {
 		$this->setStatus(PLN_PLUGIN_DEPOSIT_STATUS_NEW);
 	}
 
@@ -187,17 +181,16 @@ class Deposit extends DataObject {
 	 * @param $field int one of the PLN_PLUGIN_DEPOSIT_STATUS_* constants.
 	 * @return int
 	 */
-	function _getStatusField($field) {
+	protected function _getStatusField($field) {
 		return $this->getStatus() & $field;
 	}
 
 	/**
 	 * Set a status value.
-	 *
 	 * @param boolean $value
 	 * @param int $field one of the PLN_PLUGIN_DEPOSIT_STATUS_* constants.
 	 */
-	function _setStatusField($value, $field) {
+	protected function _setStatusField($value, $field) {
 		if($value) {
 			$this->setStatus($this->getStatus() | $field);
 		} else {
@@ -209,7 +202,7 @@ class Deposit extends DataObject {
 	 * Get whether the deposit has been packaged for the PLN
 	 * @return int
 	 */
-	function getPackagedStatus() {
+	public function getPackagedStatus() {
 		return $this->_getStatusField(PLN_PLUGIN_DEPOSIT_STATUS_PACKAGED);
 	}
 
@@ -217,7 +210,7 @@ class Deposit extends DataObject {
 	 * Set whether the deposit has been packaged for the PLN
 	 * @param $status boolean
 	 */
-	function setPackagedStatus($status = true) {
+	public function setPackagedStatus($status = true) {
 		$this->_setStatusField($status, PLN_PLUGIN_DEPOSIT_STATUS_PACKAGED);
 	}
 
@@ -225,7 +218,7 @@ class Deposit extends DataObject {
 	 * Get whether the PLN has been notified of the available deposit
 	 * @return int
 	 */
-	function getTransferredStatus() {
+	public function getTransferredStatus() {
 		return $this->_getStatusField(PLN_PLUGIN_DEPOSIT_STATUS_TRANSFERRED);
 	}
 
@@ -233,7 +226,7 @@ class Deposit extends DataObject {
 	 * Set whether the PLN has been notified of the available deposit
 	 * @param $status boolean
 	 */
-	function setTransferredStatus($status = true) {
+	public function setTransferredStatus($status = true) {
 		$this->_setStatusField($status, PLN_PLUGIN_DEPOSIT_STATUS_TRANSFERRED);
 	}
 
@@ -241,7 +234,7 @@ class Deposit extends DataObject {
 	 * Get whether the PLN has been notified of the available deposit
 	 * @return int
 	 */
-	function getPackagingFailedStatus() {
+	public function getPackagingFailedStatus() {
 		return $this->_getStatusField(PLN_PLUGIN_DEPOSIT_STATUS_PACKAGING_FAILED);
 	}
 
@@ -249,7 +242,7 @@ class Deposit extends DataObject {
 	 * Set whether the PLN has been notified of the available deposit
 	 * @param $status boolean
 	 */
-	function setPackagingFailedStatus($status = true) {
+	public function setPackagingFailedStatus($status = true) {
 		$this->_setStatusField($status, PLN_PLUGIN_DEPOSIT_STATUS_PACKAGING_FAILED);
 	}
 
@@ -257,7 +250,7 @@ class Deposit extends DataObject {
 	 * Get whether the PLN has retrieved the deposit from the journal
 	 * @return int
 	 */
-	function getReceivedStatus() {
+	public function getReceivedStatus() {
 		return $this->_getStatusField(PLN_PLUGIN_DEPOSIT_STATUS_RECEIVED);
 	}
 
@@ -265,7 +258,7 @@ class Deposit extends DataObject {
 	 * Set whether the PLN has retrieved the deposit from the journal
 	 * @param $status boolean
 	 */
-	function setReceivedStatus($status = true) {
+	public function setReceivedStatus($status = true) {
 		$this->_setStatusField($status, PLN_PLUGIN_DEPOSIT_STATUS_RECEIVED);
 	}
 
@@ -273,7 +266,7 @@ class Deposit extends DataObject {
 	 * Get whether the PLN is syncing the deposit across its nodes
 	 * @return int
 	 */
-	function getValidatedStatus() {
+	public function getValidatedStatus() {
 		return $this->_getStatusField(PLN_PLUGIN_DEPOSIT_STATUS_VALIDATED);
 	}
 
@@ -281,7 +274,7 @@ class Deposit extends DataObject {
 	 * Set whether the PLN is syncing the deposit across its nodes
 	 * @param $status boolean
 	 */
-	function setValidatedStatus($status = true) {
+	public function setValidatedStatus($status = true) {
 		$this->_setStatusField($status, PLN_PLUGIN_DEPOSIT_STATUS_VALIDATED);
 	}
 
@@ -289,7 +282,7 @@ class Deposit extends DataObject {
 	 * Get whether the deposit has been synced across its nodes
 	 * @return int
 	 */
-	function getSentStatus() {
+	public function getSentStatus() {
 		return $this->_getStatusField(PLN_PLUGIN_DEPOSIT_STATUS_SENT);
 	}
 
@@ -297,7 +290,7 @@ class Deposit extends DataObject {
 	 * Set whether the deposit has been synced across its nodes
 	 * @param $status boolean
 	 */
-	function setSentStatus($status = true) {
+	public function setSentStatus($status = true) {
 		$this->_setStatusField($status, PLN_PLUGIN_DEPOSIT_STATUS_SENT);
 	}
 
@@ -305,7 +298,7 @@ class Deposit extends DataObject {
 	 * Get whether there's been an error from the staging server
 	 * @return int
 	 */
-	function getLockssReceivedStatus() {
+	public function getLockssReceivedStatus() {
 		return $this->_getStatusField(PLN_PLUGIN_DEPOSIT_STATUS_LOCKSS_RECEIVED);
 	}
 
@@ -313,7 +306,7 @@ class Deposit extends DataObject {
 	 * Set whether there's been an error from the staging server
 	 * @param $status boolean
 	 */
-	function setLockssReceivedStatus($status = true) {
+	public function setLockssReceivedStatus($status = true) {
 		$this->_setStatusField($status, PLN_PLUGIN_DEPOSIT_STATUS_LOCKSS_RECEIVED);
 	}
 
@@ -321,7 +314,7 @@ class Deposit extends DataObject {
 	 * Get whether there's been a local error in the deposit process
 	 * @return int
 	 */
-	function getLockssSyncingStatus() {
+	public function getLockssSyncingStatus() {
 		return $this->_getStatusField(PLN_PLUGIN_DEPOSIT_STATUS_LOCKSS_SYNCING);
 	}
 
@@ -329,7 +322,7 @@ class Deposit extends DataObject {
 	 * Set whether there's been a local error in the deposit process
 	 * @param $status boolean
 	 */
-	function setLockssSyncingStatus($status = true) {
+	public function setLockssSyncingStatus($status = true) {
 		$this->_setStatusField($status, PLN_PLUGIN_DEPOSIT_STATUS_LOCKSS_SYNCING);
 	}
 
@@ -337,7 +330,7 @@ class Deposit extends DataObject {
 	 * Get whether there's been an update to a deposit
 	 * @return int
 	 */
-	function getLockssAgreementStatus() {
+	public function getLockssAgreementStatus() {
 		return $this->_getStatusField(PLN_PLUGIN_DEPOSIT_STATUS_LOCKSS_AGREEMENT);
 	}
 
@@ -345,7 +338,7 @@ class Deposit extends DataObject {
 	 * Set whether there's been an update to a deposit
 	 * @param $status boolean
 	 */
-	function setLockssAgreementStatus($status = true) {
+	public function setLockssAgreementStatus($status = true) {
 		$this->_setStatusField($status, PLN_PLUGIN_DEPOSIT_STATUS_LOCKSS_AGREEMENT);
 	}
 
@@ -353,55 +346,63 @@ class Deposit extends DataObject {
 	 * Get the date of the last status change
 	 * @return DateTime
 	 */
-	function getLastStatusDate() {
-		return $this->getData('date_status');
+	public function getLastStatusDate() {
+        return $this->getData('dateStatus');
 	}
 
 	/**
 	 * Set set the date of the last status change
 	 * @param $dateLastStatus DateTime
 	 */
-	function setLastStatusDate($dateLastStatus) {
-		$this->setData('date_status', $dateLastStatus);
+	public function setLastStatusDate($dateLastStatus) {
+        $this->setData('dateStatus', $dateLastStatus);
 	}
 
 	/**
 	 * Get the date of deposit creation
 	 * @return DateTime
 	 */
-	function getDateCreated() {
-		return $this->getData('date_created');
+	public function getDateCreated() {
+        return $this->getData('dateCreated');
 	}
 
 	/**
 	 * Set the date of deposit creation
 	 * @param $dateCreated boolean
 	 */
-	function setDateCreated($dateCreated) {
-		$this->setData('date_created', $dateCreated);
+	public function setDateCreated($dateCreated) {
+        $this->setData('dateCreated', $dateCreated);
 	}
 
 	/**
 	 * Get the modification date of the deposit
 	 * @return DateTime
 	 */
-	function getDateModified() {
-		return $this->getData('date_modified');
+	public function getDateModified() {
+        return $this->getData('dateModified');
 	}
 
 	/**
 	 * Set the modification date of the deposit
 	 * @param $dateModified boolean
 	 */
-	function setDateModified($dateModified) {
-		$this->setData('date_modified', $dateModified);
+	public function setDateModified($dateModified) {
+        $this->setData('dateModified', $dateModified);
 	}
 
-	function setExportDepositError($exportDepositError) {
-		$this->setData('export_deposit_error', $exportDepositError);
+	/**
+     * Set the export deposit error message.
+     * @param $exportDepositError string
+     */
+    public function setExportDepositError($exportDepositError) {
+        $this->setData('exportDepositError', $exportDepositError);
 	}
 
-	function getExportDepositError() {
-		return $this->getData('export_deposit_error');
+	/**
+     * Get the export deposit error message.
+     * @return string|null
+     */
+    public function getExportDepositError() {
+        return $this->getData('exportDepositError');
 	}
 }

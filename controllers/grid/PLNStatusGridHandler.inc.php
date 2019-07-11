@@ -23,20 +23,21 @@ class PLNStatusGridHandler extends GridHandler {
 	/**
 	 * Constructor
 	 */
-	function __construct() {
+	public function __construct() {
 		parent::__construct();
 		$this->addRoleAssignment(
 			array(ROLE_ID_MANAGER),
 			array('fetchGrid', 'fetchRow', 'resetDeposit')
 		);
-		$this->plugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
+
+		self::$plugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 	}
 
 	/**
 	 * Set the translator plugin.
 	 * @param $plugin StaticPagesPlugin
 	 */
-	static function setPlugin($plugin) {
+	public static function setPlugin($plugin) {
 		self::$plugin = $plugin;
 	}
 
@@ -47,7 +48,7 @@ class PLNStatusGridHandler extends GridHandler {
 	/**
 	 * @copydoc Gridhandler::initialize()
 	 */
-	function initialize($request, $args = null) {
+	public function initialize($request, $args = null) {
 		parent::initialize($request);
 
 		// Set the grid title.
@@ -58,68 +59,20 @@ class PLNStatusGridHandler extends GridHandler {
 
 		// Columns
 		$cellProvider = new PLNStatusGridCellProvider();
-		$this->addColumn(new GridColumn(
-			'id',
-			'common.id',
-			null,
-			'controllers/grid/gridCell.tpl', // Default null not supported in OMP 1.1
-			$cellProvider
-		));
-		$this->addColumn(new GridColumn(
-			'type',
-			'common.type',
-			null,
-			'controllers/grid/gridCell.tpl', // Default null not supported in OMP 1.1
-			$cellProvider
-		));
-		$this->addColumn(new GridColumn(
-			'checked',
-			'plugins.generic.pln.status.checked',
-			null,
-			'controllers/grid/gridCell.tpl', // Default null not supported in OMP 1.1
-			$cellProvider
-		));
-		$this->addColumn(new GridColumn(
-			'local_status',
-			'plugins.generic.pln.status.local_status',
-			null,
-			'controllers/grid/gridCell.tpl', // Default null not supported in OMP 1.1
-			$cellProvider
-		));
-		$this->addColumn(new GridColumn(
-			'processing_status',
-			'plugins.generic.pln.status.processing_status',
-			null,
-			'controllers/grid/gridCell.tpl', // Default null not supported in OMP 1.1
-			$cellProvider
-		));
-		$this->addColumn(new GridColumn(
-			'lockss_status',
-			'plugins.generic.pln.status.lockss_status',
-			null,
-			'controllers/grid/gridCell.tpl', // Default null not supported in OMP 1.1
-			$cellProvider
-		));
-		$this->addColumn(new GridColumn(
-			'complete',
-			'plugins.generic.pln.status.complete',
-			null,
-			'controllers/grid/gridCell.tpl', // Default null not supported in OMP 1.1
-			$cellProvider
-		));
-		$this->addColumn(new GridColumn(
-			'exportDepositError',
-			'plugins.generic.pln.deposit.exportDepositError',
-			null,
-			'controllers/grid/gridCell.tpl', // Default null not supported in OMP 1.1
-			$cellProvider
-		));
+		$this->addColumn(new GridColumn('id', 'common.id', null, null, $cellProvider));
+        $this->addColumn(new GridColumn('type', 'common.type', null, null, $cellProvider));
+        $this->addColumn(new GridColumn('checked', 'plugins.generic.pln.status.checked', null, null, $cellProvider));
+        $this->addColumn(new GridColumn('local_status', 'plugins.generic.pln.status.local_status', null, null, $cellProvider));
+        $this->addColumn(new GridColumn('processing_status', 'plugins.generic.pln.status.processing_status', null, null, $cellProvider));
+        $this->addColumn(new GridColumn('lockss_status', 'plugins.generic.pln.status.lockss_status', null, null, $cellProvider));
+        $this->addColumn(new GridColumn('complete', 'plugins.generic.pln.status.complete', null, null, $cellProvider));
+        $this->addColumn(new GridColumn('exportDepositError', 'plugins.generic.pln.deposit.exportDepositError', null, null, $cellProvider));
 	}
 
 	/**
 	 * @copydoc GridHandler::initFeatures()
 	 */
-	function initFeatures($request, $args) {
+	public function initFeatures($request, $args) {
 		import('lib.pkp.classes.controllers.grid.feature.PagingFeature');
 		return array(new PagingFeature());
 	}
@@ -135,7 +88,7 @@ class PLNStatusGridHandler extends GridHandler {
 	/**
 	 * @copydoc GridHandler::authorize()
 	 */
-	function authorize($request, &$args, $roleAssignments) {
+	public function authorize($request, &$args, $roleAssignments) {
 		import('lib.pkp.classes.security.authorization.ContextAccessPolicy');
 		$this->addPolicy(new ContextAccessPolicy($request, $roleAssignments));
 		return parent::authorize($request, $args, $roleAssignments, false);
@@ -161,14 +114,15 @@ class PLNStatusGridHandler extends GridHandler {
 	 *
 	 * @return string Serialized JSON object
 	 */
-	function resetDeposit($args, $request) {
-		$deposit_id = $args['DepositId'];
+	public function resetDeposit($args, $request) {
+        $depositId = $args['depositId'];
 		$depositDao = DAORegistry::getDAO('DepositDAO');
+		$journal = $request->getJournal();
 
-		if (!is_null($deposit_id)) {
-			$deposit = $depositDao->getById($deposit_id);
+		if (!is_null($depositId)) {
+            $deposit = $depositDao->getById($depositId, $journal->getId());
 			$deposit->setStatus(PLN_PLUGIN_DEPOSIT_STATUS_NEW);
-			$deposit->setExportDepositError("");
+			$deposit->setExportDepositError('');
 			$depositDao->updateObject($deposit);
 		}
 

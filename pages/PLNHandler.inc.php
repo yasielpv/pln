@@ -3,8 +3,8 @@
 /**
  * @file plugins/generic/pln/pages/PLNHandler.inc.php
  *
- * Copyright (c) 2013-2017 Simon Fraser University Library
- * Copyright (c) 2003-2017 John Willinsky
+ * Copyright (c) 2013-2019 Simon Fraser University
+ * Copyright (c) 2003-2019 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * @class PLNHandler
@@ -16,28 +16,19 @@
 import('classes.handler.Handler');
 
 class PLNHandler extends Handler {
-
-	/**
-	 * Constructor
-	 * @param $request Request
-	 */
-	function __construct($request) {
-		parent::__construct();
-	}
-
 	/**
 	 * Index handler: redirect to journal page.
 	 * @param $args array
 	 * @param $request PKPRequest
 	 */
-	function index($args, &$request) {
+	public function index($args, $request) {
 		$request->redirect(null, 'index');
 	}
 
 	/**
 	 * @copydoc PKPHandler::authorize()
 	 */
-	function authorize($request, &$args, $roleAssignments) {
+	public function authorize($request, &$args, $roleAssignments) {
 		import('lib.pkp.classes.security.authorization.ContextRequiredPolicy');
 		$this->addPolicy(new ContextRequiredPolicy($request));
 
@@ -51,7 +42,7 @@ class PLNHandler extends Handler {
 	 *
 	 * @return bool
 	 */
-	function deposits($args, $request) {
+	public function deposits($args, $request) {
 		$journal = $request->getJournal();
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$fileManager = new FileManager();
@@ -61,7 +52,7 @@ class PLNHandler extends Handler {
 
 		// sanitize the input
 		if (!preg_match('/^[[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12}$/',$depositUuid)) {
-			error_log(__("plugins.generic.pln.error.handler.uuid.invalid"));
+			error_log(__('plugins.generic.pln.error.handler.uuid.invalid'));
 			$dispatcher->handle404();
 			return false;
 		}
@@ -69,7 +60,7 @@ class PLNHandler extends Handler {
 		$deposit = $depositDao->getByUUID($journal->getId(),$depositUuid);
 
 		if (!$deposit) {
-			error_log(__("plugins.generic.pln.error.handler.uuid.notfound"));
+			error_log(__('plugins.generic.pln.error.handler.uuid.notfound'));
 			$dispatcher->handle404();
 			return false;
 		}
@@ -78,12 +69,12 @@ class PLNHandler extends Handler {
 		$depositBag = $depositPackage->getPackageFilePath();
 
 		if (!$fileManager->fileExists($depositBag)) {
-			error_log("plugins.generic.pln.error.handler.file.notfound");
+			error_log('plugins.generic.pln.error.handler.file.notfound');
 			$dispatcher->handle404();
 			return false;
 		}
 
-		return $fileManager->downloadFile($depositBag, mime_content_type($depositBag), true);
+		return $fileManager->downloadByPath($depositBag, PKPString::mime_content_type($depositBag), true);
 	}
 
 	/**
@@ -91,7 +82,7 @@ class PLNHandler extends Handler {
 	 * @param array $args
 	 * @param Request $request
 	 */
-	function status($args=array(), $request) {
+	public function status($args, $request) {
 		$router = $request->getRouter();
 		$plnPlugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 		$templateMgr = TemplateManager::getManager();
@@ -100,14 +91,13 @@ class PLNHandler extends Handler {
 	}
 
 	//
-	// Private helper methods
+	// Protected helper methods
 	//
 	/**
 	 * Get the Usage Stats plugin object
 	 * @return PLNPlugin
 	 */
-	function _getPlugin() {
-		$plugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
-		return $plugin;
+	protected function _getPlugin() {
+        return PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 	}
 }

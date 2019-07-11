@@ -16,24 +16,17 @@
 import('lib.pkp.classes.controllers.grid.GridRow');
 
 class PLNStatusGridRow extends GridRow {
-	/**
-	 * Constructor
-	 */
-	function __construct() {
-		parent::__construct();
-	}
-
 	//
 	// Overridden template methods
 	//
 	/**
 	 * @copydoc GridRow::initialize()
 	 */
-	function initialize($request) {
-		parent::initialize($request);
+	public function initialize($request, $template = null) {
+        parent::initialize($request, $template);
 
 		$rowId = $this->getId();
-		$actionArgs['DepositId'] = $rowId;
+		$actionArgs['depositId'] = $rowId;
 		if (!empty($rowId)) {
 			$router = $request->getRouter();
 

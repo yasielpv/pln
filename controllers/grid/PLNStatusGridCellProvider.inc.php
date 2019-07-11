@@ -18,20 +18,13 @@ import('lib.pkp.classes.linkAction.request.RedirectAction');
 
 class PLNStatusGridCellProvider extends GridCellProvider {
 	/**
-	 * Constructor
-	 */
-	function __construct() {
-		parent::__construct();
-	}
-
-	/**
 	 * Extracts variables for a given column from a data element
 	 * so that they may be assigned to template before rendering.
 	 * @param $row GridRow
 	 * @param $column GridColumn
 	 * @return array
 	 */
-	function getTemplateVarsFromRowColumn($row, $column) {
+	public function getTemplateVarsFromRowColumn($row, $column) {
 		$deposit = $row->getData();
 
 		switch ($column->getId()) {
