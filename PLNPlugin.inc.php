@@ -15,7 +15,7 @@
 
 import('lib.pkp.classes.plugins.GenericPlugin');
 import('lib.pkp.classes.config.Config');
-import('classes.article.PublishedArticle');
+import('classes.article.PublishedSubmission');
 import('classes.issue.Issue');
 
 define('PLN_PLUGIN_NAME', 'plnplugin');
