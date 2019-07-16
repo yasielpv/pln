@@ -113,7 +113,7 @@ class PLNPlugin extends GenericPlugin {
 				// Allow the PLN status grid handler to get the plugin object
 				import($component);
 				$componentPieces = explode('.', $component);
-                $className = array_pop($componentPieces);
+				$className = array_pop($componentPieces);
 				$className::setPlugin($this);
 				return true;
 		}
@@ -283,7 +283,7 @@ class PLNPlugin extends GenericPlugin {
 		$smarty = $args[1];
 		$output = $args[2];
 		$application = Application::get();
-        $templateMgr = TemplateManager::getManager($application->getRequest());
+		$templateMgr = TemplateManager::getManager($application->getRequest());
 		$output .= $templateMgr->fetch($this->getTemplatePath() . 'setup.tpl');
 		return false;
 	}
@@ -608,8 +608,8 @@ class PLNPlugin extends GenericPlugin {
 		curl_setopt_array($curl, array(
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_HTTPHEADER => array_merge(array(
-                'Expect:',
-            ), $headers),
+				'Expect:',
+			), $headers),
 			CURLOPT_URL => $url
 		));
 
@@ -647,9 +647,9 @@ class PLNPlugin extends GenericPlugin {
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_POST => true,
 			CURLOPT_HTTPHEADER => array(
-                'Content-Length: ' . filesize($filename),
-                'Expect:',
-            ),
+				'Content-Length: ' . filesize($filename),
+				'Expect:',
+			),
 			CURLOPT_INFILE => fopen($filename, "r"),
 			CURLOPT_INFILESIZE => filesize($filename),
 			CURLOPT_URL => $url
@@ -687,10 +687,10 @@ class PLNPlugin extends GenericPlugin {
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_PUT => true,
 			CURLOPT_HTTPHEADER => array(
-                'Content-Type: ' . mime_content_type($filename),
-                'Content-Length: ' . filesize($filename),
-                'Expect:',
-            ),
+				'Content-Type: ' . mime_content_type($filename),
+				'Content-Length: ' . filesize($filename),
+				'Expect:',
+			),
 			CURLOPT_INFILE => fopen($filename, "r"),
 			CURLOPT_INFILESIZE => filesize($filename),
 			CURLOPT_URL => $url

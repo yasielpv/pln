@@ -31,14 +31,14 @@ class DepositDAO extends DAO {
 	 * @return Deposit Object
 	 */
 	public function getById($depositId, $journalId = null) {
-        $params = array((int) $depositId);
-        if ($journalId !== null) $params[] = (int) $journalId;
+		$params = array((int) $depositId);
+		if ($journalId !== null) $params[] = (int) $journalId;
 		$result = $this->retrieve(
 			'SELECT *
 			FROM pln_deposits
 			WHERE deposit_id = ?'
-            . ($journalId !== null?' AND journal_id = ?':''),
-            $params
+			. ($journalId !== null?' AND journal_id = ?':''),
+			$params
 		);
 		$returner = null;
 		if ($result->RecordCount() != 0) {
@@ -112,9 +112,9 @@ class DepositDAO extends DAO {
 	 * @param $deposit Deposit
 	 */
 	public function deleteObject($deposit) {
-        $depositObjectDao = DAORegistry::getDAO('DepositObjectDAO');
-        foreach($deposit->getDepositObjects() as $depositObject) {
-            $depositObjectDao->deleteObject($depositObject);
+		$depositObjectDao = DAORegistry::getDAO('DepositObjectDAO');
+		foreach($deposit->getDepositObjects() as $depositObject) {
+			$depositObjectDao->deleteObject($depositObject);
 		}
 
 		$this->update(

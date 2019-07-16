@@ -121,7 +121,7 @@ class Deposit extends DataObject {
 	 * @return string
 	 */
 	public function getProcessingStatus() {
-        if ($this->getSentStatus()) {
+		if ($this->getSentStatus()) {
 			return __('plugins.generic.pln.status.sent');
 		}
 		if ($this->getValidatedStatus()) {
@@ -347,7 +347,7 @@ class Deposit extends DataObject {
 	 * @return DateTime
 	 */
 	public function getLastStatusDate() {
-        return $this->getData('dateStatus');
+		return $this->getData('dateStatus');
 	}
 
 	/**
@@ -355,7 +355,7 @@ class Deposit extends DataObject {
 	 * @param $dateLastStatus DateTime
 	 */
 	public function setLastStatusDate($dateLastStatus) {
-        $this->setData('dateStatus', $dateLastStatus);
+		$this->setData('dateStatus', $dateLastStatus);
 	}
 
 	/**
@@ -363,7 +363,7 @@ class Deposit extends DataObject {
 	 * @return DateTime
 	 */
 	public function getDateCreated() {
-        return $this->getData('dateCreated');
+		return $this->getData('dateCreated');
 	}
 
 	/**
@@ -371,7 +371,7 @@ class Deposit extends DataObject {
 	 * @param $dateCreated boolean
 	 */
 	public function setDateCreated($dateCreated) {
-        $this->setData('dateCreated', $dateCreated);
+		$this->setData('dateCreated', $dateCreated);
 	}
 
 	/**
@@ -379,7 +379,7 @@ class Deposit extends DataObject {
 	 * @return DateTime
 	 */
 	public function getDateModified() {
-        return $this->getData('dateModified');
+		return $this->getData('dateModified');
 	}
 
 	/**
@@ -387,22 +387,22 @@ class Deposit extends DataObject {
 	 * @param $dateModified boolean
 	 */
 	public function setDateModified($dateModified) {
-        $this->setData('dateModified', $dateModified);
+		$this->setData('dateModified', $dateModified);
 	}
 
 	/**
-     * Set the export deposit error message.
-     * @param $exportDepositError string
-     */
-    public function setExportDepositError($exportDepositError) {
-        $this->setData('exportDepositError', $exportDepositError);
+	 * Set the export deposit error message.
+	 * @param $exportDepositError string
+	 */
+	public function setExportDepositError($exportDepositError) {
+		$this->setData('exportDepositError', $exportDepositError);
 	}
 
 	/**
-     * Get the export deposit error message.
-     * @return string|null
-     */
-    public function getExportDepositError() {
-        return $this->getData('exportDepositError');
+	 * Get the export deposit error message.
+	 * @return string|null
+	 */
+	public function getExportDepositError() {
+		return $this->getData('exportDepositError');
 	}
 }
