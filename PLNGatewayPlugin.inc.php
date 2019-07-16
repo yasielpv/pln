@@ -85,11 +85,12 @@ class PLNGatewayPlugin extends GatewayPlugin {
 
 	/**
 	 * Override the builtin to get the correct template path.
+	 * @see PLNPlugin::getTemplatePath
 	 * @return string
 	 */
-	public function getTemplatePath() {
+	public function getTemplatePath($inCore = false) {
 		$plugin = $this->getPLNPlugin();
-		return $plugin->getTemplatePath();
+		return $plugin->getTemplatePath($inCore);
 	}
 
 	/**
