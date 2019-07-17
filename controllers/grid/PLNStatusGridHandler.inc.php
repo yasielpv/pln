@@ -60,13 +60,13 @@ class PLNStatusGridHandler extends GridHandler {
 		// Columns
 		$cellProvider = new PLNStatusGridCellProvider();
 		$this->addColumn(new GridColumn('id', 'common.id', null, null, $cellProvider));
-        $this->addColumn(new GridColumn('type', 'common.type', null, null, $cellProvider));
-        $this->addColumn(new GridColumn('checked', 'plugins.generic.pln.status.checked', null, null, $cellProvider));
-        $this->addColumn(new GridColumn('local_status', 'plugins.generic.pln.status.local_status', null, null, $cellProvider));
-        $this->addColumn(new GridColumn('processing_status', 'plugins.generic.pln.status.processing_status', null, null, $cellProvider));
-        $this->addColumn(new GridColumn('lockss_status', 'plugins.generic.pln.status.lockss_status', null, null, $cellProvider));
-        $this->addColumn(new GridColumn('complete', 'plugins.generic.pln.status.complete', null, null, $cellProvider));
-        $this->addColumn(new GridColumn('exportDepositError', 'plugins.generic.pln.deposit.exportDepositError', null, null, $cellProvider));
+		$this->addColumn(new GridColumn('type', 'common.type', null, null, $cellProvider));
+		$this->addColumn(new GridColumn('checked', 'plugins.generic.pln.status.checked', null, null, $cellProvider));
+		$this->addColumn(new GridColumn('local_status', 'plugins.generic.pln.status.local_status', null, null, $cellProvider));
+		$this->addColumn(new GridColumn('processing_status', 'plugins.generic.pln.status.processing_status', null, null, $cellProvider));
+		$this->addColumn(new GridColumn('lockss_status', 'plugins.generic.pln.status.lockss_status', null, null, $cellProvider));
+		$this->addColumn(new GridColumn('complete', 'plugins.generic.pln.status.complete', null, null, $cellProvider));
+		$this->addColumn(new GridColumn('exportDepositError', 'plugins.generic.pln.deposit.exportDepositError', null, null, $cellProvider));
 	}
 
 	/**
@@ -115,12 +115,12 @@ class PLNStatusGridHandler extends GridHandler {
 	 * @return string Serialized JSON object
 	 */
 	public function resetDeposit($args, $request) {
-        $depositId = $args['depositId'];
+		$depositId = $args['depositId'];
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$journal = $request->getJournal();
 
 		if (!is_null($depositId)) {
-            $deposit = $depositDao->getById($depositId, $journal->getId());
+			$deposit = $depositDao->getById($depositId, $journal->getId());
 			$deposit->setStatus(PLN_PLUGIN_DEPOSIT_STATUS_NEW);
 			$deposit->setExportDepositError('');
 			$depositDao->updateObject($deposit);

@@ -54,12 +54,12 @@ class PLNStatusForm extends Form {
 			}
 		}
 		$templateMgr = TemplateManager::getManager($request);
-        $templateMgr->assign(array(
-            'deposits' => $depositDao->getByJournalId($context->getId(), $rangeInfo),
-            'networkStatus' => $networkStatus,
-            'networkStatusMessage' => $networkStatusMessage,
-            'plnStatusDocs' => $this->_plugin->getSetting($context->getId(), 'pln_status_docs'),
-        ));
+		$templateMgr->assign(array(
+			'deposits' => $depositDao->getByJournalId($context->getId(), $rangeInfo),
+			'networkStatus' => $networkStatus,
+			'networkStatusMessage' => $networkStatusMessage,
+			'plnStatusDocs' => $this->_plugin->getSetting($context->getId(), 'pln_status_docs'),
+		));
 
 		return parent::fetch($request, $template, $display);
 	}

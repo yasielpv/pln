@@ -23,7 +23,7 @@ class PLNStatusGridRow extends GridRow {
 	 * @copydoc GridRow::initialize()
 	 */
 	public function initialize($request, $template = null) {
-        parent::initialize($request, $template);
+		parent::initialize($request, $template);
 
 		$rowId = $this->getId();
 		$actionArgs['depositId'] = $rowId;

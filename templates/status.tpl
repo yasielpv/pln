@@ -25,6 +25,6 @@
 	<h3>{translate key="plugins.generic.pln.status.deposits"}</h3>
 	<p>{translate key="plugins.generic.pln.status.network_status" networkStatusMessage=$networkStatusMessage}</p>
 	{capture assign="depositsGridUrl"}{url component="plugins.generic.pln.controllers.grid.PLNStatusGridHandler" op="fetchGrid" escape=false}{/capture}
-    {load_url_in_div id="depositsGridContainer" url=$depositsGridUrl}
+	{load_url_in_div id="depositsGridContainer" url=$depositsGridUrl}
 	<p>{translate key='plugins.generic.pln.status.docs' statusDocsUrl=$plnStatusDocs}</p>
 </div>

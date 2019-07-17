@@ -67,7 +67,7 @@ class DepositPackage {
 	 * @return string
 	 */
 	public function getAtomDocumentPath() {
-        return $this->getDepositDir() . DIRECTORY_SEPARATOR . $this->_deposit->getUUID() . '.xml';
+		return $this->getDepositDir() . DIRECTORY_SEPARATOR . $this->_deposit->getUUID() . '.xml';
 	}
 
 	/**
@@ -75,7 +75,7 @@ class DepositPackage {
 	 * @return string
 	 */
 	public function getPackageFilePath() {
-        return $this->getDepositDir() . DIRECTORY_SEPARATOR . $this->_deposit->getUUID() . '.zip';
+		return $this->getDepositDir() . DIRECTORY_SEPARATOR . $this->_deposit->getUUID() . '.zip';
 	}
 
 	/**
@@ -109,7 +109,7 @@ class DepositPackage {
 	 * @return string
 	 */
 	public function generateAtomDocument() {
-        $plnPlugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
+		$plnPlugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$journal = $journalDao->getById($this->_deposit->getJournalId());
 		$fileManager = new ContextFileManager($this->_deposit->getJournalId());
@@ -130,11 +130,11 @@ class DepositPackage {
 		$entry->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:pkp', 'http://pkp.sfu.ca/SWORD');
 
 		$entry->appendChild($this->_generateElement($atom, 'email', $journal->getSetting('contactEmail')));
-        $entry->appendChild($this->_generateElement($atom, 'title', $journal->getLocalizedName()));
+		$entry->appendChild($this->_generateElement($atom, 'title', $journal->getLocalizedName()));
 
 		$request = PKPApplication::getRequest();
 		$application = PKPApplication::getApplication();
-        $dispatcher = $application->getDispatcher();
+		$dispatcher = $application->getDispatcher();
 
 		$entry->appendChild($this->_generateElement($atom, 'pkp:journal_url', $dispatcher->url($request, ROUTE_PAGE, $journal->getPath()), 'http://pkp.sfu.ca/SWORD'));
 
@@ -160,7 +160,7 @@ class DepositPackage {
 		$pkpDetails->setAttribute('size', ceil(filesize($packageFile)/1000));
 
 		$objectVolume = '';
-        $objectIssue = '';
+		$objectIssue = '';
 		$objectPublicationDate = 0;
 
 		switch ($this->_deposit->getObjectType()) {
@@ -246,8 +246,8 @@ class DepositPackage {
 	 * @return string The full path of the created zip archive
 	 */
 	public function generatePackage() {
-        if (!@include_once(dirname(__FILE__).'/../vendor/scholarslab/bagit/lib/bagit.php')) {
-            $this->_logMessage(__('plugins.generic.pln.error.include.bagit'));
+		if (!@include_once(dirname(__FILE__).'/../vendor/scholarslab/bagit/lib/bagit.php')) {
+			$this->_logMessage(__('plugins.generic.pln.error.include.bagit'));
 			return;
 		}
 
@@ -317,7 +317,7 @@ class DepositPackage {
 
 					if (!$exportXml) {
 						$this->_logMessage(__('plugins.generic.pln.error.depositor.export.issue.error'));
-                        $this->importExportErrorHandler($depositObject->getDepositId(), __('plugins.generic.pln.error.depositor.export.issue.error'));
+						$this->importExportErrorHandler($depositObject->getDepositId(), __('plugins.generic.pln.error.depositor.export.issue.error'));
 					}
 				}
 				catch (Exception $exception) {
@@ -583,11 +583,11 @@ class DepositPackage {
 	}
 
 	/**
-     * Handle an error during the import/export process.
-     * @param $depositId int Deposit ID
-     * @param $message string Error message
-     */
-    public function importExportErrorHandler($depositId, $message) {
+	 * Handle an error during the import/export process.
+	 * @param $depositId int Deposit ID
+	 * @param $message string Error message
+	 */
+	public function importExportErrorHandler($depositId, $message) {
 		$this->_depositPackageErrored = true;
 
 		$depositDao = DAORegistry::getDAO('DepositDAO'); /** @var $depositDao DepositDAO */
@@ -626,9 +626,9 @@ class DepositUnregisterableErrorCallback {
 	}
 
 	/**
-     * Unregister the callback.
-     */
-    public function unregister() {
-        $this->_isUnregistered = true;
+	 * Unregister the callback.
+	 */
+	public function unregister() {
+		$this->_isUnregistered = true;
 	}
 }

@@ -102,14 +102,14 @@ class PLNSettingsForm extends Form {
 		}
 
 		$templateMgr = TemplateManager::getManager($request);
-        $templateMgr->assign(array(
-            'pluginName' => $this->_plugin->getName(),
-            'hasIssn' => $hasIssn,
-            'prerequisitesMissing' => $this->_checkPrerequisites(),
-            'journal_uuid' => $this->_plugin->getSetting($this->_contextId, 'journal_uuid'),
-            'terms_of_use' => unserialize($this->_plugin->getSetting($this->_contextId, 'terms_of_use')),
-            'terms_of_use_agreement' => $this->getData('terms_of_use_agreement'),
-        ));
+		$templateMgr->assign(array(
+			'pluginName' => $this->_plugin->getName(),
+			'hasIssn' => $hasIssn,
+			'prerequisitesMissing' => $this->_checkPrerequisites(),
+			'journal_uuid' => $this->_plugin->getSetting($this->_contextId, 'journal_uuid'),
+			'terms_of_use' => unserialize($this->_plugin->getSetting($this->_contextId, 'terms_of_use')),
+			'terms_of_use_agreement' => $this->getData('terms_of_use_agreement'),
+		));
 
 		return parent::fetch($request, $template, $display);
 	}

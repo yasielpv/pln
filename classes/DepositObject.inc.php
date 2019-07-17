@@ -51,7 +51,7 @@ class DepositObject extends DataObject {
 	 * @return string
 	 */
 	public function getObjectType() {
-        return $this->getData('objectType');
+		return $this->getData('objectType');
 	}
 
 	/**
@@ -59,7 +59,7 @@ class DepositObject extends DataObject {
 	 * @param string
 	 */
 	public function setObjectType($objectType) {
-        $this->setData('objectType', $objectType);
+		$this->setData('objectType', $objectType);
 	}
 
 	/**
@@ -67,7 +67,7 @@ class DepositObject extends DataObject {
 	 * @return int
 	 */
 	public function getObjectId() {
-        return $this->getData('objectId');
+		return $this->getData('objectId');
 	}
 
 	/**
@@ -75,7 +75,7 @@ class DepositObject extends DataObject {
 	 * @param int
 	 */
 	public function setObjectId($objectId) {
-        $this->setData('objectId', $objectId);
+		$this->setData('objectId', $objectId);
 	}
 
 	/**
@@ -83,7 +83,7 @@ class DepositObject extends DataObject {
 	 * @return int
 	 */
 	public function getJournalId() {
-        return $this->getData('journalId');
+		return $this->getData('journalId');
 	}
 
 	/**
@@ -91,7 +91,7 @@ class DepositObject extends DataObject {
 	 * @param int
 	 */
 	public function setJournalId($journalId) {
-        $this->setData('journalId', $journalId);
+		$this->setData('journalId', $journalId);
 	}
 
 	/**
@@ -99,7 +99,7 @@ class DepositObject extends DataObject {
 	 * @return int
 	 */
 	public function getDepositId() {
-        return $this->getData('depositId');
+		return $this->getData('depositId');
 	}
 
 	/**
@@ -107,7 +107,7 @@ class DepositObject extends DataObject {
 	 * @param int
 	 */
 	public function setDepositId($depositId) {
-        $this->setData('depositId', $depositId);
+		$this->setData('depositId', $depositId);
 	}
 
 	/**
@@ -115,7 +115,7 @@ class DepositObject extends DataObject {
 	 * @return DateTime
 	 */
 	public function getDateCreated() {
-        return $this->getData('dateCreated');
+		return $this->getData('dateCreated');
 	}
 
 	/**
@@ -123,7 +123,7 @@ class DepositObject extends DataObject {
 	 * @param $dateCreated DateTime
 	 */
 	public function setDateCreated($dateCreated) {
-        $this->setData('dateCreated', $dateCreated);
+		$this->setData('dateCreated', $dateCreated);
 	}
 
 	/**
@@ -131,7 +131,7 @@ class DepositObject extends DataObject {
 	 * @return DateTime
 	 */
 	public function getDateModified() {
-        return $this->getData('dateModified');
+		return $this->getData('dateModified');
 	}
 
 	/**
@@ -139,6 +139,6 @@ class DepositObject extends DataObject {
 	 * @param $dateModified DateTime
 	 */
 	public function setDateModified($dateModified) {
-        $this->setData('dateModified', $dateModified);
+		$this->setData('dateModified', $dateModified);
 	}
 }

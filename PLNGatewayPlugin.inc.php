@@ -47,22 +47,22 @@ class PLNGatewayPlugin extends GatewayPlugin {
 
 	/**
   	 * @copydoc Plugin::getName
-     */
-    public function getName() {
+	 */
+	public function getName() {
 		return 'PLNGatewayPlugin';
 	}
 
 	/**
-     * @copydoc Plugin::getDisplayName
-     */
-    public function getDisplayName() {
+	 * @copydoc Plugin::getDisplayName
+	 */
+	public function getDisplayName() {
 		return __('plugins.generic.plngateway.displayName');
 	}
 
 	/**
-     * @copydoc Plugin::getDescription
-     */
-    public function getDescription() {
+	 * @copydoc Plugin::getDescription
+	 */
+	public function getDescription() {
 		return __('plugins.generic.plngateway.description');
 	}
 
@@ -71,7 +71,7 @@ class PLNGatewayPlugin extends GatewayPlugin {
 	 * @return object
 	 */
 	public function getPLNPlugin() {
-        return PluginRegistry::getPlugin('generic', $this->parentPluginName);
+		return PluginRegistry::getPlugin('generic', $this->parentPluginName);
 	}
 
 	/**
@@ -109,7 +109,7 @@ class PLNGatewayPlugin extends GatewayPlugin {
 	public function fetch($args, $request) {
 		$plugin = $this->getPLNPlugin();
 		$templateMgr = TemplateManager::getManager($request);
-        $journal = $request->getJournal();
+		$journal = $request->getJournal();
 
 		$pluginVersionFile = $this->getPluginPath() . DIRECTORY_SEPARATOR . 'version.xml';
 		$pluginVersion = VersionCheck::parseVersionXml($pluginVersionFile);
