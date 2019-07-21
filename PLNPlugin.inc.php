@@ -94,8 +94,8 @@ class PLNPlugin extends GenericPlugin {
 				HookRegistry::register('NotificationManager::getNotificationContents', array($this, 'callbackNotificationContents'));
 				HookRegistry::register('LoadComponentHandler', array($this, 'setupComponentHandlers'));
 
-				HookRegistry::register('AcronPlugin::parseCronTab', array($this, 'callbackParseCronTab'));
 			}
+			HookRegistry::register('AcronPlugin::parseCronTab', array($this, 'callbackParseCronTab'));
 		}
 
 		return $success;
