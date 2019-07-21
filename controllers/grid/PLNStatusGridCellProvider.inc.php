@@ -33,6 +33,8 @@ class PLNStatusGridCellProvider extends GridCellProvider {
 				return array('label' => $deposit->getId());
 			case 'type':
 				return array('label' => $deposit->getObjectType());
+			case 'objectId':
+				return array('label' => $deposit->getObjectId());
 			case 'checked':
 				return array('label' => $deposit->getStatus());
 			case 'local_status':
@@ -43,8 +45,6 @@ class PLNStatusGridCellProvider extends GridCellProvider {
 				return array('label' => $deposit->getLockssStatus());
 			case 'complete':
 				return array('label' => $deposit->getComplete());
-			case 'exportDepositError':
-				return array('label' => $deposit->getExportDepositError());
 		}
 	}
 }

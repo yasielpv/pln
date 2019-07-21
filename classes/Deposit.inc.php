@@ -38,6 +38,16 @@ class Deposit extends DataObject {
 	}
 
 	/**
+	 * Get the id of deposit objects in this deposit.
+	 * @return int
+	 */
+	public function getObjectId() {
+		$depositObjects = $this->getDepositObjects();
+		$depositObject = $depositObjects->next();
+		return ($depositObject?$depositObject->getObjectId():null);
+	}
+
+	/**
 	 * Get all deposit objects of this deposit.
 	 * @return array of DepositObject
 	 */

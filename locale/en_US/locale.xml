@@ -41,8 +41,7 @@
 	<message key="plugins.generic.pln.status.network_status">Network Status: {$networkStatusMessage}</message>
 	<message key="plugins.generic.pln.status.deposits">Deposits</message>
 	<message key="plugins.generic.pln.status">Status</message>
-	<message key="plugins.generic.pln.deposit.exportDepositError">Error Message</message>
-	
+	<message key="plugins.generic.pln.objectId">Type Object Id</message>
 
 	<!-- status page table headers -->	
 	<message key="plugins.generic.pln.status.docs"><![CDATA[The PLN <a href="{$statusDocsUrl}">deposit statuses are described here</a>.]]></message>
@@ -105,6 +104,19 @@
 	<message key="plugins.generic.pln.depositor.newcontent">Processing new content.</message>
 	<message key="plugins.generic.pln.depositor.packagingdeposits">Packaging content for deposit.</message>
 	<message key="plugins.generic.pln.depositor.transferringdeposits">Sending deposits to the PLN.</message>
+
+	<message key="plugins.generic.pln.depositor.statusupdates.processing">Trying status update for {$depositId} ({$objectType}: {$objectId}) (Local Status: [{$statusLocal}], Processing Status: [{$statusProcessing}], Lockss Status: [{$statusLockss}])</message>
+	<message key="plugins.generic.pln.depositor.statusupdates.processing.processingState">Processing status got for {$depositId} -> ({$processingState})</message>
+
+	<message key="plugins.generic.pln.depositor.packagingdeposits.processing">Trying package deposit {$depositId} ({$objectType}: {$objectId}) (Local Status: [{$statusLocal}], Processing Status: [{$statusProcessing}], Lockss Status: [{$statusLockss}])</message>
+	<message key="plugins.generic.pln.depositor.packagingdeposits.processing.error">Native Import/Export plugin failed for deposit {$depositId}, when trying to package it</message>
+	<message key="plugins.generic.pln.depositor.packagingdeposits.processing.packageFailed">Packaging for deposit {$depositId} failed</message>
+	<message key="plugins.generic.pln.depositor.packagingdeposits.processing.packageSucceeded">Packaging for deposit {$depositId} succeeded</message>
+
+	<message key="plugins.generic.pln.depositor.transferringdeposits.processing">Trying transfer deposit {$depositId} ({$objectType}: {$objectId}) (Local Status: [{$statusLocal}], Processing Status: [{$statusProcessing}], Lockss Status: [{$statusLockss}])</message>
+	<message key="plugins.generic.pln.depositor.transferringdeposits.processing.postAtom">Posting the Atom file to staging server for deposit {$depositId} (Local Status: [{$statusLocal}], Processing Status: [{$statusProcessing}], Lockss Status: [{$statusLockss}]) - (Url: [{$url}], AtomPath: [{$atomPath}], Method: [{$method}])</message>
+	<message key="plugins.generic.pln.depositor.transferringdeposits.processing.resultSucceeded">Posting the Atom file to staging server for deposit {$depositId} succeeded</message>
+	<message key="plugins.generic.pln.depositor.transferringdeposits.processing.resultFailed">Posting the Atom file to staging server for deposit {$depositId} failed (Error: [{$error}] - [{$result}])</message>
 
 	<message key="plugins.generic.plngateway.displayName">PLN Gateway</message>
 	<message key="plugins.generic.plngateway.description">Reports PLN Status and recent article titles for the staging server.</message>
