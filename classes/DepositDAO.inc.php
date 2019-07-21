@@ -249,11 +249,13 @@ class DepositDAO extends DAO {
 			FROM pln_deposits AS d
 			WHERE d.journal_id = ?
 			AND d.status & ? = 0
+			AND d.status & ? = 0
 			AND d.status & ? = 0',
 			array(
 				(int) $journalId,
 				(int) PLN_PLUGIN_DEPOSIT_STATUS_PACKAGED,
-				(int) PLN_PLUGIN_DEPOSIT_STATUS_LOCKSS_AGREEMENT
+				(int) PLN_PLUGIN_DEPOSIT_STATUS_LOCKSS_AGREEMENT,
+				(int) PLN_PLUGIN_DEPOSIT_STATUS_PACKAGING_FAILED
 			)
 		);
 
@@ -271,11 +273,13 @@ class DepositDAO extends DAO {
 			FROM pln_deposits AS d
 			WHERE d.journal_id = ?
 			AND d.status & ? <> 0
+			AND d.status & ? = 0
 			AND d.status & ? = 0',
 			array (
 				(int) $journalId,
 				(int) PLN_PLUGIN_DEPOSIT_STATUS_TRANSFERRED,
-				(int) PLN_PLUGIN_DEPOSIT_STATUS_LOCKSS_AGREEMENT
+				(int) PLN_PLUGIN_DEPOSIT_STATUS_LOCKSS_AGREEMENT,
+				(int) PLN_PLUGIN_DEPOSIT_STATUS_PACKAGING_FAILED
 			)
 		);
 

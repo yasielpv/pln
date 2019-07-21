@@ -153,6 +153,15 @@ class Depositor extends ScheduledTask {
 		$depositQueue = $depositDao->getNeedStagingStatusUpdate($journal->getId());
 
 		while ($deposit = $depositQueue->next()) {
+			$this->addExecutionLogEntry(__('plugins.generic.pln.depositor.statusupdates.processing', 
+				array('depositId' => $deposit->getId(), 
+					'statusLocal' => $deposit->getLocalStatus(), 
+					'statusProcessing' => $deposit->getProcessingStatus(), 
+					'statusLockss' => $deposit->getLockssStatus(),
+					'objectId' => $deposit->getObjectId(),
+					'objectType' => $deposit->getObjectType())), 
+				SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+
 			$depositPackage = new DepositPackage($deposit, $this);
 			$depositPackage->updateDepositStatus();
 		}
@@ -179,6 +188,15 @@ class Depositor extends ScheduledTask {
 		$depositQueue = $depositDao->getNeedTransferring($journal->getId());
 
 		while ($deposit = $depositQueue->next()) {
+			$this->addExecutionLogEntry(__('plugins.generic.pln.depositor.transferringdeposits.processing', 
+				array('depositId' => $deposit->getId(), 
+					'statusLocal' => $deposit->getLocalStatus(), 
+					'statusProcessing' => $deposit->getProcessingStatus(), 
+					'statusLockss' => $deposit->getLockssStatus(),
+					'objectId' => $deposit->getObjectId(),
+					'objectType' => $deposit->getObjectType())), 
+				SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+
 			$depositPackage = new DepositPackage($deposit, $this);
 			$depositPackage->transferDeposit();
 			unset($deposit);
@@ -203,6 +221,15 @@ class Depositor extends ScheduledTask {
 
 		// loop though all of the deposits that need packaging
 		while ($deposit = $depositQueue->next()) {
+			$this->addExecutionLogEntry(__('plugins.generic.pln.depositor.packagingdeposits.processing', 
+				array('depositId' => $deposit->getId(), 
+					'statusLocal' => $deposit->getLocalStatus(), 
+					'statusProcessing' => $deposit->getProcessingStatus(), 
+					'statusLockss' => $deposit->getLockssStatus(),
+					'objectId' => $deposit->getObjectId(),
+					'objectType' => $deposit->getObjectType())), 
+				SCHEDULED_TASK_MESSAGE_TYPE_NOTICE);
+
 			$depositPackage = new DepositPackage($deposit, $this);
 			$depositPackage->packageDeposit();
 		}

@@ -93,9 +93,9 @@ class PLNPlugin extends GenericPlugin {
 				HookRegistry::register('LoadHandler', array($this, 'callbackLoadHandler'));
 				HookRegistry::register('NotificationManager::getNotificationContents', array($this, 'callbackNotificationContents'));
 				HookRegistry::register('LoadComponentHandler', array($this, 'setupComponentHandlers'));
-
-				HookRegistry::register('AcronPlugin::parseCronTab', array($this, 'callbackParseCronTab'));
 			}
+
+			HookRegistry::register('AcronPlugin::parseCronTab', array($this, 'callbackParseCronTab'));
 		}
 
 		return $success;
@@ -185,6 +185,13 @@ class PLNPlugin extends GenericPlugin {
 	 */
 	public function getInstallSchemaFile() {
 		return $this->getPluginPath() . DIRECTORY_SEPARATOR . 'xml' . DIRECTORY_SEPARATOR . 'schema.xml';
+	}
+
+	/**
+	 * @copydoc PKPPlugin::getInstallDataFile()
+	 */
+	function getInstallDataFile() {
+		return $this->getPluginPath() . DIRECTORY_SEPARATOR . 'xml' . DIRECTORY_SEPARATOR . 'data.xml';
 	}
 
 	/**
@@ -322,7 +329,6 @@ class PLNPlugin extends GenericPlugin {
 			if ($op) {
 				if (in_array($op, array('deposits'))) {
 					define('HANDLER_CLASS', 'PLNHandler');
-					define('PLN_PLUGIN_NAME', $this->getName());
 					AppLocale::requireComponents(LOCALE_COMPONENT_APP_COMMON);
 					$handlerFile =& $args[2];
 					$handlerFile = $this->getHandlerPath() . '/' . 'PLNHandler.inc.php';

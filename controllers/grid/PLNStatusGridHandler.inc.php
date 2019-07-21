@@ -60,12 +60,12 @@ class PLNStatusGridHandler extends GridHandler {
 		$cellProvider = new PLNStatusGridCellProvider();
 		$this->addColumn(new GridColumn('id', 'common.id', null, null, $cellProvider));
 		$this->addColumn(new GridColumn('type', 'common.type', null, null, $cellProvider));
+		$this->addColumn(new GridColumn('objectId', 'plugins.generic.pln.objectId', null, null, $cellProvider));
 		$this->addColumn(new GridColumn('checked', 'plugins.generic.pln.status.checked', null, null, $cellProvider));
 		$this->addColumn(new GridColumn('local_status', 'plugins.generic.pln.status.local_status', null, null, $cellProvider));
 		$this->addColumn(new GridColumn('processing_status', 'plugins.generic.pln.status.processing_status', null, null, $cellProvider));
 		$this->addColumn(new GridColumn('lockss_status', 'plugins.generic.pln.status.lockss_status', null, null, $cellProvider));
 		$this->addColumn(new GridColumn('complete', 'plugins.generic.pln.status.complete', null, null, $cellProvider));
-		$this->addColumn(new GridColumn('exportDepositError', 'plugins.generic.pln.deposit.exportDepositError', null, null, $cellProvider));
 	}
 
 	/**
