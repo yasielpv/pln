@@ -188,6 +188,13 @@ class PLNPlugin extends GenericPlugin {
 	}
 
 	/**
+	 * @copydoc PKPPlugin::getInstallDataFile()
+	 */
+	function getInstallDataFile() {
+		return $this->getPluginPath() . DIRECTORY_SEPARATOR . 'xml' . DIRECTORY_SEPARATOR . 'data.xml';
+	}
+
+	/**
 	 * @copydoc PKPPlugin::getHandlerPath()
 	 */
 	public function getHandlerPath() {
