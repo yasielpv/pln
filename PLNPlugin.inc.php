@@ -80,8 +80,6 @@ class PLNPlugin extends GenericPlugin {
 		$success = parent::register($category, $path, $mainContextId);
 
 		if ($success) {
-			HookRegistry::register('Templates::Manager::Setup::JournalArchiving', array($this, 'callbackJournalArchivingSetup'));
-
 			if ($this->getEnabled()) {
 				$this->registerDAOs();
 				$this->import('classes.Deposit');
@@ -280,21 +278,6 @@ class PLNPlugin extends GenericPlugin {
 	}
 
 	/**
-	 * A callback used to populate journal setup with PLN preservation info
-	 * @param $hookName string (Templates::Manager::Setup::JournalArchiving)
-	 * @param $args array
-	 * @return boolean false to continue processing subsequent hooks
-	 */
-	public function callbackJournalArchivingSetup($hookName, $args) {
-		$smarty = $args[1];
-		$output = $args[2];
-		$application = Application::get();
-		$templateMgr = TemplateManager::getManager($application->getRequest());
-		$output .= $templateMgr->fetch($this->getTemplateResource('setup.tpl'));
-		return false;
-	}
-
-	/**
 	 * Hook registry function to provide notification messages
 	 * @param $hookName string (NotificationManager::getNotificationContents)
 	 * @param $args array ($notification, $message)
@@ -466,7 +449,8 @@ class PLNPlugin extends GenericPlugin {
 	 * @return int The HTTP response status or FALSE for a network error.
 	 */
 	public function getServiceDocument($contextId) {
-		$request = PKPApplication::getRequest();
+		$application = Application::getApplication();
+		$request = $application->getRequest();
 		$contextDao = Application::getContextDAO();
 		$context = $contextDao->getById($contextId);
 
