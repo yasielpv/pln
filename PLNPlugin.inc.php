@@ -80,8 +80,6 @@ class PLNPlugin extends GenericPlugin {
 		$success = parent::register($category, $path, $mainContextId);
 
 		if ($success) {
-			HookRegistry::register('Templates::Manager::Setup::JournalArchiving', array($this, 'callbackJournalArchivingSetup'));
-
 			if ($this->getEnabled()) {
 				$this->registerDAOs();
 				$this->import('classes.Deposit');
@@ -277,21 +275,6 @@ class PLNPlugin extends GenericPlugin {
 	public function callbackParseCronTab($hookName, $args) {
 		$taskFilesPath =& $args[0];
 		$taskFilesPath[] = $this->getPluginPath() . '/xml/scheduledTasks.xml';
-		return false;
-	}
-
-	/**
-	 * A callback used to populate journal setup with PLN preservation info
-	 * @param $hookName string (Templates::Manager::Setup::JournalArchiving)
-	 * @param $args array
-	 * @return boolean false to continue processing subsequent hooks
-	 */
-	public function callbackJournalArchivingSetup($hookName, $args) {
-		$smarty = $args[1];
-		$output = $args[2];
-		$application = Application::get();
-		$templateMgr = TemplateManager::getManager($application->getRequest());
-		$output .= $templateMgr->fetch($this->getTemplatePath() . 'setup.tpl');
 		return false;
 	}
 
