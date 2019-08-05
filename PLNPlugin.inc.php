@@ -452,7 +452,8 @@ class PLNPlugin extends GenericPlugin {
 	 * @return int The HTTP response status or FALSE for a network error.
 	 */
 	public function getServiceDocument($contextId) {
-		$request = PKPApplication::getRequest();
+		$application = Application::getApplication();
+		$request = $application->getRequest();
 		$contextDao = Application::getContextDAO();
 		$context = $contextDao->getById($contextId);
 
