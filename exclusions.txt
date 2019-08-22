@@ -1,0 +1,12 @@
+pln/vendor/scholarslab/bagit/test
+pln/vendor/pear/archive_tar/tests
+pln/vendor/pear/archive_tar/.gitignore
+pln/vendor/pear/archive_tar/.travis.yml
+pln/vendor/pear/pear_exception/.gitignore
+pln/vendor/pear/pear_exception/.travis.yml
+pln/vendor/pear/console_getopt/.gitignore
+pln/vendor/pear/console_getopt/.travis.yml
+pln/vendor/scholarslab/bagit/.gitignore
+pln/vendor/scholarslab/bagit/.travis.yml
+pln/.gitattributes
+pln/.gitignore
