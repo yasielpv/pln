@@ -258,6 +258,7 @@ class DepositPackage {
 		$publishedArticleDao = DAORegistry::getDAO('PublishedSubmissionDAO');
 		PluginRegistry::loadCategory('importexport');
 		$exportPlugin = PluginRegistry::getPlugin('importexport', 'NativeImportExportPlugin');
+		@ini_set('memory_limit', -1);
 		$plnPlugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 		$fileManager = new ContextFileManager($this->_deposit->getJournalId());
 
