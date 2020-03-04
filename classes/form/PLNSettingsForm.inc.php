@@ -114,7 +114,8 @@ class PLNSettingsForm extends Form {
 	/**
 	 * @copydoc Form::execute()
 	 */
-	public function execute() {
+	public function execute(...$functionArgs) {
+		parent::execute(...$functionArgs);
 		$this->_plugin->updateSetting($this->_contextId, 'terms_of_use_agreement', serialize($this->getData('terms_of_use_agreement')), 'object');
 
 		$pluginSettingsDao = DAORegistry::getDAO('PluginSettingsDAO');

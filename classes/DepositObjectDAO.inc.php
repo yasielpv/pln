@@ -14,6 +14,7 @@
  */
 
 import('lib.pkp.classes.db.DAO');
+import('lib.pkp.classes.submission.PKPSubmission'); // STATUS_PUBLISHED constant
 
 class DepositObjectDAO extends DAO {
 	/**
@@ -85,8 +86,9 @@ class DepositObjectDAO extends DAO {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
 				$result = $this->retrieve(
 					'SELECT pdo.deposit_object_id, a.last_modified FROM pln_deposit_objects pdo
-					LEFT JOIN articles a ON pdo.object_id = a.article_id
-					WHERE a.journal_id = ? AND pdo.journal_id = ? AND pdo.date_modified < a.last_modified',
+					JOIN submissions s ON pdo.object_id = s.submission_id
+					JOIN publications p ON p.publication_id = s.current_publication_id
+					WHERE s.context_id = ? AND pdo.journal_id = ? AND pdo.date_modified < p.last_modified',
 					array (
 						(int) $journalId,
 						(int) $journalId
@@ -110,15 +112,20 @@ class DepositObjectDAO extends DAO {
 				break;
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
 				$result = $this->retrieve(
-					'SELECT pdo.deposit_object_id, MAX(i.last_modified) as issue_modified, MAX(a.last_modified) as article_modified
+					'SELECT pdo.deposit_object_id, MAX(i.last_modified) as issue_modified, MAX(p.last_modified) as article_modified
 					FROM issues i
-					LEFT JOIN pln_deposit_objects pdo ON pdo.object_id = i.issue_id
-					LEFT JOIN published_submissions pa ON pa.issue_id = i.issue_id
-					LEFT JOIN submissions a ON a.submission_id = pa.submission_id
-					WHERE (pdo.date_modified < a.last_modified OR pdo.date_modified < i.last_modified)
+					JOIN pln_deposit_objects pdo ON pdo.object_id = i.issue_id
+					JOIN publication_settings ps ON (CAST(i.issue_id AS CHAR) = ps.setting_value AND ps.setting_name = ?)
+					JOIN publications p ON (p.publication_id = ps.publication_id AND p.status = ?)
+					JOIN submissions s ON s.current_publication_id = p.publication_id
+					WHERE (pdo.date_modified < p.last_modified OR pdo.date_modified < i.last_modified)
 					AND (pdo.journal_id = ?)
 					GROUP BY pdo.deposit_object_id',
-					(int) $journalId
+					array(
+						'issueId',
+						STATUS_PUBLISHED,
+						(int) $journalId,
+					)
 				);
 				while (!$result->EOF) {
 					$row = $result->GetRowAssoc(false);
@@ -157,17 +164,20 @@ class DepositObjectDAO extends DAO {
 
 		switch ($objectType) {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
-				$published_article_dao = DAORegistry::getDAO('PublishedSubmissionDAO');
+				$submissionDao = DAORegistry::getDAO('SubmissionDAO');
 				$result = $this->retrieve(
-					'SELECT pa.submission_id FROM published_submissions pa
-					LEFT JOIN submissions a ON pa.submission_id = a.submission_id
-					LEFT JOIN pln_deposit_objects pdo ON pa.submission_id = pdo.object_id
-					WHERE a.journal_id = ? AND pdo.object_id is null',
-					(int) $journalId
+					'SELECT p.submission_id FROM publications p
+					JOIN submissions s ON s.current_publication_id = p.publication_id
+					LEFT JOIN pln_deposit_objects pdo ON s.submission_id = pdo.object_id
+					WHERE s.journal_id = ? AND pdo.object_id is null AND p.status = ?',
+					array(
+						(int) $journalId,
+						STATUS_PUBLISHED,
+					)
 				);
 				while (!$result->EOF) {
 					$row = $result->GetRowAssoc(false);
-					$objects[] = $published_article_dao->getPublishedSubmissionById($row['article_id']);
+					$objects[] = $submissionDao->getById($row['submission_id']);
 					$result->MoveNext();
 				}
 				$result->Close();

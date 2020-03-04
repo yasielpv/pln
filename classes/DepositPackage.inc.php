@@ -129,7 +129,7 @@ class DepositPackage {
 		$entry->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:dcterms', 'http://purl.org/dc/terms/');
 		$entry->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:pkp', 'http://pkp.sfu.ca/SWORD');
 
-		$entry->appendChild($this->_generateElement($atom, 'email', $journal->getSetting('contactEmail')));
+		$entry->appendChild($this->_generateElement($atom, 'email', $journal->getData('contactEmail')));
 		$entry->appendChild($this->_generateElement($atom, 'title', $journal->getLocalizedName()));
 
 		$request = PKPApplication::getRequest();
@@ -138,15 +138,15 @@ class DepositPackage {
 
 		$entry->appendChild($this->_generateElement($atom, 'pkp:journal_url', $dispatcher->url($request, ROUTE_PAGE, $journal->getPath()), 'http://pkp.sfu.ca/SWORD'));
 
-		$entry->appendChild($this->_generateElement($atom, 'pkp:publisherName', $journal->getSetting('publisherInstitution'), 'http://pkp.sfu.ca/SWORD'));
+		$entry->appendChild($this->_generateElement($atom, 'pkp:publisherName', $journal->getData('publisherInstitution'), 'http://pkp.sfu.ca/SWORD'));
 
-		$entry->appendChild($this->_generateElement($atom, 'pkp:publisherUrl', $journal->getSetting('publisherUrl'), 'http://pkp.sfu.ca/SWORD'));
+		$entry->appendChild($this->_generateElement($atom, 'pkp:publisherUrl', $journal->getData('publisherUrl'), 'http://pkp.sfu.ca/SWORD'));
 
 		$issn = '';
-		if ($journal->getSetting('onlineIssn')) {
-			$issn = $journal->getSetting('onlineIssn');
-		} else if ($journal->getSetting('printIssn')) {
-			$issn = $journal->getSetting('printIssn');
+		if ($journal->getData('onlineIssn')) {
+			$issn = $journal->getData('onlineIssn');
+		} else if ($journal->getData('printIssn')) {
+			$issn = $journal->getData('printIssn');
 		}
 
 		$entry->appendChild($this->_generateElement($atom, 'pkp:issn', $issn, 'http://pkp.sfu.ca/SWORD'));
@@ -166,12 +166,13 @@ class DepositPackage {
 		switch ($this->_deposit->getObjectType()) {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
 				$depositObjects = $this->_deposit->getDepositObjects();
+				$submissionDao = DAORegistry::getDAO('SubmissionDAO');
 				while ($depositObject = $depositObjects->next()) {
-					$publishedArticleDao = DAORegistry::getDAO('PublishedSubmissionDAO');
-					$article = $publishedArticleDao->getPublishedSubmissionById($depositObject->getObjectId());
-					if ($article->getDatePublished() > $objectPublicationDate)
-						$objectPublicationDate = $article->getDatePublished();
-					unset($depositObject);
+					$submission = $submissionDao->getById($depositObject->getObjectId());
+					$publication = $submission->getCurrentPublication();
+					$publicationDate = $publication?$publication->getData('publicationDate'):null;
+					if ($publicationDate && strtotime($publicationDate) > $objectPublicationDate)
+						$objectPublicationDate = strtotime($publicationDate);
 				}
 				break;
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
@@ -217,7 +218,7 @@ class DepositPackage {
 		$license->appendChild($this->_generateElement($atom, 'licenseURL', $journal->getLocalizedSetting('licenseURL', $locale), 'http://pkp.sfu.ca/SWORD'));
 
 		$mode = $atom->createElementNS('http://pkp.sfu.ca/SWORD', 'publishingMode');
-		switch($journal->getSetting('publishingMode')) {
+		switch($journal->getData('publishingMode')) {
 			case PUBLISHING_MODE_OPEN:
 				$mode->nodeValue = 'Open';
 				break;
@@ -255,7 +256,7 @@ class DepositPackage {
 		$journalDao = DAORegistry::getDAO('JournalDAO');
 		$issueDao = DAORegistry::getDAO('IssueDAO');
 		$sectionDao = DAORegistry::getDAO('SectionDAO');
-		$publishedArticleDao = DAORegistry::getDAO('PublishedSubmissionDAO');
+		$submissionDao = DAORegistry::getDAO('SubmissionDAO');
 		PluginRegistry::loadCategory('importexport');
 		$exportPlugin = PluginRegistry::getPlugin('importexport', 'NativeImportExportPlugin');
 		@ini_set('memory_limit', -1);
@@ -268,36 +269,36 @@ class DepositPackage {
 		// set up folder and file locations
 		$bagDir = $this->getDepositDir() . DIRECTORY_SEPARATOR . $this->_deposit->getUUID();
 		$packageFile = $this->getPackageFilePath();
-		$exportFile =  tempnam(sys_get_temp_dir(), 'ojs-pln-export-');
-		$termsFile =  tempnam(sys_get_temp_dir(), 'ojs-pln-terms-');
+		$exportFile = tempnam(sys_get_temp_dir(), 'ojs-pln-export-');
+		$termsFile = tempnam(sys_get_temp_dir(), 'ojs-pln-terms-');
 
 		$bag = new BagIt($bagDir);
+		$fileList = array();
+		import('lib.pkp.classes.file.FileManager');
+		$fileManager = new FileManager();
 
 		switch ($this->_deposit->getObjectType()) {
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE:
-				$articles = array();
+				$submissionIds = array();
 
-				// we need to add all of the relevant articles to an array to export as a batch
+				// we need to add all of the relevant submissions to an array to export as a batch
 				while ($depositObject = $depositObjects->next()) {
-					$article = $publishedArticleDao->getPublishedSubmissionById($this->_deposit->getObjectId(), $journal->getId());
-					$issue = $issueDao->getIssueById($article->getIssueId(), $journal->getId());
-					$section = $sectionDao->getSection($article->getSectionId());
+					$submission = $submissionDao->getById($this->_deposit->getObjectId());
+					$currentPublication = $submission->getCurrentPublication();
+					if ($submission->getContextId() != $journal->getId()) continue;
+					if (!$currentPublication || $currentPublication->getStatus() != STATUS_PUBLISHED) continue;
 
-					// add the article to the array we'll pass for export
-					$articles[] = array(
-						'publishedArticle' => $article,
-						'section' => $section,
-						'issue' => $issue,
-						'journal' => $journal
-					);
-					unset($depositObject);
+					$submissionIds[] = $submission->getId();
 				}
 
-				// export all of the articles together
-				if ($exportPlugin->exportArticles($articles, $exportFile) !== true) {
+				// export all of the submissions together
+				$exportXml = $exportPlugin->exportSubmissions($submissionIds, $journal, null, ['no-embed' => 1]);
+				if (!$exportXml) {
 					$this->_logMessage(__('plugins.generic.pln.error.depositor.export.articles.error'));
 					return false;
 				}
+				$exportXml = $this->_cleanFileList($exportXml, $fileList);
+				$fileManager->writeFile($exportFile, $exportXml);
 				break;
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
 				// we only ever do one issue at a time, so get that issue
@@ -312,7 +313,8 @@ class DepositPackage {
 					$exportXml = $exportPlugin->exportIssues(
 						(array) $issue->getId(),
 						$journal,
-						$user = $request->getUser()
+						$user = $request->getUser(),
+						['no-embed' => 1]
 					);
 
 					if (!$exportXml) {
@@ -326,12 +328,10 @@ class DepositPackage {
 				}
 				
 				$callback->unregister();
-
-				import('lib.pkp.classes.file.FileManager');
-				$fileManager = new FileManager();
+				$exportXml = $this->_cleanFileList($exportXml, $fileList);
 				$fileManager->writeFile($exportFile, $exportXml);
 				break;
-			default:
+			default: throw new Exception('Unknown deposit type!');
 		}
 
 		// add the current terms to the bag
@@ -357,6 +357,9 @@ class DepositPackage {
 
 		// add the exported content to the bag
 		$bag->addFile($exportFile, $this->_deposit->getObjectType() . $this->_deposit->getUUID() . '.xml');
+		foreach ($fileList as $sourcePath => $targetPath) {
+			$bag->addFile($sourcePath, $targetPath);
+		}
 		// add the exported content to the bag
 		$bag->addFile($termsFile, 'terms' . $this->_deposit->getUUID() . '.xml');
 
@@ -376,6 +379,26 @@ class DepositPackage {
 		$fileManager->deleteByPath($termsFile);
 
 		return $packageFile;
+	}
+
+	/**
+	 * Read a list of file paths from the specified native XML string and clean up the XML's pathnames.
+	 * @param $xml string
+	 * @param $fileList array Reference to array to receive file list
+	 * @return array
+	 */
+	function _cleanFileList($xml, &$fileList) {
+		$doc = new DOMDocument();
+		$doc->loadXML($xml);
+		$xpath = new DOMXPath($doc);
+		$xpath->registerNameSpace('pkp', 'http://pkp.sfu.ca');
+		foreach($xpath->query('//pkp:submission_file//pkp:href') as $hrefNode ) {
+			$filePath = $hrefNode->getAttribute('src');
+			$targetPath = 'files/' . basename($filePath);
+			$fileList[$filePath] = $targetPath;
+			$hrefNode->setAttribute('src', $targetPath);
+		}
+		return $doc->saveXML();
 	}
 
 	/**
