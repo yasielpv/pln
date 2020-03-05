@@ -259,6 +259,7 @@ class DepositPackage {
 		$submissionDao = DAORegistry::getDAO('SubmissionDAO');
 		PluginRegistry::loadCategory('importexport');
 		$exportPlugin = PluginRegistry::getPlugin('importexport', 'NativeImportExportPlugin');
+		$supportsOptions = in_array('parseOpts', get_class_methods($exportPlugin));
 		@ini_set('memory_limit', -1);
 		$plnPlugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
 		$fileManager = new ContextFileManager($this->_deposit->getJournalId());
@@ -297,7 +298,7 @@ class DepositPackage {
 					$this->_logMessage(__('plugins.generic.pln.error.depositor.export.articles.error'));
 					return false;
 				}
-				$exportXml = $this->_cleanFileList($exportXml, $fileList);
+				if ($supportsOptions) $exportXml = $this->_cleanFileList($exportXml, $fileList);
 				$fileManager->writeFile($exportFile, $exportXml);
 				break;
 			case PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE:
@@ -328,7 +329,7 @@ class DepositPackage {
 				}
 				
 				$callback->unregister();
-				$exportXml = $this->_cleanFileList($exportXml, $fileList);
+				if ($supportsOptions) $exportXml = $this->_cleanFileList($exportXml, $fileList);
 				$fileManager->writeFile($exportFile, $exportXml);
 				break;
 			default: throw new Exception('Unknown deposit type!');
