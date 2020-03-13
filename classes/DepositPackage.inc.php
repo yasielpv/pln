@@ -361,6 +361,26 @@ class DepositPackage {
 		foreach ($fileList as $sourcePath => $targetPath) {
 			$bag->addFile($sourcePath, $targetPath);
 		}
+
+		// Add the schema files to the bag (adjusting the XSD references to flatten them)
+		$bag->createFile(
+			preg_replace(
+				'/schemaLocation="[^"]+pkp-native.xsd"/',
+				'schemaLocation="pkp-native.xsd"',
+				file_get_contents('plugins/importexport/native/native.xsd')
+			),
+			'native.xsd'
+		);
+		$bag->createFile(
+			preg_replace(
+				'/schemaLocation="[^"]+importexport.xsd"/',
+				'schemaLocation="importexport.xsd"',
+				file_get_contents('lib/pkp/plugins/importexport/native/pkp-native.xsd')
+			),
+			'pkp-native.xsd'
+		);
+		$bag->createFile(file_get_contents('lib/pkp/xml/importexport.xsd'), 'importexport.xsd');
+
 		// add the exported content to the bag
 		$bag->addFile($termsFile, 'terms' . $this->_deposit->getUUID() . '.xml');
 
