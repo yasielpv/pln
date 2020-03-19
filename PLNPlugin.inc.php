@@ -76,27 +76,22 @@ class PLNPlugin extends GenericPlugin {
 	 * @copydoc LazyLoadPlugin::register()
 	 */
 	public function register($category, $path, $mainContextId = null) {
+		if (!parent::register($category, $path, $mainContextId)) return false;
+		if ($this->getEnabled()) {
+			$this->registerDAOs();
+			$this->import('classes.Deposit');
+			$this->import('classes.DepositObject');
+			$this->import('classes.DepositPackage');
 
-		$success = parent::register($category, $path, $mainContextId);
-
-		if ($success) {
-			if ($this->getEnabled()) {
-				$this->registerDAOs();
-				$this->import('classes.Deposit');
-				$this->import('classes.DepositObject');
-				$this->import('classes.DepositPackage');
-
-				HookRegistry::register('PluginRegistry::loadCategory', array($this, 'callbackLoadCategory'));
-				HookRegistry::register('JournalDAO::deleteJournalById', array($this, 'callbackDeleteJournalById'));
-				HookRegistry::register('LoadHandler', array($this, 'callbackLoadHandler'));
-				HookRegistry::register('NotificationManager::getNotificationContents', array($this, 'callbackNotificationContents'));
-				HookRegistry::register('LoadComponentHandler', array($this, 'setupComponentHandlers'));
-			}
-
-			HookRegistry::register('AcronPlugin::parseCronTab', array($this, 'callbackParseCronTab'));
+			HookRegistry::register('PluginRegistry::loadCategory', array($this, 'callbackLoadCategory'));
+			HookRegistry::register('JournalDAO::deleteJournalById', array($this, 'callbackDeleteJournalById'));
+			HookRegistry::register('LoadHandler', array($this, 'callbackLoadHandler'));
+			HookRegistry::register('NotificationManager::getNotificationContents', array($this, 'callbackNotificationContents'));
+			HookRegistry::register('LoadComponentHandler', array($this, 'setupComponentHandlers'));
 		}
 
-		return $success;
+		HookRegistry::register('AcronPlugin::parseCronTab', array($this, 'callbackParseCronTab'));
+		return true;
 	}
 
 	/**
