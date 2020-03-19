@@ -34,10 +34,10 @@
 	</pluginInfo>
 	<journalInfo>
 		<title>{$currentJournal->getLocalizedName()|escape}</title>
-		<articles count="{$articles->getCount()|escape}">
-			{iterate from=articles item=article}
-			<article pubDate="{$article->getDatePublished()|escape}">{$article->getLocalizedTitle()|escape}</article>
-			{/iterate}
+		<articles count="{$publications|@count|escape}">
+			{foreach from=$publications item=publication}
+			<article pubDate="{$publication->getData('datePublished')|escape}">{$publication->getLocalizedTitle()|escape}</article>
+			{/foreach}
 		</articles>
 	</journalInfo>
 </plnplugin>

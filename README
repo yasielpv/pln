@@ -4,7 +4,7 @@
 === Author: Chris MacDonald <chris@fcts.ca>
 === Author: Michael Joyce <ubermichael@gmail.com>
 === Author: Dimitris Efstathiou <defstat@gmail.com>
-=== Last update: January 2017
+=== Last update: August 2019
 ================================================================
 
 About
@@ -56,18 +56,33 @@ Version History
 ---------------
 -1.0	- Initial Release
 -1.0.1	- Make upgraded plugins use default settings
--1.0.2	- Bug fixes, add terms of use acceptance to the gateway, add setting for default network URL. 
--2.0.0	- Porting PLN Plugin to OJS 3.0.x
+-1.0.2	- Bug fixes, add terms of use acceptance to the gateway, add setting for
+          default network URL. 
+-2.0.0	- Porting PLN Plugin to OJS 3.x
+
+Installation Instructions
+-------------------------
+We recommend installing this plugin using the Plugin Gallery within OJS. Log in
+with administrator privileges, navigate to Settings > Journal > Plugins, and
+choose the Plugin Gallery. Find the PLN plugin there and follow the
+instructions to install it.
 
 Build Instructions
----------------------
-The plugin depends on the BagIt component (https://packagist.org/packages/scholarslab/bagit) and 
-it incorporates it as a Composer (https://getcomposer.org/) module. 
-Please make sure you have Composer installed before installing the plugin.
+------------------
+(These instructions are only necessary if you are working with the plugin
+manually. If you are installing the plugin using the Plugin Gallery, they are
+not necessary.)
+
+The plugin depends on the BagIt component
+(https://packagist.org/packages/scholarslab/bagit) and it incorporates it as a
+Composer (https://getcomposer.org/) module. Please make sure you have Composer
+installed before installing the plugin.
 
 - Clone the repository containing the code.
 - Run OJS's "php tools/upgrade.php upgrade"
-- Execute "composer install" from console, being in the cloned pln folder. (This process is going to produce a "vendor" folder containing the depending library.)
+- Execute "composer install" from console, being in the cloned pln folder.
+  (This process is going to produce a "vendor" folder containing the depending
+  library.)
 - Enable Acron plugin and change config.inc.php variable scheduled_tasks = On
 - Enable the pln plugin
 
