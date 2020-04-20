@@ -1,13 +1,13 @@
 <!--
- * plugins/generic/pln/ping.dtd
+ * ping.dtd
  *
- * Copyright (c) 2013-2019 Simon Fraser University
- * Copyright (c) 2003-2019 John Willinsky
- * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+ * Copyright (c) 2013-2020 Simon Fraser University
+ * Copyright (c) 2003-2020 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
  *
  * DTD for plugin pings
- *
  -->
+
 <!-- Top-level collection containers for batch importing -->
 <!ELEMENT plnplugin (ojsInfo, pluginInfo, journalInfo)>
 
@@ -27,21 +27,21 @@
 <!ELEMENT tasks (#PCDATA)>
 
 <!ELEMENT terms (term*)>
-		<!ATTLIST terms
-				termsAccepted (yes|no) #REQUIRED>
+<!ATTLIST terms
+	termsAccepted (yes|no) #REQUIRED>
 
 <!ELEMENT term (#PCDATA)>
-		<!ATTLIST term
-				key CDATA #REQUIRED
-				updated CDATA #REQUIRED
-				accepted CDATA #REQUIRED>
+<!ATTLIST term
+	key CDATA #REQUIRED
+	updated CDATA #REQUIRED
+	accepted CDATA #REQUIRED>
 <!ELEMENT network (#PCDATA)>
 
 <!ELEMENT journalInfo (title, articles)>
 <!ELEMENT title (#PCDATA)>
 <!ELEMENT articles (article*)>
-				<!ATTLIST articles
-								count CDATA #REQUIRED>
+<!ATTLIST articles
+	count CDATA #REQUIRED>
 <!ELEMENT article (#PCDATA)>
-				<!ATTLIST article
-								pubDate CDATA #REQUIRED>
+<!ATTLIST article
+	pubDate CDATA #REQUIRED>

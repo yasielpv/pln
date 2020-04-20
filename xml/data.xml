@@ -2,14 +2,14 @@
 <!DOCTYPE data SYSTEM "../../../lib/pkp/dtd/xmlData.dtd">
 
 <!--
-  * xml/data.xml
-  *
-  * Copyright (c) 2014-2019 Simon Fraser University
-  * Copyright (c) 2003-2019 John Willinsky
-  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
-  *
-  * Ensure that the scheduled_tasks job is installed for the PLN plugin.
-  -->
+ * xml/data.xml
+ *
+ * Copyright (c) 2014-2020 Simon Fraser University
+ * Copyright (c) 2003-2020 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
+ *
+ * Ensure that the scheduled_tasks job is installed for the PLN plugin.
+ -->
 <data>
 	<sql>
 		<!-- Temporarily back up the old scheduled_tasks entry for this plugin, if there is one -->

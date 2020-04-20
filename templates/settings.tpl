@@ -1,12 +1,11 @@
 {**
- * plugins/generic/pln/templates/settingsForm.tpl
+ * templates/settingsForm.tpl
  *
- * Copyright (c) 2013-2019 Simon Fraser University
- * Copyright (c) 2003-2019 John Willinsky
- * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+ * Copyright (c) 2013-2020 Simon Fraser University
+ * Copyright (c) 2003-2020 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
  *
  * PLN plugin settings
- *
  *}
 
 <script>
@@ -15,10 +14,6 @@
 		$('#plnSettingsForm').pkpHandler('$.pkp.controllers.form.AjaxFormHandler');
 	{rdelim});
 </script>
-
-{strip}
-	{assign var="pageTitle" value="plugins.generic.pln.settings_page"}
-{/strip}
 
 {if $prerequisitesMissing|@count > 0}
 	<ul>

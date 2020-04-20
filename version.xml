@@ -2,19 +2,19 @@
 <!DOCTYPE version SYSTEM "../../../lib/pkp/dtd/pluginVersion.dtd">
 
 <!--
- * plugins/generic/pln/version.xml
+ * version.xml
  *
- * Copyright (c) 2013-2019 Simon Fraser University
- * Copyright (c) 2003-2019 John Willinsky
- * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+ * Copyright (c) 2013-2020 Simon Fraser University
+ * Copyright (c) 2003-2020 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
  *
  * Plugin version information.
  -->
 <version>
 	<application>pln</application>
 	<type>plugins.generic</type>
-	<release>2.0.0</release>
-	<date>2019-08-22</date>
+	<release>2.0.0.1</release>
+	<date>2020-04-20</date>
 	<lazy-load>1</lazy-load>
 	<sitewide>0</sitewide>
 	<class>PLNPlugin</class>
