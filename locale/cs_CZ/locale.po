@@ -15,19 +15,16 @@ msgid "plugins.generic.pln"
 msgstr "Plugin PKP PLN"
 
 msgid "plugins.generic.pln.description"
-msgstr "Plugin PKP PLN uloží váš publikovaný obsah do PKP veřejné sítě LOCKSS pro jejich ochranu."
+msgstr "Plugin PKP PN uloží váš publikovaný obsah do PKP veřejné sítě LOCKSS pro jejich ochranu."
 
 msgid "plugins.generic.pln.manager.setup.description"
 msgstr "<strong>PKP soukromá síť LOCKSS</strong><br /><br />Přečtěte si <a href=\"https://pkp.sfu.ca/pkp-lockss/\" target=\"_blank\">informace o PKP PLN</a> a vyplňte <a href=\"{$plnPluginURL}\">tento jednoduchý formulář</a>. Tato volba vám umožní zahrnutí vašeho časopisu do sítě Public Knowledge Project Private LOCKSS (PKP PLN)."
-
-msgid "plugins.generic.pln.settings_page"
-msgstr "Nastavení PKP PLN pluginu"
 
 msgid "plugins.generic.pln.settings"
 msgstr "Nastavení"
 
 msgid "plugins.generic.pln.settings.saved"
-msgstr "Nastavení PKP PLN byla uložena."
+msgstr "Nastavení PKP PN byla uložena."
 
 msgid "plugins.generic.pln.settings.terms_of_use"
 msgstr "Podmínky užití"
@@ -64,9 +61,6 @@ msgstr "Článek"
 
 msgid "plugins.generic.pln.objects.issue"
 msgstr "Číslo"
-
-msgid "plugins.generic.pln.status_page"
-msgstr "Stav PKP PLN pluginu"
 
 msgid "plugins.generic.pln.status.network_status"
 msgstr "Stav sítě: {$networkStatusMessage}"
@@ -120,16 +114,16 @@ msgid "plugins.generic.pln.status.no"
 msgstr "Ne"
 
 msgid "plugins.generic.pln.depositorTask.name"
-msgstr "Úkol PKP PLN depozitoru"
+msgstr "Úkol PKP PN depozitoru"
 
 msgid "plugins.generic.pln.notifications.processing_for"
 msgstr "Zpracování uložení pro"
 
 msgid "plugins.generic.pln.notifications.pln_not_accepting"
-msgstr "PKP PLN v tomto momentě nepřijímá uložení."
+msgstr "PKP PN v tomto momentě nepřijímá uložení."
 
 msgid "plugins.generic.pln.notifications.pln_accepting"
-msgstr "PKP PLN přijímá ukládání."
+msgstr "PKP PN přijímá ukládání."
 
 msgid "plugins.generic.pln.notifications.check_status"
 msgstr "Zkontrolujte status vašich uložení."
@@ -138,10 +132,10 @@ msgid "plugins.generic.pln.notifications.issn_missing"
 msgstr "Váš časopis musí mít ISSN aby bylo možné ukládat obsah do PKP PLN."
 
 msgid "plugins.generic.pln.notifications.http_error"
-msgstr "Při připojování k PKP PLN nastala chyba - kontaktujte, prosím, systémového administrátora."
+msgstr "Při připojování k PKP PN nastala chyba - kontaktujte, prosím, systémového administrátora."
 
 msgid "plugins.generic.pln.notifications.terms_updated"
-msgstr "Zásady používání PKP PLN byly aktualizovány. Je vyžadován souhlas s novými podmínkami používání před pokračování v ukládání."
+msgstr "Zásady používání PKP PN byly aktualizovány. Je vyžadován souhlas s novými podmínkami používání před pokračování v ukládání."
 
 msgid "plugins.generic.pln.notifications.curl_missing"
 msgstr "Podpora CURL musí být povolena, aby proběhlo zpracování."

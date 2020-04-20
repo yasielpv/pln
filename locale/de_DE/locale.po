@@ -26,9 +26,6 @@ msgstr "Das PKP-PLN-Plug-In wurde aktiviert."
 msgid "plugins.generic.pln.disabled"
 msgstr "Das PKP-PLN-Plug-In wurde deaktiviert."
 
-msgid "plugins.generic.pln.settings_page"
-msgstr "PKP-PLN-Plug-In - Einstellungen"
-
 msgid "plugins.generic.pln.settings"
 msgstr "Einstellungen"
 
@@ -51,7 +48,7 @@ msgid "plugins.generic.pln.settings.journal_uuid"
 msgstr "Kennzeichnung der Zeitschrift"
 
 msgid "plugins.generic.pln.settings.journal_uuid_help"
-msgstr "Dies ist die eindeutige Kennung Ihrer Zeitschrift für das PKP PLN. Sie müssen diese Kennung angeben, wenn Sie Support durch die Administrator/innen von PKP PLN erhalten möchten."
+msgstr "Dies ist die eindeutige Kennung Ihrer Zeitschrift für das PKP PLN. Sie müssen diese Kennung angeben, wenn Sie Support durch die Administrator/innen von PKP PN erhalten möchten."
 
 msgid "plugins.generic.pln.settings.refresh"
 msgstr "Aktualisieren"
@@ -66,16 +63,13 @@ msgid "plugins.generic.pln.required.object_threshold"
 msgstr "Bitte wählen Sie eine Schwelle für die Objektablieferung."
 
 msgid "plugins.generic.pln.required.terms_of_use_agreement"
-msgstr "Die Zustimmung zu den Nutzungsbedingungen des Netzwerks ist erforderlich, um bei dem PLN abzuliefern."
+msgstr "Die Zustimmung zu den Nutzungsbedingungen des Netzwerks ist erforderlich, um bei dem PKP PN abzuliefern."
 
 msgid "plugins.generic.pln.objects.article"
 msgstr "Artikel"
 
 msgid "plugins.generic.pln.objects.issue"
 msgstr "Ausgabe"
-
-msgid "plugins.generic.pln.status_page"
-msgstr "PKP-PLN-Plug-In - Status"
 
 msgid "plugins.generic.pln.status.network_status"
 msgstr "Netzwerk-Status: {$networkStatusMessage}"
@@ -153,7 +147,7 @@ msgid "plugins.generic.pln.status.remote_failure"
 msgstr "Serverfehler"
 
 msgid "plugins.generic.pln.depositorTask.name"
-msgstr "PKP PLN Ablieferungsaufgabe"
+msgstr "PKP PN Ablieferungsaufgabe"
 
 msgid "plugins.generic.pln.notifications.processing_for"
 msgstr "Ablieferung wird durchgeführt für {$title}."
@@ -162,22 +156,22 @@ msgid "plugins.generic.pln.notifications.getting_servicedocument"
 msgstr "Hole das Service-Dokument."
 
 msgid "plugins.generic.pln.notifications.pln_not_accepting"
-msgstr "Das PKP PLN akzeptiert momentan keine Ablieferungen."
+msgstr "Das PKP PN akzeptiert momentan keine Ablieferungen."
 
 msgid "plugins.generic.pln.notifications.pln_accepting"
-msgstr "Das PKP PLN akzeptiert Ablieferungen."
+msgstr "Das PKP PN akzeptiert Ablieferungen."
 
 msgid "plugins.generic.pln.notifications.check_status"
 msgstr "Überprüfen Sie den Status Ihrer Ablieferungen."
 
 msgid "plugins.generic.pln.notifications.issn_missing"
-msgstr "Ihre Zeitschrift muss über eine ISSN verfügen, um Inhalte in das PKP PLN abzuliefern."
+msgstr "Ihre Zeitschrift muss über eine ISSN verfügen, um Inhalte in das PKP PN abzuliefern."
 
 msgid "plugins.generic.pln.notifications.http_error"
-msgstr "Es gab einen Fehler bei der Verbindung zum PKP PLN - bitte benachrichten Sie Ihre/n Systemadministrator/in."
+msgstr "Es gab einen Fehler bei der Verbindung zum PKP PN - bitte benachrichten Sie Ihre/n Systemadministrator/in."
 
 msgid "plugins.generic.pln.notifications.terms_updated"
-msgstr "Die Nutzungsbedingungen des PKP PLN sind aktualisiert worden. Die Zustimmung zu den neuen Bedingungen ist notwendig, um weiter abliefern zu können."
+msgstr "Die Nutzungsbedingungen des PKP PN sind aktualisiert worden. Die Zustimmung zu den neuen Bedingungen ist notwendig, um weiter abliefern zu können."
 
 msgid "plugins.generic.pln.notifications.curl_missing"
 msgstr "Die Unterstützung von CURL muss aktiviert werden, um fortfahren zu können."
@@ -192,19 +186,19 @@ msgid "plugins.generic.pln.notifications.tar_missing"
 msgstr "Ihr System muss über ein tar-Programm verfügen."
 
 msgid "plugins.generic.pln.notifications.archive_tar_missing"
-msgstr "Die Archive_Tar-PHP-Erweiterung muss installiert werden, bevor das PKP PLN aktiviert werden kann."
+msgstr "Die Archive_Tar-PHP-Erweiterung muss installiert werden, bevor das PKP PN aktiviert werden kann."
 
 msgid "plugins.generic.pln.error.include.bagit"
 msgstr "Die in OJS enthaltene BagIt-Bibliothek kann nicht geladen werden, vermutlich aufgrund nicht erfüllter Grundvoraussetzungen."
 
 msgid "plugins.generic.pln.error.network.servicedocument"
-msgstr "Netzwerk-Fehler {$error} beim Versuch, das Service-Dokument vom PLN zu holen."
+msgstr "Netzwerk-Fehler {$error} beim Versuch, das Service-Dokument vom PKP PN zu holen."
 
 msgid "plugins.generic.pln.error.network.deposit"
-msgstr "Netzwerk-Fehler {$error} beim Versuch, die Ablieferung an das PLN zu senden."
+msgstr "Netzwerk-Fehler {$error} beim Versuch, die Ablieferung an das PKP PN zu senden."
 
 msgid "plugins.generic.pln.error.network.swordstatement"
-msgstr "Netzwerk-Fehler {$error} beim Versuch, von PLN ein Statusupdate für die Ablieferung zu holen."
+msgstr "Netzwerk-Fehler {$error} beim Versuch, von PKP PN ein Statusupdate für die Ablieferung zu holen."
 
 msgid "plugins.generic.pln.error.http.servicedocument"
 msgstr "PLN-Server hat einen HTTP-Fehler {$error} gemeldet beim Versuch, das Service-Dokument zu holen."

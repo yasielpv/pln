@@ -15,19 +15,16 @@ msgid "plugins.generic.pln"
 msgstr "Plugiciel PKP PLN"
 
 msgid "plugins.generic.pln.description"
-msgstr "Le Plugiciel PKP PLN déposera votre contenu publié dans le réseau privé LOCKSS de PKP pour préservation."
+msgstr "Le Plugiciel PKP PN déposera votre contenu publié dans le réseau privé LOCKSS de PKP pour préservation."
 
 msgid "plugins.generic.pln.manager.setup.description"
 msgstr "<strong>Réseau privé LOCKSS de PKP</strong><br /><br />Veuillez lire le <a href=\"https://pkp.sfu.ca/pkp-lockss/\" target=\"_blank\">guide de PKP PLN</a> et compléter <a href=\"{$plnPluginURL}\">ce simple formulaire</a>. Cette option permettra l'inclusion de votre revue dans le réseau LOCKSS privé du Public Project Knowledge (PKP PLN)."
-
-msgid "plugins.generic.pln.settings_page"
-msgstr "Plugiciel PKP PLN - Paramètres"
 
 msgid "plugins.generic.pln.settings"
 msgstr "Paramètres"
 
 msgid "plugins.generic.pln.settings.saved"
-msgstr "Paramètres de PKP PLN enregistrés ."
+msgstr "Paramètres de PKP PN enregistrés ."
 
 msgid "plugins.generic.pln.settings.terms_of_use"
 msgstr "Conditions d'utilisation"
@@ -42,7 +39,7 @@ msgid "plugins.generic.pln.settings.journal_uuid"
 msgstr "Identifiant de la revue"
 
 msgid "plugins.generic.pln.settings.journal_uuid_help"
-msgstr "Ceci est l’identifiant unique de votre revue pour PKP PLN. Vous devrez probablement le partager avec les administrateurs de PKP PLN en cas de demande de support."
+msgstr "Ceci est l’identifiant unique de votre revue pour PKP PLN. Vous devrez probablement le partager avec les administrateurs de PKP PN en cas de demande de support."
 
 msgid "plugins.generic.pln.settings.refresh"
 msgstr "Rafraîchir"
@@ -64,9 +61,6 @@ msgstr "Article"
 
 msgid "plugins.generic.pln.objects.issue"
 msgstr "Numéro"
-
-msgid "plugins.generic.pln.status_page"
-msgstr "Plugiciel PKP PLN - Statut"
 
 msgid "plugins.generic.pln.status.network_status"
 msgstr "Statut du réseau: {$networkStatusMessage}"
@@ -126,10 +120,10 @@ msgid "plugins.generic.pln.notifications.processing_for"
 msgstr "Déposant en traitement de"
 
 msgid "plugins.generic.pln.notifications.pln_not_accepting"
-msgstr "Le PKP PLN n'accepte pas les dépôt actuellement."
+msgstr "Le PKP PN n'accepte pas les dépôt actuellement."
 
 msgid "plugins.generic.pln.notifications.pln_accepting"
-msgstr "Le PKP PLN accepte les dépôts"
+msgstr "Le PKP PN accepte les dépôts"
 
 msgid "plugins.generic.pln.notifications.check_status"
 msgstr "Vérifier les statuts de vos dépôts"
@@ -138,10 +132,10 @@ msgid "plugins.generic.pln.notifications.issn_missing"
 msgstr "Votre revue doit avoir un ISSN pour déposer son contenu à PKP PLN."
 
 msgid "plugins.generic.pln.notifications.http_error"
-msgstr "Une erreur est survenue pendant la connexion à PKP PLN - veuillez contacter votre administrateur système"
+msgstr "Une erreur est survenue pendant la connexion à PKP PN - veuillez contacter votre administrateur système"
 
 msgid "plugins.generic.pln.notifications.terms_updated"
-msgstr "Les conditions d'utilisation de PKP PLN ont été mises à jour. L'acceptation des nouvelles conditions sont requises avant de continuer à déposer."
+msgstr "Les conditions d'utilisation de PKP PN ont été mises à jour. L'acceptation des nouvelles conditions sont requises avant de continuer à déposer."
 
 msgid "plugins.generic.pln.notifications.curl_missing"
 msgstr "Le support CURL doit être activé avant de procéder."
@@ -150,16 +144,16 @@ msgid "plugins.generic.pln.notifications.zip_missing"
 msgstr "Le support ZipArchive doit être activé avant de procéder."
 
 msgid "plugins.generic.pln.enabled"
-msgstr "Le plugiciel PKP PLN a été activé."
+msgstr "Le plugiciel PKP PN a été activé."
 
 msgid "plugins.generic.pln.disabled"
 msgstr "Le plugiciel a été désactivé."
 
 msgid "plugins.generic.pln.settings.acron_required"
-msgstr "Le plugiciel PLN exige le plugiciel Acron ou des outils de planification périodiques comme 'cron'."
+msgstr "Le plugiciel PKP PN exige le plugiciel Acron ou des outils de planification périodiques comme 'cron'."
 
 msgid "plugins.generic.pln.status.docs"
-msgstr "Les statuts de dépôt du PLN <a href=\"{$statusDocsUrl}\">sont décrits ici</a>."
+msgstr "Les statuts de dépôt du PKP PN <a href=\"{$statusDocsUrl}\">sont décrits ici</a>."
 
 msgid "plugins.generic.pln.status.checked"
 msgstr "Vérifié"
@@ -210,22 +204,22 @@ msgid "plugins.generic.pln.error.include.bagit"
 msgstr "La bibliothèque BagIt, qui est comprise dans OJS, ne peut pas être lancée, probablement en raison d'un prérequis manquant."
 
 msgid "plugins.generic.pln.error.network.servicedocument"
-msgstr "Erreur réseau {$error} connexion au PLN pour obtenir le document de service."
+msgstr "Erreur réseau {$error} connexion au PKP PN pour obtenir le document de service."
 
 msgid "plugins.generic.pln.error.network.deposit"
-msgstr "Erreur réseau {$error} connexion au PLN pour envoyer le dépôt."
+msgstr "Erreur réseau {$error} connexion au PKP PN pour envoyer le dépôt."
 
 msgid "plugins.generic.pln.error.network.swordstatement"
-msgstr "Erreur réseau {$error} connexion au PLN pour obtenir une mise à jour du statut du dépôt."
+msgstr "Erreur réseau {$error} connexion au PKP PN pour obtenir une mise à jour du statut du dépôt."
 
 msgid "plugins.generic.pln.error.http.servicedocument"
-msgstr "Erreur HTTP {$error} envoyée par le serveur PLN lors d'une tentative de connexion au document de service."
+msgstr "Erreur HTTP {$error} envoyée par le serveur PKP PN lors d'une tentative de connexion au document de service."
 
 msgid "plugins.generic.pln.error.http.deposit"
-msgstr "Erreur HTTP {$error} envoyée par le serveur PLN lors de l'envoi du dépôt."
+msgstr "Erreur HTTP {$error} envoyée par le serveur PKP PN lors de l'envoi du dépôt."
 
 msgid "plugins.generic.pln.error.http.swordstatement"
-msgstr "Erreur HTTP {$error} envoyée par le serveur PLN lors de la vérification du statut d'un dépôt."
+msgstr "Erreur HTTP {$error} envoyée par le serveur PKP PN lors de la vérification du statut d'un dépôt."
 
 msgid "plugins.generic.pln.error.depositor.missingpackage"
 msgstr "Impossible de trouver le dossier compressé {$file}."
@@ -258,10 +252,10 @@ msgid "plugins.generic.pln.depositor.packagingdeposits"
 msgstr "Paquetage de contenu pour le dépôt en cours."
 
 msgid "plugins.generic.pln.depositor.transferringdeposits"
-msgstr "Envoi des dépôts au PLN en cours."
+msgstr "Envoi des dépôts au PKP PN en cours."
 
 msgid "plugins.generic.plngateway.displayName"
 msgstr "Passerelle PLN"
 
 msgid "plugins.generic.plngateway.description"
-msgstr "Rapporte le statut du PLN et les titres d'article récents pour le serveur de test."
+msgstr "Rapporte le statut du PKP PN et les titres d'article récents pour le serveur de test."

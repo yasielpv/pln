@@ -12,28 +12,25 @@ msgstr ""
 "Language: \n"
 
 msgid "plugins.generic.pln"
-msgstr "Plugin PLN do PKP"
+msgstr "Plugin PKP PN do PKP"
 
 msgid "plugins.generic.pln.description"
-msgstr "O plugin PLN do PKP  realizará o deposito do conteúdo preservado na Rede Privada LOCKSS da PKP para preservação."
+msgstr "O plugin PKP PN do PKP  realizará o deposito do conteúdo preservado na Rede Privada LOCKSS da PKP para preservação."
 
 msgid "plugins.generic.pln.manager.setup.description"
-msgstr "<strong>Rede Privada LOCKSS da PKP</strong><br /><br />Por favor, leia o <a href=\"https://pkp.sfu.ca/pkp-lockss/\" target=\"_blank\">resumo da PLN (Rede Privada LOCKSS) da PKP</a> e preencha <a href=\"{$plnPluginURL}\">este formulário</a>. Esta opção permitirá a inclusão de seu periódico no Public Knowledge Project Private LOCKSS Network (PLN do PKP)."
+msgstr "<strong>Rede Privada LOCKSS da PKP</strong><br /><br />Por favor, leia o <a href=\"https://pkp.sfu.ca/pkp-lockss/\" target=\"_blank\">resumo da PKP PN (Rede Privada LOCKSS) da PKP</a> e preencha <a href=\"{$plnPluginURL}\">este formulário</a>. Esta opção permitirá a inclusão de seu periódico no Public Knowledge Project Private LOCKSS Network (PLN do PKP)."
 
 msgid "plugins.generic.pln.enabled"
-msgstr "O plugin PLN do PKP foi habilitado."
+msgstr "O plugin PKP PN do PKP foi habilitado."
 
 msgid "plugins.generic.pln.disabled"
-msgstr "O plugin PLN do PKP foi desabilitado."
-
-msgid "plugins.generic.pln.settings_page"
-msgstr "Plugin PLN do PKP - Configurações"
+msgstr "O plugin PKP PN do PKP foi desabilitado."
 
 msgid "plugins.generic.pln.settings"
 msgstr "Configurações"
 
 msgid "plugins.generic.pln.settings.acron_required"
-msgstr "O plugin PLN exige o plugin Acron ou outra forma de agendamento periódico de ações como o 'cron'."
+msgstr "O plugin PKP PN exige o plugin Acron ou outra forma de agendamento periódico de ações como o 'cron'."
 
 msgid "plugins.generic.pln.settings.saved"
 msgstr "PLN do PKP configurações salvas."
@@ -51,7 +48,7 @@ msgid "plugins.generic.pln.settings.journal_uuid"
 msgstr "Identificador de periódico"
 
 msgid "plugins.generic.pln.settings.journal_uuid_help"
-msgstr "Este é o identificador único do seu periódico para a PLN do PKP. Pode ser necessário informar esse identificador aos administradores da PLN do PKP em casos de suporte."
+msgstr "Este é o identificador único do seu periódico para a PKP PN do PKP. Pode ser necessário informar esse identificador aos administradores da PKP PN do PKP em casos de suporte."
 
 msgid "plugins.generic.pln.settings.refresh"
 msgstr "Atualizar"
@@ -74,9 +71,6 @@ msgstr "Artigo"
 msgid "plugins.generic.pln.objects.issue"
 msgstr "Edição"
 
-msgid "plugins.generic.pln.status_page"
-msgstr "Plugin PLN do PKP - Situação"
-
 msgid "plugins.generic.pln.status.network_status"
 msgstr "Estado da rede: {$networkStatusMessage}"
 
@@ -87,7 +81,7 @@ msgid "plugins.generic.pln.status"
 msgstr "Situação"
 
 msgid "plugins.generic.pln.status.docs"
-msgstr "A <a href=\"{$statusDocsUrl}\">situação dos depósitos à PLN está descrita aqui</a>."
+msgstr "A <a href=\"{$statusDocsUrl}\">situação dos depósitos à PKP PN está descrita aqui</a>."
 
 msgid "plugins.generic.pln.status.id"
 msgstr "ID"
@@ -162,22 +156,22 @@ msgid "plugins.generic.pln.notifications.getting_servicedocument"
 msgstr "Recuperando documento de serviço."
 
 msgid "plugins.generic.pln.notifications.pln_not_accepting"
-msgstr "A PLN do PKP não está aceitando depósitos no momento."
+msgstr "A PKP PN do PKP não está aceitando depósitos no momento."
 
 msgid "plugins.generic.pln.notifications.pln_accepting"
-msgstr "A PLN do PKP está aceitando depósitos."
+msgstr "A PKP PN do PKP está aceitando depósitos."
 
 msgid "plugins.generic.pln.notifications.check_status"
 msgstr "Verificar situação de seus depósitos."
 
 msgid "plugins.generic.pln.notifications.issn_missing"
-msgstr "Seu periódico deve ter um ISSN para poder depositar na PLN do PKP."
+msgstr "Seu periódico deve ter um ISSN para poder depositar na PKP PN do PKP."
 
 msgid "plugins.generic.pln.notifications.http_error"
-msgstr "Erro ao conectar à PLN do PKP - entre em contato com o administrador do sistema."
+msgstr "Erro ao conectar à PKP PN do PKP - entre em contato com o administrador do sistema."
 
 msgid "plugins.generic.pln.notifications.terms_updated"
-msgstr "Os termos de uso da PLN do PKP foram atualizados. É necessário aceitar os novos termos para continuar depositando."
+msgstr "Os termos de uso da PKP PN do PKP foram atualizados. É necessário aceitar os novos termos para continuar depositando."
 
 msgid "plugins.generic.pln.notifications.curl_missing"
 msgstr "Suporte ao CURL deve estar habilitado para continuar."
@@ -192,28 +186,28 @@ msgid "plugins.generic.pln.notifications.tar_missing"
 msgstr "Um executável tar deve estar disponível."
 
 msgid "plugins.generic.pln.notifications.archive_tar_missing"
-msgstr "A extensão Archive_Tar do PHP deve estar instalada antes de habilitar o plugin PLN do PKP."
+msgstr "A extensão Archive_Tar do PHP deve estar instalada antes de habilitar o plugin PKP PN do PKP."
 
 msgid "plugins.generic.pln.error.include.bagit"
 msgstr "A biblioteca BagIt, incluída com o OJS, não pode ser carregada, provavelmente devido à falta de algum pré-requisito."
 
 msgid "plugins.generic.pln.error.network.servicedocument"
-msgstr "Erro de rede {$error} ao conectar à PLN para recuperar documento de serviço."
+msgstr "Erro de rede {$error} ao conectar à PKP PN para recuperar documento de serviço."
 
 msgid "plugins.generic.pln.error.network.deposit"
-msgstr "Erro de rede {$error} ao conectar à PLN para enviar depósito."
+msgstr "Erro de rede {$error} ao conectar à PKP PN para enviar depósito."
 
 msgid "plugins.generic.pln.error.network.swordstatement"
-msgstr "Erro de rede {$error} ao conectar à PLN para atualizar situação do depósito."
+msgstr "Erro de rede {$error} ao conectar à PKP PN para atualizar situação do depósito."
 
 msgid "plugins.generic.pln.error.http.servicedocument"
-msgstr "O servidor da PLN retornou o erro HTTP {$error} ao tentar recuperar documento de serviço."
+msgstr "O servidor da PKP PN retornou o erro HTTP {$error} ao tentar recuperar documento de serviço."
 
 msgid "plugins.generic.pln.error.http.deposit"
-msgstr "Servidor da PLN retornou erro HTTP {$error} ao enviar o depósito."
+msgstr "Servidor da PKP PN retornou erro HTTP {$error} ao enviar o depósito."
 
 msgid "plugins.generic.pln.error.http.swordstatement"
-msgstr "O servidor da PLN retornou o erro HTTP {$error} ao verificar a situação de um depósito."
+msgstr "O servidor da PKP PN retornou o erro HTTP {$error} ao verificar a situação de um depósito."
 
 msgid "plugins.generic.pln.error.depositor.missingpackage"
 msgstr "Impossível encontrar arquivo de pacote {$file}."
@@ -252,4 +246,4 @@ msgid "plugins.generic.plngateway.displayName"
 msgstr "Gateway da PLN"
 
 msgid "plugins.generic.plngateway.description"
-msgstr "Reporta situação da PLN e títulos de artigos recentes para o servidor de preprocessamento."
+msgstr "Reporta situação da PKP PN e títulos de artigos recentes para o servidor de preprocessamento."

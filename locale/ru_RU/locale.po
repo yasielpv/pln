@@ -26,17 +26,14 @@ msgstr "Плагин «PKP PLN» был включен."
 msgid "plugins.generic.pln.disabled"
 msgstr "Плагин «PKP PLN» был отключен."
 
-msgid "plugins.generic.pln.settings_page"
-msgstr "Плагин «PKP PLN» — Настройки"
-
 msgid "plugins.generic.pln.settings"
 msgstr "Настройки"
 
 msgid "plugins.generic.pln.settings.acron_required"
-msgstr "Плагин PLN требуется либо плагин Acron, либо инструменты периодического запуска по расписанию, например, «cron»."
+msgstr "Плагин PKP PN требуется либо плагин Acron, либо инструменты периодического запуска по расписанию, например, «cron»."
 
 msgid "plugins.generic.pln.settings.saved"
-msgstr "Настройки PKP PLN сохранены."
+msgstr "Настройки PKP PN сохранены."
 
 msgid "plugins.generic.pln.settings.terms_of_use"
 msgstr "Условия использования"
@@ -51,7 +48,7 @@ msgid "plugins.generic.pln.settings.journal_uuid"
 msgstr "Идентификатор журнала"
 
 msgid "plugins.generic.pln.settings.journal_uuid_help"
-msgstr "Это уникальный идентификатор вашего журнала для PKP PLN. Возможно Вам потребуется сообщить его администраторам PKP PLN для поддержки Вашего журнала."
+msgstr "Это уникальный идентификатор вашего журнала для PKP PLN. Возможно Вам потребуется сообщить его администраторам PKP PN для поддержки Вашего журнала."
 
 msgid "plugins.generic.pln.settings.refresh"
 msgstr "Обновить"
@@ -73,9 +70,6 @@ msgstr "Статья"
 
 msgid "plugins.generic.pln.objects.issue"
 msgstr "Выпуск"
-
-msgid "plugins.generic.pln.status_page"
-msgstr "Плагин «PKP PLN» — Статус"
 
 msgid "plugins.generic.pln.status.network_status"
 msgstr "Статус сети: {$networkStatusMessage}"
@@ -162,10 +156,10 @@ msgid "plugins.generic.pln.notifications.getting_servicedocument"
 msgstr "Получение служебного документа."
 
 msgid "plugins.generic.pln.notifications.pln_not_accepting"
-msgstr "PKP PLN сейчас не принимает депонируемые объекты."
+msgstr "PKP PN сейчас не принимает депонируемые объекты."
 
 msgid "plugins.generic.pln.notifications.pln_accepting"
-msgstr "PKP PLN принимает депонируемые объекты."
+msgstr "PKP PN принимает депонируемые объекты."
 
 msgid "plugins.generic.pln.notifications.check_status"
 msgstr "Проверьте статус ваших депонируемых объектов."
@@ -174,10 +168,10 @@ msgid "plugins.generic.pln.notifications.issn_missing"
 msgstr "Ваш журнал должен иметь ISSN для депонирования контента в PKP PLN."
 
 msgid "plugins.generic.pln.notifications.http_error"
-msgstr "Произошла ошибка при подключении к PKP PLN — пожалуйста, свяжитесь с системным администратором."
+msgstr "Произошла ошибка при подключении к PKP PN — пожалуйста, свяжитесь с системным администратором."
 
 msgid "plugins.generic.pln.notifications.terms_updated"
-msgstr "Условия использования PKP PLN были обновлены. Принятие новых условий является обязательным для продолжения депонирования."
+msgstr "Условия использования PKP PN были обновлены. Принятие новых условий является обязательным для продолжения депонирования."
 
 msgid "plugins.generic.pln.notifications.curl_missing"
 msgstr "Для работы необходимо включить поддержку CURL."
@@ -198,19 +192,19 @@ msgid "plugins.generic.pln.error.include.bagit"
 msgstr "Библиотеку BagIt, входящую в состав OJS, не удается загрузить, скорее всего из-за отсутствия необходимых для ее работы компонент."
 
 msgid "plugins.generic.pln.error.network.servicedocument"
-msgstr "Ошибка сети {$error} при подключении к PLN для получения служебного документа."
+msgstr "Ошибка сети {$error} при подключении к PKP PN для получения служебного документа."
 
 msgid "plugins.generic.pln.error.network.deposit"
-msgstr "Ошибка сети {$error} при подключении к PLN для отправки депонируемого объекта."
+msgstr "Ошибка сети {$error} при подключении к PKP PN для отправки депонируемого объекта."
 
 msgid "plugins.generic.pln.error.network.swordstatement"
-msgstr "Ошибка сети {$error} при подключении к PLN для получения обновленного статуса депонируемого объекта."
+msgstr "Ошибка сети {$error} при подключении к PKP PN для получения обновленного статуса депонируемого объекта."
 
 msgid "plugins.generic.pln.error.http.servicedocument"
-msgstr "Сервер PLN вернул ошибку HTTP {$error} при попытке получения служебного документа."
+msgstr "Сервер PKP PN вернул ошибку HTTP {$error} при попытке получения служебного документа."
 
 msgid "plugins.generic.pln.error.http.deposit"
-msgstr "Сервер PLN вернул ошибку HTTP {$error} при отправке депонируемого объекта."
+msgstr "Сервер PKP PN вернул ошибку HTTP {$error} при отправке депонируемого объекта."
 
 msgid "plugins.generic.pln.error.http.swordstatement"
 msgstr "PLN вернул ошибку HTTP {$error} при проверке статуса депонируемого объекта."
@@ -252,4 +246,4 @@ msgid "plugins.generic.plngateway.displayName"
 msgstr "Шлюз PLN"
 
 msgid "plugins.generic.plngateway.description"
-msgstr "Передает статус PLN и названия последних статей на сервер."
+msgstr "Передает статус PKP PN и названия последних статей на сервер."

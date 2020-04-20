@@ -15,28 +15,25 @@ msgid "plugins.generic.pln"
 msgstr "Plugin PKP PLN"
 
 msgid "plugins.generic.pln.description"
-msgstr "Il plugin PKP PLN cura il versamento dei contenuti pubblicati dalla rivista nella PKP Private LOCKSS Network a fini di conservazione a lungo termine."
+msgstr "Il plugin PKP PN cura il versamento dei contenuti pubblicati dalla rivista nella PKP Private LOCKSS Network a fini di conservazione a lungo termine."
 
 msgid "plugins.generic.pln.manager.setup.description"
 msgstr "<strong>PKP Private LOCKSS Network</strong><br /><br />Leggi la <a href=\"https://pkp.sfu.ca/pkp-lockss/\" target=\"_blank\">panoramica sulla PKP PLN</a> e completa <a href=\"{$plnPluginURL}\">questo semplice modulo</a>. Questa opzione permette l'inclusione della tua rivista nella Public Knowledge Project Private LOCKSS Network (PKP PLN)."
 
 msgid "plugins.generic.pln.enabled"
-msgstr "Il plugin PKP PLN è stato abilitato."
+msgstr "Il plugin PKP PN è stato abilitato."
 
 msgid "plugins.generic.pln.disabled"
-msgstr "Il plugin PKP PLN è stato disabilitato."
-
-msgid "plugins.generic.pln.settings_page"
-msgstr "Plugin PKP PLN - Impostazioni"
+msgstr "Il plugin PKP PN è stato disabilitato."
 
 msgid "plugins.generic.pln.settings"
 msgstr "Impostazioni"
 
 msgid "plugins.generic.pln.settings.acron_required"
-msgstr "Il plugin PLN richiede il plugin Acron o l'abilitazione dei tool pianificati, per esempio in 'cron.'"
+msgstr "Il plugin PKP PN richiede il plugin Acron o l'abilitazione dei tool pianificati, per esempio in 'cron.'"
 
 msgid "plugins.generic.pln.settings.saved"
-msgstr "Impostazioni PKP PLN salvate."
+msgstr "Impostazioni PKP PN salvate."
 
 msgid "plugins.generic.pln.settings.terms_of_use"
 msgstr "Condizioni d'uso"
@@ -51,7 +48,7 @@ msgid "plugins.generic.pln.settings.journal_uuid"
 msgstr "Identificatore della rivista"
 
 msgid "plugins.generic.pln.settings.journal_uuid_help"
-msgstr "Questo è l'identificatore unico della rivista per la PKP PLN. Potresti doverlo comunicare agli amministratori della PKP PLN nelle richieste di supporto."
+msgstr "Questo è l'identificatore unico della rivista per la PKP PLN. Potresti doverlo comunicare agli amministratori della PKP PN nelle richieste di supporto."
 
 msgid "plugins.generic.pln.settings.refresh"
 msgstr "Aggiorna"
@@ -66,16 +63,13 @@ msgid "plugins.generic.pln.required.object_threshold"
 msgstr "Scegli una soglia di versamento per gli oggetti."
 
 msgid "plugins.generic.pln.required.terms_of_use_agreement"
-msgstr "Per versare nella PLN devi accettare le condizioni d'uso."
+msgstr "Per versare nella PKP PN devi accettare le condizioni d'uso."
 
 msgid "plugins.generic.pln.objects.article"
 msgstr "Articoli"
 
 msgid "plugins.generic.pln.objects.issue"
 msgstr "Fascicoli"
-
-msgid "plugins.generic.pln.status_page"
-msgstr "PKP PLN Plugin - Stato"
 
 msgid "plugins.generic.pln.status.network_status"
 msgstr "Stato della rete: {$networkStatusMessage}"
@@ -87,7 +81,7 @@ msgid "plugins.generic.pln.status"
 msgstr "Stato"
 
 msgid "plugins.generic.pln.status.docs"
-msgstr "I diversi <a href=\"{$statusDocsUrl}\">stati di versamento in PLN sono descritti qui</a>."
+msgstr "I diversi <a href=\"{$statusDocsUrl}\">stati di versamento in PKP PN sono descritti qui</a>."
 
 msgid "plugins.generic.pln.status.id"
 msgstr "ID"
@@ -162,10 +156,10 @@ msgid "plugins.generic.pln.notifications.getting_servicedocument"
 msgstr "Getting service document."
 
 msgid "plugins.generic.pln.notifications.pln_not_accepting"
-msgstr "La PKP PLN al momento non accetta versamenti."
+msgstr "La PKP PN al momento non accetta versamenti."
 
 msgid "plugins.generic.pln.notifications.pln_accepting"
-msgstr "La PKP PLN è aperta ai versamenti."
+msgstr "La PKP PN è aperta ai versamenti."
 
 msgid "plugins.generic.pln.notifications.check_status"
 msgstr "Verifica lo stato dei tuoi versamenti."
@@ -174,10 +168,10 @@ msgid "plugins.generic.pln.notifications.issn_missing"
 msgstr "La rivista deve avere un ISSN per poter versare i propri contenuti nella PKP PLN."
 
 msgid "plugins.generic.pln.notifications.http_error"
-msgstr "Si è verificato un errore di connessione con la PKP PLN - contatta l'amministratore di sistema."
+msgstr "Si è verificato un errore di connessione con la PKP PN - contatta l'amministratore di sistema."
 
 msgid "plugins.generic.pln.notifications.terms_updated"
-msgstr "Le condizioni d'uso della PKP PLN sono state aggiornate. Devi accettare le nuove condizioni per poter continuare a versare."
+msgstr "Le condizioni d'uso della PKP PN sono state aggiornate. Devi accettare le nuove condizioni per poter continuare a versare."
 
 msgid "plugins.generic.pln.notifications.curl_missing"
 msgstr "Per continuare devi abilitare il supporto CURL."
@@ -198,22 +192,22 @@ msgid "plugins.generic.pln.error.include.bagit"
 msgstr "La libreria BagIt, già compresa in OJS, non può essere caricata, probabilmente a causa di qualche requisito mancante."
 
 msgid "plugins.generic.pln.error.network.servicedocument"
-msgstr "Errore di rete {$error} connettendosi alla PLN per ricevere il service document."
+msgstr "Errore di rete {$error} connettendosi alla PKP PN per ricevere il service document."
 
 msgid "plugins.generic.pln.error.network.deposit"
-msgstr "Errore di rete {$error} connettendosi alla PLN per la trasmissione del versamento"
+msgstr "Errore di rete {$error} connettendosi alla PKP PN per la trasmissione del versamento"
 
 msgid "plugins.generic.pln.error.network.swordstatement"
-msgstr "Errore di rete {$error} connettendosi alla PLN per ricevere gli aggiornamenti sullo stato del versamento."
+msgstr "Errore di rete {$error} connettendosi alla PKP PN per ricevere gli aggiornamenti sullo stato del versamento."
 
 msgid "plugins.generic.pln.error.http.servicedocument"
-msgstr "Il server PLN ha restituito un errore HTTP {$error} cercando di ricavere il service document."
+msgstr "Il server PKP PN ha restituito un errore HTTP {$error} cercando di ricavere il service document."
 
 msgid "plugins.generic.pln.error.http.deposit"
-msgstr "Il server PLN ha restituito un errore HTTP {$error} durante l'invio di un versamento."
+msgstr "Il server PKP PN ha restituito un errore HTTP {$error} durante l'invio di un versamento."
 
 msgid "plugins.generic.pln.error.http.swordstatement"
-msgstr "Il server PLN ha restituito un errore HTTP {$error} durante il controllo dello stato di un versamento."
+msgstr "Il server PKP PN ha restituito un errore HTTP {$error} durante il controllo dello stato di un versamento."
 
 msgid "plugins.generic.pln.error.depositor.missingpackage"
 msgstr "Non rieso a trovate il file del pacchetto {$file}."
@@ -246,13 +240,13 @@ msgid "plugins.generic.pln.depositor.packagingdeposits"
 msgstr "Impacchettamento dei contenuti per il versamento."
 
 msgid "plugins.generic.pln.depositor.transferringdeposits"
-msgstr "Invio del versamento alla PLN in corso."
+msgstr "Invio del versamento alla PKP PN in corso."
 
 msgid "plugins.generic.plngateway.displayName"
 msgstr "Gateway PLN"
 
 msgid "plugins.generic.plngateway.description"
-msgstr "Mostra lo stato della PLN e i titoli degli articoli recenti in preparazione per il deposito."
+msgstr "Mostra lo stato della PKP PN e i titoli degli articoli recenti in preparazione per il deposito."
 
 msgid "plugins.generic.plnblock.preservedin"
 msgstr "Conservato nella PKP|PLN"

@@ -12,37 +12,34 @@ msgstr ""
 "Language: \n"
 
 msgid "plugins.generic.pln"
-msgstr "PKP PLN Plugin"
+msgstr "PKP PN Plugin"
 
 msgid "plugins.generic.pln.description"
-msgstr "The PKP PLN plugin will deposit your published content into the PKP Private LOCKSS Network for preservation."
+msgstr "The PKP PN plugin will deposit your published content into the PKP Preservation Network."
 
 msgid "plugins.generic.pln.manager.setup.description"
-msgstr "<strong>PKP Private LOCKSS Network</strong><br /><br />Please read the <a href=\"https://pkp.sfu.ca/pkp-lockss/\" target=\"_blank\">overview of the PKP PLN</a> and complete <a href=\"{$plnPluginURL}\">this simple form</a>. This option will enable inclusion of your journal in the Public Knowledge Project Private LOCKSS Network (PKP PLN)."
+msgstr "<strong>PKP Preservation Network</strong><br /><br />Please read the <a href=\"https://pkp.sfu.ca/pkp-pn\" target=\"_blank\">overview of the PKP PN</a> and complete <a href=\"{$plnPluginURL}\">this simple form</a>. This option will enable inclusion of your journal in the Public Knowledge Project Preservation Network (PKP PN)."
 
 msgid "plugins.generic.pln.enabled"
-msgstr "The PKP PLN plugin has been enabled."
+msgstr "The PKP PN plugin has been enabled."
 
 msgid "plugins.generic.pln.disabled"
-msgstr "The PKP PLN plugin has been disabled."
-
-msgid "plugins.generic.pln.settings_page"
-msgstr "PKP PLN Plugin - Settings"
+msgstr "The PKP PN plugin has been disabled."
 
 msgid "plugins.generic.pln.settings"
 msgstr "Settings"
 
 msgid "plugins.generic.pln.settings.acron_required"
-msgstr "The PLN plugin requires either the Acron plugin or a periodic scheduling tools such as 'cron.'"
+msgstr "The PKP PN plugin requires either the Acron plugin or a periodic scheduling tools such as 'cron.'"
 
 msgid "plugins.generic.pln.settings.saved"
-msgstr "PKP PLN settings saved."
+msgstr "PKP PN settings saved."
 
 msgid "plugins.generic.pln.settings.terms_of_use"
 msgstr "Terms of Use"
 
 msgid "plugins.generic.pln.settings.terms_of_use_help"
-msgstr "As Journal Manager, I, in good faith, accept and confirm the following terms and conditions for participation in the Public Knowledge Project’s Private LOCKSS Network (PKP-PLN):"
+msgstr "As Journal Manager, I, in good faith, accept and confirm the following terms and conditions for participation in the Public Knowledge Project’s Preservation Network (PKP-PN):"
 
 msgid "plugins.generic.pln.settings.terms_of_use_agree"
 msgstr "I Agree"
@@ -51,7 +48,7 @@ msgid "plugins.generic.pln.settings.journal_uuid"
 msgstr "Journal Identifier"
 
 msgid "plugins.generic.pln.settings.journal_uuid_help"
-msgstr "This is your journal's unique identifier for the PKP PLN. You may need to share this with PKP PLN administrators for support purposes."
+msgstr "This is your journal's unique identifier for the PKP PN. You may need to share this with PKP PN administrators for support purposes."
 
 msgid "plugins.generic.pln.settings.refresh"
 msgstr "Refresh"
@@ -66,16 +63,13 @@ msgid "plugins.generic.pln.required.object_threshold"
 msgstr "Please choose a deposit object threshold."
 
 msgid "plugins.generic.pln.required.terms_of_use_agreement"
-msgstr "Agreement to the network's terms of use is required in order to deposit to the PLN."
+msgstr "Agreement to the network's terms of use is required in order to deposit to the PKP PN."
 
 msgid "plugins.generic.pln.objects.article"
 msgstr "Article"
 
 msgid "plugins.generic.pln.objects.issue"
 msgstr "Issue"
-
-msgid "plugins.generic.pln.status_page"
-msgstr "PKP PLN Plugin - Status"
 
 msgid "plugins.generic.pln.status.network_status"
 msgstr "Network Status: {$networkStatusMessage}"
@@ -90,7 +84,7 @@ msgid "plugins.generic.pln.objectId"
 msgstr "Type Object Id"
 
 msgid "plugins.generic.pln.status.docs"
-msgstr "The PLN <a href=\"{$statusDocsUrl}\">deposit statuses are described here</a>."
+msgstr "The PKP PN <a href=\"{$statusDocsUrl}\">deposit statuses are described here</a>."
 
 msgid "plugins.generic.pln.status.id"
 msgstr "ID"
@@ -159,7 +153,7 @@ msgid "plugins.generic.pln.status.packagingFailed"
 msgstr "Packaging Failure"
 
 msgid "plugins.generic.pln.depositorTask.name"
-msgstr "PKP PLN Depositor Task"
+msgstr "PKP PN Depositor Task"
 
 msgid "plugins.generic.pln.notifications.processing_for"
 msgstr "Depositor processing for {$title}."
@@ -168,22 +162,22 @@ msgid "plugins.generic.pln.notifications.getting_servicedocument"
 msgstr "Getting service document."
 
 msgid "plugins.generic.pln.notifications.pln_not_accepting"
-msgstr "The PKP PLN is not currently accepting deposits."
+msgstr "The PKP PN is not currently accepting deposits."
 
 msgid "plugins.generic.pln.notifications.pln_accepting"
-msgstr "The PKP PLN is accepting deposits."
+msgstr "The PKP PN is accepting deposits."
 
 msgid "plugins.generic.pln.notifications.check_status"
 msgstr "Check the status of your deposits."
 
 msgid "plugins.generic.pln.notifications.issn_missing"
-msgstr "Your journal must have an ISSN to deposit content to the PKP PLN."
+msgstr "Your journal must have an ISSN to deposit content to the PKP PN."
 
 msgid "plugins.generic.pln.notifications.http_error"
-msgstr "There was an error connecting to the PKP PLN - please contact your system administrator."
+msgstr "There was an error connecting to the PKP PN - please contact your system administrator."
 
 msgid "plugins.generic.pln.notifications.terms_updated"
-msgstr "The PKP PLN terms of use have been updated. Agreement with new terms is required to continue depositing."
+msgstr "The PKP PN terms of use have been updated. Agreement with new terms is required to continue depositing."
 
 msgid "plugins.generic.pln.notifications.curl_missing"
 msgstr "CURL support must be enabled to proceed."
@@ -198,28 +192,28 @@ msgid "plugins.generic.pln.notifications.tar_missing"
 msgstr "Your system must have a tar executable."
 
 msgid "plugins.generic.pln.notifications.archive_tar_missing"
-msgstr "The Archive_Tar PHP extension must be installed before the PKP PLN can be enabled."
+msgstr "The Archive_Tar PHP extension must be installed before the PKP PN can be enabled."
 
 msgid "plugins.generic.pln.error.include.bagit"
 msgstr "The BagIt library, which is included with OJS, cannot be loaded, probably due to a missing prerequisite."
 
 msgid "plugins.generic.pln.error.network.servicedocument"
-msgstr "Network error {$error} connecting to the PLN to get the service document."
+msgstr "Network error {$error} connecting to the PKP PN to get the service document."
 
 msgid "plugins.generic.pln.error.network.deposit"
-msgstr "Network error {$error} connecting to the PLN to send the deposit."
+msgstr "Network error {$error} connecting to the PKP PN to send the deposit."
 
 msgid "plugins.generic.pln.error.network.swordstatement"
-msgstr "Network error {$error} connecting to the PLN to get a status update for deposit."
+msgstr "Network error {$error} connecting to the PKP PN to get a status update for deposit."
 
 msgid "plugins.generic.pln.error.http.servicedocument"
-msgstr "PLN server returned HTTP error {$error} when attempting to get the service document."
+msgstr "PN server returned HTTP error {$error} when attempting to get the service document."
 
 msgid "plugins.generic.pln.error.http.deposit"
-msgstr "PLN server returned HTTP error {$error} when sending the deposit."
+msgstr "PN server returned HTTP error {$error} when sending the deposit."
 
 msgid "plugins.generic.pln.error.http.swordstatement"
-msgstr "PLN server returned HTTP error {$error} when checking the status of a deposit."
+msgstr "PN server returned HTTP error {$error} when checking the status of a deposit."
 
 msgid "plugins.generic.pln.error.depositor.missingpackage"
 msgstr "Cannot find package file {$file}."
@@ -252,7 +246,7 @@ msgid "plugins.generic.pln.depositor.packagingdeposits"
 msgstr "Packaging content for deposit."
 
 msgid "plugins.generic.pln.depositor.transferringdeposits"
-msgstr "Sending deposits to the PLN."
+msgstr "Sending deposits to the PKP PN."
 
 msgid "plugins.generic.pln.depositor.statusupdates.processing"
 msgstr "Trying status update for {$depositId} ({$objectType}: {$objectId}) (Local Status: [{$statusLocal}], Processing Status: [{$statusProcessing}], Lockss Status: [{$statusLockss}])"
@@ -285,7 +279,7 @@ msgid "plugins.generic.pln.depositor.transferringdeposits.processing.resultFaile
 msgstr "Posting the Atom file to staging server for deposit {$depositId} failed (Error: [{$error} - [{$result}]])"
 
 msgid "plugins.generic.plngateway.displayName"
-msgstr "PLN Gateway"
+msgstr "PN Gateway"
 
 msgid "plugins.generic.plngateway.description"
-msgstr "Reports PLN Status and recent article titles for the staging server."
+msgstr "Reports PKP PN Status and recent article titles for the staging server."
