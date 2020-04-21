@@ -2,11 +2,11 @@
 <!DOCTYPE locale SYSTEM "../../../../../lib/pkp/dtd/locale.dtd">
 
 <!--
-  * plugins/generic/pln/locale/zh_CN/locale.xml
+  * locale/zh_CN/locale.xml
   *
-  * Copyright (c) 2013-2019 Simon Fraser University
-  * Copyright (c) 2003-2019 John Willinsky
-  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+  * Copyright (c) 2013-2020 Simon Fraser University
+  * Copyright (c) 2003-2020 John Willinsky
+  * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
   * Credits: https://pkp.sfu.ca/wiki/index.php?title=OJS:_Chinese_(zh_CN)
   * 
   * PLN plugin localization strings

@@ -1,15 +1,13 @@
 <?php
 
 /**
- * @file plugins/generic/pln/controllers/grid/PLNStatusGridCellProvider.inc.php
+ * @file controllers/grid/PLNStatusGridCellProvider.inc.php
  *
- * Copyright (c) 2014-2017 Simon Fraser University Library
- * Copyright (c) 2000-2017 John Willinsky
- * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+ * Copyright (c) 2014-2020 Simon Fraser University
+ * Copyright (c) 2000-2020 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
  *
  * @class PLNStatusGridCellProvider
- * @ingroup controllers_grid_PLNStatusGridCellProvider
- *
  * @brief Class for a cell provider to display information about PLN Deposits
  */
 

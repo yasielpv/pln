@@ -2,11 +2,11 @@
 <!DOCTYPE locale SYSTEM "../../../../../lib/pkp/dtd/locale.dtd">
 
 <!--
-  * plugins/generic/pln/locale/cs_CZ/locale.xml
+  * locale/cs_CZ/locale.xml
   *
-  * Copyright (c) 2013-2019 Simon Fraser University
-  * Copyright (c) 2003-2019 John Willinsky
-  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+  * Copyright (c) 2013-2020 Simon Fraser University
+  * Copyright (c) 2003-2020 John Willinsky
+  * Distributed under the GNU GPL v3. For full terms see the file LICENSE.
   * Credits: https://pkp.sfu.ca/wiki/index.php?title=OJS:_Czech_(cs_CZ)
   *
   * PLN plugin localization strings
