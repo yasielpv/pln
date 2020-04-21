@@ -18,7 +18,6 @@
 	<message key="plugins.generic.pln.manager.setup.description"><![CDATA[<strong>PKP Private LOCKSS Network</strong><br /><br />Leggi la <a href="https://pkp.sfu.ca/pkp-lockss/" target="_blank">panoramica sulla PKP PLN</a> e completa <a href="{$plnPluginURL}">questo semplice modulo</a>. Questa opzione permette l'inclusione della tua rivista nella Public Knowledge Project Private LOCKSS Network (PKP PLN).]]></message>
 	<message key="plugins.generic.pln.enabled">Il plugin PKP PLN è stato abilitato.</message>
 	<message key="plugins.generic.pln.disabled">Il plugin PKP PLN è stato disabilitato.</message>
-	<message key="plugins.generic.pln.settings_page">Plugin PKP PLN - Impostazioni</message>
 	<message key="plugins.generic.pln.settings">Impostazioni</message>
 	<message key="plugins.generic.pln.settings.acron_required">Il plugin PLN richiede il plugin Acron o l'abilitazione dei tool pianificati, per esempio in 'cron.'</message>
 	<message key="plugins.generic.pln.settings.saved">Impostazioni PKP PLN salvate.</message>
@@ -36,7 +35,6 @@
 	<message key="plugins.generic.pln.objects.article">Articoli</message>
 	<message key="plugins.generic.pln.objects.issue">Fascicoli</message>
 
-	<message key="plugins.generic.pln.status_page">PKP PLN Plugin - Stato</message>
 	<message key="plugins.generic.pln.status.network_status">Stato della rete: {$networkStatusMessage}</message>
 	<message key="plugins.generic.pln.status.deposits">Versamenti</message>
 	<message key="plugins.generic.pln.status">Stato</message>

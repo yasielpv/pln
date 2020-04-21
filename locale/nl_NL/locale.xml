@@ -17,7 +17,6 @@
 	<message key="plugins.generic.pln.description">De PKP PLN plugin deponeert uw publicaties in het PKP Private LOCKSS Network ter preservatie.</message>
 	<message key="plugins.generic.pln.manager.setup.description"><![CDATA[<strong>PKP Private LOCKSS Network</strong><br /><br />Gelieve het <a href="https://pkp.sfu.ca/pkp-lockss/" target="_blank">overshot van het PKP PLN</a> te lezen en <a href="{$plnPluginURL}">dit formulier</a> in te vullen. Deze optie zorgt ervoor dat uw tijdschrift wordt opgenomen in het  Public Knowledge Project Private LOCKSS Network (PKP PLN).]]></message>
 
-	<message key="plugins.generic.pln.settings_page">PKP PLN Plugin - Instellingen</message>
 	<message key="plugins.generic.pln.settings">Instellingen</message>
 	<message key="plugins.generic.pln.settings.saved">PKP PLN instellingen opgeslagen.</message>
 	<message key="plugins.generic.pln.settings.terms_of_use">Gebruiksvoorwaarden</message>
@@ -35,7 +34,6 @@
 	<message key="plugins.generic.pln.objects.article">Artikel</message>
 	<message key="plugins.generic.pln.objects.issue">Nummer</message>
 
-	<message key="plugins.generic.pln.status_page">PKP PLN Plugin - Status</message>
 	<message key="plugins.generic.pln.status.network_status">Netwerk status: {$networkStatusMessage}</message>
 	<message key="plugins.generic.pln.status.deposits">Deponeringen</message>
 	<message key="plugins.generic.pln.status">Status</message>

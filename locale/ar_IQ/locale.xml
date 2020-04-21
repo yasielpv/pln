@@ -19,7 +19,6 @@
 	<message key="plugins.generic.pln.enabled">إن إضافة PLN لمشروع المعرفة العامة قد تم تمكينها.</message>
 	<message key="plugins.generic.pln.disabled">إن إضافة PLN لمشروع المعرفة العامة قد تم تعطيلها.</message>
 
-	<message key="plugins.generic.pln.settings_page">إعدادات إضافة PLN لمشروع المعرفة العامة</message>
 	<message key="plugins.generic.pln.settings">الإعدادات</message>
 	<message key="plugins.generic.pln.settings.acron_required">إن إضافة PLN تتطلب وجود إضافة Acron أو تواجد أداة جدولة دورية مثل 'cron.'</message>
 	<message key="plugins.generic.pln.settings.saved">تم حفظ إعدادات PLN لمشروع المعرفة العامة.</message>
@@ -38,7 +37,6 @@
 	<message key="plugins.generic.pln.objects.article">المؤلَّف</message>
 	<message key="plugins.generic.pln.objects.issue">العدد</message>
 
-	<message key="plugins.generic.pln.status_page">حالة إضافة PLN لمشروع المعرفة العامة</message>
 	<message key="plugins.generic.pln.status.network_status">حالة الشبكة: {$networkStatusMessage}</message>
 	<message key="plugins.generic.pln.status.deposits">الإيداعات</message>
 	<message key="plugins.generic.pln.status">الحالة</message>

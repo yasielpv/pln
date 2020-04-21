@@ -16,10 +16,6 @@
 	{rdelim});
 </script>
 
-{strip}
-	{assign var="pageTitle" value="plugins.generic.pln.settings_page"}
-{/strip}
-
 {if $prerequisitesMissing|@count > 0}
 	<ul>
 		{foreach from=$prerequisitesMissing item=message}

@@ -17,7 +17,6 @@
 	<message key="plugins.generic.pln.description">PKP PLN插件将您出版的内容存储在PKP Private LOCKSS Network中。</message>
 	<message key="plugins.generic.pln.manager.setup.description"><![CDATA[<strong>PKP Private LOCKSS Network</strong><br /><br />请阅读 <a href="https://pkp.sfu.ca/pkp-lockss/" target="_blank"> PKP PLN 概述</a> 并且完成 <a href="{$plnPluginURL}">这个简单的表格</a>. 该操作可以使你的期刊收录到公共知识项目的Private LOCKSS Network (PKP PLN)中。]]></message>
 
-	<message key="plugins.generic.pln.settings_page">PKP PLN 插件 - 设置</message>
 	<message key="plugins.generic.pln.settings">设置</message>
 	<message key="plugins.generic.pln.settings.saved">保存PKP PLN 设置</message>
 	<message key="plugins.generic.pln.settings.terms_of_use">使用条款</message>
@@ -35,7 +34,6 @@
 	<message key="plugins.generic.pln.objects.article">文章</message>
 	<message key="plugins.generic.pln.objects.issue">期次</message>
 
-	<message key="plugins.generic.pln.status_page">PKP PLN 插件 - 状态</message>
 	<message key="plugins.generic.pln.status.network_status">网络状态: {$networkStatusMessage}</message>
 	<message key="plugins.generic.pln.status.deposits">存储</message>
 	<message key="plugins.generic.pln.status">状态</message>

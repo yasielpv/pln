@@ -19,7 +19,6 @@
 	<message key="plugins.generic.pln.enabled">O plugin PLN do PKP foi habilitado.</message>
 	<message key="plugins.generic.pln.disabled">O plugin PLN do PKP foi desabilitado.</message>
 
-	<message key="plugins.generic.pln.settings_page">Plugin PLN do PKP - Configurações</message>
 	<message key="plugins.generic.pln.settings">Configurações</message>
 	<message key="plugins.generic.pln.settings.acron_required">O plugin PLN exige o plugin Acron ou outra forma de agendamento periódico de ações como o 'cron'.</message>
 	<message key="plugins.generic.pln.settings.saved">PLN do PKP configurações salvas.</message>
@@ -38,7 +37,6 @@
 	<message key="plugins.generic.pln.objects.article">Artigo</message>
 	<message key="plugins.generic.pln.objects.issue">Edição</message>
 
-	<message key="plugins.generic.pln.status_page">Plugin PLN do PKP - Situação</message>
 	<message key="plugins.generic.pln.status.network_status">Estado da rede: {$networkStatusMessage}</message>
 	<message key="plugins.generic.pln.status.deposits">Depósitos</message>
 	<message key="plugins.generic.pln.status">Situação</message>

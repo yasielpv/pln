@@ -19,7 +19,6 @@
 	<message key="plugins.generic.pln.enabled">Плагин «PKP PLN» был включен.</message>
 	<message key="plugins.generic.pln.disabled">Плагин «PKP PLN» был отключен.</message>
 
-	<message key="plugins.generic.pln.settings_page">Плагин «PKP PLN» — Настройки</message>
 	<message key="plugins.generic.pln.settings">Настройки</message>
 	<message key="plugins.generic.pln.settings.acron_required">Плагин PLN требуется либо плагин Acron, либо инструменты периодического запуска по расписанию, например, «cron».</message>
 	<message key="plugins.generic.pln.settings.saved">Настройки PKP PLN сохранены.</message>
@@ -38,7 +37,6 @@
 	<message key="plugins.generic.pln.objects.article">Статья</message>
 	<message key="plugins.generic.pln.objects.issue">Выпуск</message>
 
-	<message key="plugins.generic.pln.status_page">Плагин «PKP PLN» — Статус</message>
 	<message key="plugins.generic.pln.status.network_status">Статус сети: {$networkStatusMessage}</message>
 	<message key="plugins.generic.pln.status.deposits">Депонируемые объекты</message>
 	<message key="plugins.generic.pln.status">Статус</message>

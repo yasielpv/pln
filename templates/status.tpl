@@ -16,10 +16,6 @@
 	{rdelim});
 </script>
 
-{strip}
-{assign var="pageTitle" value="plugins.generic.pln.status_page"}
-{/strip}
-
 {capture assign="confirmReset"}{translate key="plugins.generic.pln.status.confirmReset"}{/capture}
 <div id="plnStatus">
 	<h3>{translate key="plugins.generic.pln.status.deposits"}</h3>

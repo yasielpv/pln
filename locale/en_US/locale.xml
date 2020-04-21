@@ -18,7 +18,6 @@
 	<message key="plugins.generic.pln.enabled">The PKP PLN plugin has been enabled.</message>
 	<message key="plugins.generic.pln.disabled">The PKP PLN plugin has been disabled.</message>
 
-	<message key="plugins.generic.pln.settings_page">PKP PLN Plugin - Settings</message>
 	<message key="plugins.generic.pln.settings">Settings</message>
 	<message key="plugins.generic.pln.settings.acron_required">The PLN plugin requires either the Acron plugin or a periodic scheduling tools such as 'cron.'</message>
 	<message key="plugins.generic.pln.settings.saved">PKP PLN settings saved.</message>
@@ -37,7 +36,6 @@
 	<message key="plugins.generic.pln.objects.article">Article</message>
 	<message key="plugins.generic.pln.objects.issue">Issue</message>
 
-	<message key="plugins.generic.pln.status_page">PKP PLN Plugin - Status</message>
 	<message key="plugins.generic.pln.status.network_status">Network Status: {$networkStatusMessage}</message>
 	<message key="plugins.generic.pln.status.deposits">Deposits</message>
 	<message key="plugins.generic.pln.status">Status</message>

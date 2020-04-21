@@ -47,7 +47,6 @@
 	<message key="plugins.generic.pln.settings.refresh">Yenile</message>
 	<message key="plugins.generic.pln.objects.article">Makale</message>
 	<message key="plugins.generic.pln.objects.issue">Sayı</message>
-	<message key="plugins.generic.pln.status_page">PKP PLN Eklentisi - Durumlar</message>
 	<message key="plugins.generic.pln.status.network_status">Ağ Durumu: {$networkStatusMessage}</message>
 	<message key="plugins.generic.pln.status">Durum</message>
 	<message key="plugins.generic.pln.status.id">ID</message>
@@ -60,7 +59,6 @@
 	<message key="plugins.generic.pln.manager.setup.description"><![CDATA[<strong>PKP Private LOCKSS Network</strong><br /><br />Please read the <a href="https://pkp.sfu.ca/pkp-lockss/" target="_blank">overview of the PKP PLN</a> and complete <a href="{$plnPluginURL}">this simple form</a>. This option will enable inclusion of your journal in the Public Knowledge Project Private LOCKSS Network (PKP PLN).]]></message>
 	<message key="plugins.generic.pln.enabled">The PKP PLN plugin has been enabled.</message>
 	<message key="plugins.generic.pln.disabled">The PKP PLN plugin has been disabled.</message>
-	<message key="plugins.generic.pln.settings_page">PKP PLN Plugin - Settings</message>
 	<message key="plugins.generic.pln.settings.acron_required">The PLN plugin requires either the Acron plugin or a periodic scheduling tools such as 'cron.'</message>
 	<message key="plugins.generic.pln.settings.saved">PKP PLN settings saved.</message>
 	<message key="plugins.generic.pln.settings.terms_of_use">Terms of Use</message>

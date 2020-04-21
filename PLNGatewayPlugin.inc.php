@@ -43,7 +43,7 @@ class PLNGatewayPlugin extends GatewayPlugin {
 	}
 
 	/**
-  	 * @copydoc Plugin::getName
+	 * @copydoc Plugin::getName
 	 */
 	public function getName() {
 		return 'PLNGatewayPlugin';

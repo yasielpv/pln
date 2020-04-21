@@ -74,27 +74,23 @@ class PLNPlugin extends GenericPlugin {
 	 * @copydoc LazyLoadPlugin::register()
 	 */
 	public function register($category, $path, $mainContextId = null) {
+		if (!parent::register($category, $path, $mainContextId)) return false;
 
-		$success = parent::register($category, $path, $mainContextId);
+		if ($this->getEnabled()) {
+			$this->registerDAOs();
+			$this->import('classes.Deposit');
+			$this->import('classes.DepositObject');
+			$this->import('classes.DepositPackage');
 
-		if ($success) {
-			if ($this->getEnabled()) {
-				$this->registerDAOs();
-				$this->import('classes.Deposit');
-				$this->import('classes.DepositObject');
-				$this->import('classes.DepositPackage');
-
-				HookRegistry::register('PluginRegistry::loadCategory', array($this, 'callbackLoadCategory'));
-				HookRegistry::register('JournalDAO::deleteJournalById', array($this, 'callbackDeleteJournalById'));
-				HookRegistry::register('LoadHandler', array($this, 'callbackLoadHandler'));
-				HookRegistry::register('NotificationManager::getNotificationContents', array($this, 'callbackNotificationContents'));
-				HookRegistry::register('LoadComponentHandler', array($this, 'setupComponentHandlers'));
-			}
-
-			HookRegistry::register('AcronPlugin::parseCronTab', array($this, 'callbackParseCronTab'));
+			HookRegistry::register('PluginRegistry::loadCategory', array($this, 'callbackLoadCategory'));
+			HookRegistry::register('JournalDAO::deleteJournalById', array($this, 'callbackDeleteJournalById'));
+			HookRegistry::register('LoadHandler', array($this, 'callbackLoadHandler'));
+			HookRegistry::register('NotificationManager::getNotificationContents', array($this, 'callbackNotificationContents'));
+			HookRegistry::register('LoadComponentHandler', array($this, 'setupComponentHandlers'));
 		}
+		HookRegistry::register('AcronPlugin::parseCronTab', array($this, 'callbackParseCronTab'));
 
-		return $success;
+		return true;
 	}
 
 	/**
@@ -229,7 +225,7 @@ class PLNPlugin extends GenericPlugin {
 			case 'pln_status_docs':
 				return Config::getVar('lockss', 'pln_status_docs', Config::getVar('lockss', 'pln_url', PLN_DEFAULT_NETWORK) . PLN_DEFAULT_STATUS_SUFFIX);
 		}
-		
+
 		return parent::getSetting($journalId, $settingName);
 	}
 
@@ -361,7 +357,7 @@ class PLNPlugin extends GenericPlugin {
 
 				$context = $request->getContext();
 				AppLocale::requireComponents(LOCALE_COMPONENT_APP_COMMON,  LOCALE_COMPONENT_PKP_MANAGER);
-				
+
 				$this->import('classes.form.PLNStatusForm');
 				$form = new PLNStatusForm($this, $context->getId());
 
@@ -462,7 +458,7 @@ class PLNPlugin extends GenericPlugin {
 
 		$application = Application::getApplication();
 		$dispatcher = $application->getDispatcher();
-		
+
 		// retrieve the service document
 		$result = $this->curlGet(
 			$network . PLN_PLUGIN_SD_IRI,
@@ -709,13 +705,10 @@ class PLNPlugin extends GenericPlugin {
 		return PKPString::generateUUID();
 	}
 
-	
 	/**
 	 * @copydoc PKPPlugin::getTemplatePath
 	 */
-	
 	public function getTemplatePath($inCore = false) {
 		return parent::getTemplatePath($inCore) . DIRECTORY_SEPARATOR;
 	}
-	
 }

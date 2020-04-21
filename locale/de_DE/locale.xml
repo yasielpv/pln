@@ -19,7 +19,6 @@
 	<message key="plugins.generic.pln.enabled">Das PKP-PLN-Plug-In wurde aktiviert.</message>
 	<message key="plugins.generic.pln.disabled">Das PKP-PLN-Plug-In wurde deaktiviert.</message>
 
-	<message key="plugins.generic.pln.settings_page">PKP-PLN-Plug-In - Einstellungen</message>
 	<message key="plugins.generic.pln.settings">Einstellungen</message>
 	<message key="plugins.generic.pln.settings.acron_required">Das PKP-PLN-Plug-In benötigt entweder das Acron-Plug-In oder ein Tool für regelmäßig wiederholte Aktionen (wie 'cron').</message>
 	<message key="plugins.generic.pln.settings.saved">PKP-PLN-Einstellungen gespeichert.</message>
@@ -38,7 +37,6 @@
 	<message key="plugins.generic.pln.objects.article">Artikel</message>
 	<message key="plugins.generic.pln.objects.issue">Ausgabe</message>
 
-	<message key="plugins.generic.pln.status_page">PKP-PLN-Plug-In - Status</message>
 	<message key="plugins.generic.pln.status.network_status">Netzwerk-Status: {$networkStatusMessage}</message>
 	<message key="plugins.generic.pln.status.deposits">Ablieferungen</message>
 	<message key="plugins.generic.pln.status">Status</message>
