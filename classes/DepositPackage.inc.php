@@ -183,7 +183,6 @@ class DepositPackage {
 					$objectIssue = $issue->getNumber();
 					if ($issue->getDatePublished() > $objectPublicationDate)
 						$objectPublicationDate = $issue->getDatePublished();
-					unset($depositObject);
 				}
 				break;
 		}
@@ -261,7 +260,6 @@ class DepositPackage {
 		$supportsOptions = in_array('parseOpts', get_class_methods($exportPlugin));
 		@ini_set('memory_limit', -1);
 		$plnPlugin = PluginRegistry::getPlugin('generic', PLN_PLUGIN_NAME);
-		$fileManager = new ContextFileManager($this->_deposit->getJournalId());
 
 		$journal = $journalDao->getById($this->_deposit->getJournalId());
 		$depositObjects = $this->_deposit->getDepositObjects();
@@ -576,7 +574,7 @@ class DepositPackage {
 	 * Update the deposit's status by checking with the PLN.
 	 */
 	public function updateDepositStatus() {
-		$journalId = $this->_deposit->getJournalID();
+		$journalId = $this->_deposit->getJournalId();
 		$depositDao = DAORegistry::getDAO('DepositDAO');
 		$plnPlugin = PluginRegistry::getPlugin('generic', 'plnplugin');
 

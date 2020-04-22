@@ -1,10 +1,9 @@
 ================================================================
 === OJS Private LOCKSS Network Plugin
-=== Version: 2.0.0
+=== Version: (see version.xml)
 === Author: Chris MacDonald <chris@fcts.ca>
 === Author: Michael Joyce <ubermichael@gmail.com>
 === Author: Dimitris Efstathiou <defstat@gmail.com>
-=== Last update: August 2019
 ================================================================
 
 About
@@ -16,12 +15,12 @@ your published content automatically.
 
 License
 -------
-This plugin is licensed under the GNU General Public License v2. See the
-accompanying OJS file docs/COPYING for the complete terms of this license.
+This plugin is licensed under the GNU General Public License v3. See the
+file LICENSE for the complete terms of this license.
 
 System Requirements
 -------------------
-OJS 3.0.0 or greater.
+OJS 3.2.0 or greater.
 CURL support for PHP.
 ZipArchive support for PHP.
 
@@ -86,7 +85,7 @@ installed before installing the plugin.
 - Enable Acron plugin and change config.inc.php variable scheduled_tasks = On
 - Enable the pln plugin
 
-Other usefull hints / Troubleshooting hints
+Other useful hints / Troubleshooting hints
 ------------------------------------------------
 - The pln plugin depends on 2 database tables, namely the 'pln_deposits' and 'pln_deposit_objects' tables. If those tables are not in your database, try to run OJS's "php tools/upgrade.php upgrade".
 - The 'plugins.generic.pln.classes.tasks.Depositor' task must be inside the 'scheduled_tasks' database table. If not, try 'Reload Scheduled Tasks' from the Plugins gallery area, under the Acron plugin.
