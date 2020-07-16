@@ -638,6 +638,7 @@ class DepositPackage {
 				$this->_deposit->setLockssReceivedStatus();
 				break;
 			case 'syncing':
+			case 'inProgress':
 				$this->_deposit->setLockssSyncingStatus();
 				break;
 			case 'agreement':
