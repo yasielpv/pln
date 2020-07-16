@@ -34,7 +34,7 @@ class PLNStatusGridCellProvider extends GridCellProvider {
 			case 'objectId':
 				return array('label' => $deposit->getObjectId());
 			case 'checked':
-				return array('label' => $deposit->getStatus());
+				return array('label' => $deposit->getLastStatusDate());
 			case 'local_status':
 				return array('label' => $deposit->getLocalStatus());
 			case 'processing_status':
