@@ -32,7 +32,13 @@ class Deposit extends DataObject {
 	public function getObjectType() {
 		$depositObjects = $this->getDepositObjects();
 		$depositObject = $depositObjects->next();
-		return ($depositObject?$depositObject->getObjectType():null);
+		if (!$depositObject)
+			return null;
+		if ($depositObject->getObjectType() == PLN_PLUGIN_DEPOSIT_OBJECT_ARTICLE)
+			return __('plugins.generic.pln.objects.article');
+		if ($depositObject->getObjectType() == PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE)
+			return __('plugins.generic.pln.objects.issue');
+		return null;
 	}
 
 	/**
