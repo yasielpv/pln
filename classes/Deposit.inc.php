@@ -38,7 +38,7 @@ class Deposit extends DataObject {
 			return __('plugins.generic.pln.objects.article');
 		if ($depositObject->getObjectType() == PLN_PLUGIN_DEPOSIT_OBJECT_ISSUE)
 			return __('plugins.generic.pln.objects.issue');
-		return null;
+		return $depositObject->getObjectType();
 	}
 
 	/**
